@@ -4,7 +4,7 @@ defmodule DashboardWeb.UserSettingsController do
   alias Dashboard.Accounts
   alias DashboardWeb.UserAuth
 
-  plug :assign_email_and_password_changesets
+  plug :assign_email_password_and_access_token_changesets
 
   def edit(conn, _params) do
     render(conn, "edit.html")
@@ -62,11 +62,26 @@ defmodule DashboardWeb.UserSettingsController do
     end
   end
 
-  defp assign_email_and_password_changesets(conn, _opts) do
+  def update_access_token(conn, %{"user" => user_params}) do
+    user = conn.assigns.current_user
+
+    case Accounts.update_user_access_token(user, user_params) do
+      {:ok, user} ->
+        conn
+        |> put_flash(:info, "Personal Access Token updated successfully.")
+        |> redirect(to: Routes.user_settings_path(conn, :edit))
+
+      {:error, changeset} ->
+        render(conn, "edit.html", access_token_changeset: changeset)
+    end
+  end
+
+  defp assign_email_password_and_access_token_changesets(conn, _opts) do
     user = conn.assigns.current_user
 
     conn
     |> assign(:email_changeset, Accounts.change_user_email(user))
     |> assign(:password_changeset, Accounts.change_user_password(user))
+    |> assign(:access_token_changeset, Accounts.change_user_access_token(user))
   end
 end

@@ -348,4 +348,33 @@ defmodule Dashboard.Accounts do
       {:error, :user, changeset, _} -> {:error, changeset}
     end
   end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for changing the user's personal access token.
+
+  ## Examples
+
+      iex> change_user_access_token(user)
+      %Ecto.Changeset{data: %User{}}
+
+  """
+
+  def change_user_access_token(%User{} = user, attrs \\ %{}) do
+    User.access_token_changeset(user, attrs)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for changing the user personal access token.
+
+  ## Examples
+
+      iex> update_user_access_token(user, %{application_id: ..., application_secret: ...})
+      {:ok, %User{}}
+
+  """
+  def update_user_access_token(%User{} = user, attrs) do
+    user
+    |> User.access_token_changeset(attrs)
+    |> Repo.update()
+  end
 end

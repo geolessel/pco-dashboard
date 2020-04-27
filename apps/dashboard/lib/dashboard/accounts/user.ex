@@ -7,6 +7,8 @@ defmodule Dashboard.Accounts.User do
     field :email, :string
     field :password, :string, virtual: true
     field :hashed_password, :string
+    field :application_id, :string
+    field :application_secret, :string
     field :confirmed_at, :naive_datetime
 
     timestamps()
@@ -81,6 +83,15 @@ defmodule Dashboard.Accounts.User do
     |> cast(attrs, [:password])
     |> validate_confirmation(:password, message: "does not match password")
     |> validate_password()
+  end
+
+  @doc """
+  A user changeset for setting Personal Access Token information
+  """
+  def access_token_changeset(user, attrs) do
+    user
+    |> cast(attrs, [:application_id, :application_secret])
+    |> validate_required([:application_id, :application_secret])
   end
 
   @doc """

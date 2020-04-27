@@ -47,3 +47,26 @@
     <%= submit "Change password" %>
   </div>
 <% end %>
+
+
+<h3>Change Planning Center access token</h3>
+
+<%= form_for @access_token_changeset, Routes.user_settings_path(@conn, :update_access_token), fn f -> %>
+  <%= if @access_token_changeset.action do %>
+    <div class="alert alert-danger">
+      <p>Oops, something went wrong! Please check the errors below.</p>
+    </div>
+  <% end %>
+
+  <%= label f, :application_id, "Planning Center Application ID" %>
+  <%= text_input f, :application_id %>
+  <%= error_tag f, :application_id %>
+
+  <%= label f, :application_secret, "Planning Center Application Secret" %>
+  <%= text_input f, :application_secret %>
+  <%= error_tag f, :application_secret %>
+
+  <div>
+    <%= submit "Change access token" %>
+  </div>
+<% end %>
