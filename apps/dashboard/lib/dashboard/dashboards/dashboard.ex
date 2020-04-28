@@ -2,8 +2,6 @@ defmodule Dashboard.Dashboards.Dashboard do
   use Ecto.Schema
   import Ecto.Changeset
 
-  @derive {Phoenix.Param, key: :slug}
-
   schema "dashboards" do
     field :name, :string
     field :slug, :string
