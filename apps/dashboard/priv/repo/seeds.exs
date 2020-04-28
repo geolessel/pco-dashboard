@@ -31,7 +31,7 @@ components
   IO.puts("  - #{attrs.name}")
 
   case Repo.get_by(Component, attrs) do
-    nil -> Dashboards.change_component(%Component{})
+    nil -> %Component{}
     c -> c
   end
   |> Dashboards.change_component(attrs)
