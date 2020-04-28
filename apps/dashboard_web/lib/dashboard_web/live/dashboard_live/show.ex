@@ -33,9 +33,8 @@ defmodule DashboardWeb.DashboardLive.Show do
       Map.get(
         Dashboard.PlanningCenterApi.Client.get(
           user,
-          "/people/v2/people?order=-updated_at&per_page=5"
-        )
-        |> IO.inspect(label: "json"),
+          "/people/v2/people?order=-updated_at&per_page=5&fields[Person]=name,updated_at"
+        ),
         :body,
         %{}
       )
