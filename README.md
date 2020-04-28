@@ -15,7 +15,7 @@ If you are running it for the first time, you can create a container
 with
 
 ``` shell
-docker container run --name pco-dashboard-db --publish 5432:5432 --detach postgres
+docker container run --name pco-dashboard-db --publish 5432:5432 --detach -e POSTGRES_PASSWORD=postgres postgres
 ```
 
 You can stop the container with
