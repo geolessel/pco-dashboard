@@ -5,21 +5,50 @@ defmodule DashboardWeb.DashboardLive.Show do
 
   @impl true
   def mount(_params, %{"user_token" => user_token} = _session, socket) do
-    {:ok, assign(socket, :user_id, fetch_user_id_from_token(user_token))}
+    send(self(), :fetch_people)
+    :timer.send_interval(30_000, :fetch_people)
+
+    {:ok,
+     socket
+     |> assign(:user_token, user_token)}
   end
 
   @impl true
   def handle_params(%{"slug" => slug}, _, socket) do
+    user = Accounts.get_user_by_session_token(socket.assigns.user_token)
+    dashboard = Dashboards.get_dashboard_by_slug!(slug, user.id)
+
     {:noreply,
      socket
      |> assign(:page_title, page_title(socket.assigns.live_action))
-     |> assign(:dashboard, Dashboards.get_dashboard_by_slug!(slug, socket.assigns.user_id))}
+     |> assign(:people, [])
+     |> assign(:dashboard, dashboard)}
+  end
+
+  @impl true
+  def handle_info(:fetch_people, socket) do
+    user = Accounts.get_user_by_session_token(socket.assigns.user_token)
+
+    people =
+      Map.get(
+        Dashboard.PlanningCenterApi.Client.get(
+          user,
+          "/people/v2/people?order=-updated_at&per_page=5"
+        )
+        |> IO.inspect(label: "json"),
+        :body,
+        %{}
+      )
+      |> Map.get("data", [])
+
+    {:noreply,
+     assign(
+       socket,
+       :people,
+       people
+     )}
   end
 
   defp page_title(:show), do: "Show Dashboard"
   defp page_title(:edit), do: "Edit Dashboard"
-
-  defp fetch_user_id_from_token(user_token) do
-    Accounts.get_user_by_session_token(user_token).id
-  end
 end

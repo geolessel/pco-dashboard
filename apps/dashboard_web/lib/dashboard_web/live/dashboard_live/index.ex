@@ -5,6 +5,9 @@ defmodule DashboardWeb.DashboardLive.Index do
   alias Dashboard.Dashboards
   alias Dashboard.Dashboards.Dashboard
 
+  # TODO: maybe instead of storing the user_id in the socket, we re-get the user_id
+  #       from the user_token whenever we need it.
+
   @impl true
   def mount(_params, %{"user_token" => user_token} = _session, socket) do
     socket = assign_user_id(socket, user_token)

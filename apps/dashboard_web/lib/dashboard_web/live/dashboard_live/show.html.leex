@@ -1,5 +1,7 @@
 <h1>Show Dashboard</h1>
 
+<% # TODO: probably won't need this unless we want to edit which components are active %>
+
 <%= if @live_action in [:edit] do %>
   <%= live_modal @socket, DashboardWeb.DashboardLive.FormComponent,
     id: @dashboard.id,
@@ -9,19 +11,4 @@
     return_to: Routes.dashboard_show_path(@socket, :show, @dashboard) %>
 <% end %>
 
-<ul>
-
-  <li>
-    <strong>Name:</strong>
-    <%= @dashboard.name %>
-  </li>
-
-  <li>
-    <strong>Slug:</strong>
-    <%= @dashboard.slug %>
-  </li>
-
-</ul>
-
-<span><%= live_patch "Edit", to: Routes.dashboard_show_path(@socket, :edit, @dashboard), class: "button" %></span>
-<span><%= live_redirect "Back", to: Routes.dashboard_index_path(@socket, :index) %></span>
+<%= live_component(@socket, DashboardWeb.Components.PersonUpdated, people: @people) %>
