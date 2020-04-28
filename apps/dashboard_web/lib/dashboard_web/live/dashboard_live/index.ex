@@ -16,10 +16,10 @@ defmodule DashboardWeb.DashboardLive.Index do
     {:noreply, apply_action(socket, socket.assigns.live_action, params)}
   end
 
-  defp apply_action(socket, :edit, %{"id" => id}) do
+  defp apply_action(socket, :edit, %{"slug" => slug}) do
     socket
     |> assign(:page_title, "Edit Dashboard")
-    |> assign(:dashboard, Dashboards.get_dashboard!(id, socket.assigns.user_id))
+    |> assign(:dashboard, Dashboards.get_dashboard_by_slug!(slug, socket.assigns.user_id))
   end
 
   defp apply_action(socket, :new, _params) do
@@ -35,8 +35,8 @@ defmodule DashboardWeb.DashboardLive.Index do
   end
 
   @impl true
-  def handle_event("delete", %{"id" => id}, %{assigns: %{user_id: user_id}} = socket) do
-    dashboard = Dashboards.get_dashboard!(id, user_id)
+  def handle_event("delete", %{"slug" => slug}, %{assigns: %{user_id: user_id}} = socket) do
+    dashboard = Dashboards.get_dashboard_by_slug!(slug, user_id)
     {:ok, _} = Dashboards.delete_dashboard(dashboard)
 
     {:noreply, assign(socket, :dashboards, fetch_dashboards(user_id))}

@@ -39,7 +39,25 @@ defmodule Dashboard.Dashboards do
       ** (Ecto.NoResultsError)
 
   """
-  def get_dashboard!(id, user_id), do: Repo.get_by(Dashboard, %{id: id, user_id: user_id})
+  def get_dashboard!(id, user_id), do: Repo.get_by!(Dashboard, %{id: id, user_id: user_id})
+
+  @doc """
+  Gets a single dashboard from a slug and user_id.
+
+  Raises `Ecto.NoResultsError` if the Dashboard does not exist.
+
+  ### Examples
+
+       iex> get_dashboard_by_slug!("default", 1)
+       %Dashboard{}
+
+       iex> get_dashboard_by_slug!("invalid", 1)
+       ** (Ecto.NoResultsError)
+
+  """
+  def get_dashboard_by_slug!(slug, user_id) do
+    Repo.get_by!(Dashboard, %{slug: slug, user_id: user_id})
+  end
 
   @doc """
   Creates a dashboard.

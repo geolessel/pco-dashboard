@@ -71,10 +71,10 @@ defmodule DashboardWeb.Router do
 
     live "/dashboards", DashboardLive.Index, :index
     live "/dashboards/new", DashboardLive.Index, :new
-    live "/dashboards/:id/edit", DashboardLive.Index, :edit
+    live "/dashboards/:slug/edit", DashboardLive.Index, :edit
 
-    live "/dashboards/:id", DashboardLive.Show, :show
-    live "/dashboards/:id/show/edit", DashboardLive.Show, :edit
+    live "/dashboards/:slug", DashboardLive.Show, :show
+    live "/dashboards/:slug/show/edit", DashboardLive.Show, :edit
   end
 
   scope "/", DashboardWeb do

@@ -28,7 +28,7 @@
         <td>
           <span><%= live_redirect "Show", to: Routes.dashboard_show_path(@socket, :show, dashboard) %></span>
           <span><%= live_patch "Edit", to: Routes.dashboard_index_path(@socket, :edit, dashboard) %></span>
-          <span><%= link "Delete", to: "#", phx_click: "delete", phx_value_id: dashboard.id, data: [confirm: "Are you sure?"] %></span>
+          <span><%= link "Delete", to: "#", phx_click: "delete", phx_value_slug: dashboard.slug, data: [confirm: "Are you sure?"] %></span>
         </td>
       </tr>
     <% end %>

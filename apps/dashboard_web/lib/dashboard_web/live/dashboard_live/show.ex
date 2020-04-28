@@ -9,11 +9,11 @@ defmodule DashboardWeb.DashboardLive.Show do
   end
 
   @impl true
-  def handle_params(%{"id" => id}, _, socket) do
+  def handle_params(%{"slug" => slug}, _, socket) do
     {:noreply,
      socket
      |> assign(:page_title, page_title(socket.assigns.live_action))
-     |> assign(:dashboard, Dashboards.get_dashboard!(id, socket.assigns.user_id))}
+     |> assign(:dashboard, Dashboards.get_dashboard_by_slug!(slug, socket.assigns.user_id))}
   end
 
   defp page_title(:show), do: "Show Dashboard"
