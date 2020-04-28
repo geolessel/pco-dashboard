@@ -74,3 +74,8 @@ config :phoenix, :plug_init_mode, :runtime
 # Set a higher stacktrace during development. Avoid configuring such
 # in production as building large stacktraces may be expensive.
 config :phoenix, :stacktrace_depth, 20
+
+config :dashboard,
+  api_base: "api.pco.test",
+  api_transport: :http,
+  api_port: 80
