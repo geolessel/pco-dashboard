@@ -63,4 +63,69 @@ defmodule Dashboard.DashboardsTest do
       assert %Ecto.Changeset{} = Dashboards.change_dashboard(dashboard)
     end
   end
+
+  describe "components" do
+    alias Dashboard.Dashboards.Component
+
+    @valid_attrs %{api_path: "some api_path", assign: "some assign", module: "some module", name: "some name"}
+    @update_attrs %{api_path: "some updated api_path", assign: "some updated assign", module: "some updated module", name: "some updated name"}
+    @invalid_attrs %{api_path: nil, assign: nil, module: nil, name: nil}
+
+    def component_fixture(attrs \\ %{}) do
+      {:ok, component} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> Dashboards.create_component()
+
+      component
+    end
+
+    test "list_components/0 returns all components" do
+      component = component_fixture()
+      assert Dashboards.list_components() == [component]
+    end
+
+    test "get_component!/1 returns the component with given id" do
+      component = component_fixture()
+      assert Dashboards.get_component!(component.id) == component
+    end
+
+    test "create_component/1 with valid data creates a component" do
+      assert {:ok, %Component{} = component} = Dashboards.create_component(@valid_attrs)
+      assert component.api_path == "some api_path"
+      assert component.assign == "some assign"
+      assert component.module == "some module"
+      assert component.name == "some name"
+    end
+
+    test "create_component/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Dashboards.create_component(@invalid_attrs)
+    end
+
+    test "update_component/2 with valid data updates the component" do
+      component = component_fixture()
+      assert {:ok, %Component{} = component} = Dashboards.update_component(component, @update_attrs)
+      assert component.api_path == "some updated api_path"
+      assert component.assign == "some updated assign"
+      assert component.module == "some updated module"
+      assert component.name == "some updated name"
+    end
+
+    test "update_component/2 with invalid data returns error changeset" do
+      component = component_fixture()
+      assert {:error, %Ecto.Changeset{}} = Dashboards.update_component(component, @invalid_attrs)
+      assert component == Dashboards.get_component!(component.id)
+    end
+
+    test "delete_component/1 deletes the component" do
+      component = component_fixture()
+      assert {:ok, %Component{}} = Dashboards.delete_component(component)
+      assert_raise Ecto.NoResultsError, fn -> Dashboards.get_component!(component.id) end
+    end
+
+    test "change_component/1 returns a component changeset" do
+      component = component_fixture()
+      assert %Ecto.Changeset{} = Dashboards.change_component(component)
+    end
+  end
 end
