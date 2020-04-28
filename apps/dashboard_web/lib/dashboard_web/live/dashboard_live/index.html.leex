@@ -1,0 +1,38 @@
+<h1>Listing Dashboards</h1>
+
+<%= if @live_action in [:new, :edit] do %>
+  <%= live_modal @socket, DashboardWeb.DashboardLive.FormComponent,
+    id: @dashboard.id || :new,
+    title: @page_title,
+    action: @live_action,
+    dashboard: @dashboard,
+    return_to: Routes.dashboard_index_path(@socket, :index),
+    user_id: @user_id %>
+<% end %>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Slug</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody id="dashboards">
+    <%= for dashboard <- @dashboards do %>
+      <tr id="dashboard-<%= dashboard.id %>">
+        <td><%= dashboard.name %></td>
+        <td><%= dashboard.slug %></td>
+
+        <td>
+          <span><%= live_redirect "Show", to: Routes.dashboard_show_path(@socket, :show, dashboard) %></span>
+          <span><%= live_patch "Edit", to: Routes.dashboard_index_path(@socket, :edit, dashboard) %></span>
+          <span><%= link "Delete", to: "#", phx_click: "delete", phx_value_id: dashboard.id, data: [confirm: "Are you sure?"] %></span>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<span><%= live_patch "New Dashboard", to: Routes.dashboard_index_path(@socket, :new) %></span>

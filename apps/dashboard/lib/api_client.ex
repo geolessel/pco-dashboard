@@ -53,7 +53,7 @@ defmodule Dashboard.ApiClient do
         state = put_in(state.requests[request_ref], %{from: from, response: %{}})
         {:noreply, state}
 
-      {:error, conn, %{reason: :closed}} ->
+      {:error, _conn, %{reason: :closed}} ->
         {:stop, :normal, state}
 
       {:error, conn, reason} ->
@@ -83,7 +83,7 @@ defmodule Dashboard.ApiClient do
         _ = Logger.error(fn -> "Received unknown message: " <> inspect(message) end)
         {:noreply, state}
 
-      {:error, conn, response} ->
+      {:error, conn, _response} ->
         Logger.error(fn -> "Received error: " <> inspect(conn) end)
         {:noreply, state}
 

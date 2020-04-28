@@ -1,0 +1,27 @@
+<h1>Show Dashboard</h1>
+
+<%= if @live_action in [:edit] do %>
+  <%= live_modal @socket, DashboardWeb.DashboardLive.FormComponent,
+    id: @dashboard.id,
+    title: @page_title,
+    action: @live_action,
+    dashboard: @dashboard,
+    return_to: Routes.dashboard_show_path(@socket, :show, @dashboard) %>
+<% end %>
+
+<ul>
+
+  <li>
+    <strong>Name:</strong>
+    <%= @dashboard.name %>
+  </li>
+
+  <li>
+    <strong>Slug:</strong>
+    <%= @dashboard.slug %>
+  </li>
+
+</ul>
+
+<span><%= live_patch "Edit", to: Routes.dashboard_show_path(@socket, :edit, @dashboard), class: "button" %></span>
+<span><%= live_redirect "Back", to: Routes.dashboard_index_path(@socket, :index) %></span>

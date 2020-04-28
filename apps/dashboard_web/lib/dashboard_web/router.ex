@@ -68,6 +68,13 @@ defmodule DashboardWeb.Router do
     put "/users/settings/update_email", UserSettingsController, :update_email
     put "/users/settings/update_access_token", UserSettingsController, :update_access_token
     get "/users/settings/confirm_email/:token", UserSettingsController, :confirm_email
+
+    live "/dashboards", DashboardLive.Index, :index
+    live "/dashboards/new", DashboardLive.Index, :new
+    live "/dashboards/:id/edit", DashboardLive.Index, :edit
+
+    live "/dashboards/:id", DashboardLive.Show, :show
+    live "/dashboards/:id/show/edit", DashboardLive.Show, :edit
   end
 
   scope "/", DashboardWeb do
