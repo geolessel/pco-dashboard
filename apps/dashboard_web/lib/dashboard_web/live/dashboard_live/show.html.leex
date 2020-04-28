@@ -11,4 +11,6 @@
     return_to: Routes.dashboard_show_path(@socket, :show, @dashboard) %>
 <% end %>
 
-<%= live_component(@socket, DashboardWeb.Components.PersonUpdated, people: @people) %>
+<%= for component <- @components do %>
+  <%= live_component(@socket, String.to_atom("Elixir." <> component.module), [{component.assign, @people}]) %>
+<% end %>
