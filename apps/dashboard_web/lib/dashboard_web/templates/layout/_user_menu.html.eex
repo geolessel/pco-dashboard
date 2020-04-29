@@ -3,11 +3,11 @@
     <div class="nav-item"><%= @current_user.email %></div>
     <div class="nav-item"><%= link "Dashboards", to: Routes.dashboard_index_path(@conn, :index) %></div>
     <div class="nav-item"><%= link "Settings", to: Routes.user_settings_path(@conn, :edit) %></div>
-    <div class="nav-item"><%= link "Logout", to: Routes.user_session_path(@conn, :delete), method: :delete %></div>
-  <% else %>
     <%= if function_exported?(Routes, :live_dashboard_path, 2) do %>
       <div class="nav-item"><%= link "LiveDashboard", to: Routes.live_dashboard_path(@conn, :home) %></div>
     <% end %>
+    <div class="nav-item"><%= link "Logout", to: Routes.user_session_path(@conn, :delete), method: :delete %></div>
+  <% else %>
     <div class="nav-item"><%= link "Register", to: Routes.user_registration_path(@conn, :new) %></div>
     <div class="nav-item"><%= link "Login", to: Routes.user_session_path(@conn, :new) %></div>
   <% end %>
