@@ -27,19 +27,22 @@ defmodule DashboardWeb.DashboardLive.Layout do
 
   @impl true
   def handle_event("add-component", %{"component-id" => component_id} = params, socket) do
+    user = Accounts.get_user_by_session_token(socket.assigns.user_token)
     dashboard = socket.assigns.dashboard
 
     # TODO: handle the error!
+    # TODO: is the double-reverse of the list faster or slower than appending the list directly?
     case Dashboards.create_dashboard_component(%{
            dashboard_id: dashboard.id,
-           component_id: component_id
+           component_id: component_id,
+           user_id: user.id
          }) do
       {:ok, dc} ->
         {:noreply,
          assign(
            socket,
            :dashboard_components,
-           Enum.reverse([dc | socket.assigns.dashboard_components])
+           Enum.reverse([dc | Enum.reverse(socket.assigns.dashboard_components)])
          )}
     end
   end
@@ -67,6 +70,5 @@ defmodule DashboardWeb.DashboardLive.Layout do
     end
   end
 
-  defp page_title(:show), do: "Show Dashboard Layout"
   defp page_title(:edit), do: "Edit Dashboard Layout"
 end

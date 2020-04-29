@@ -58,7 +58,9 @@ defmodule Dashboard.Dashboards do
   def get_dashboard_by_slug!(slug, user_id) do
     Dashboard
     |> Repo.get_by!(%{slug: slug, user_id: user_id})
-    |> Repo.preload(:components)
+    |> Repo.preload(:components,
+      dashboard_components: from(dc in DashboardComponent, order_by: dc.sequence)
+    )
   end
 
   @doc """
@@ -240,5 +242,11 @@ defmodule Dashboard.Dashboards do
 
   def delete_dashboard_component(%DashboardComponent{} = dc) do
     Repo.delete(dc)
+  end
+
+  def get_max_sequence_for_dashboard(%Dashboard{id: did} = dashboard) do
+    Repo.one(
+      from dc in DashboardComponent, where: dc.dashboard_id == ^did, select: max(dc.sequence)
+    )
   end
 end

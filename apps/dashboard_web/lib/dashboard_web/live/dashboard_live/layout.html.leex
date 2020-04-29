@@ -12,7 +12,7 @@
   <h2>Available Components</h2>
   <div style="display: flex; flex-direction: row;">
     <%= for component <- @all_components do %>
-      <div style="display: flex; align-items: center; border: 1px solid #666; padding: 0.5em; margin-right: 0.5em;" phx-click="add-component" phx-value-component-id="<%= component.id %>">
+      <div style="display: flex; align-items: center; border: 1px solid #666; padding: 0.5em; margin-right: 0.5em;" phx-click="add-component" phx-value-component-id=<%= component.id %>>
         <span style="color: green; margin-right: 0.2em; font-size: 1.2em;">+</span> <%= component.name %>
       </div>
     <% end %>
@@ -24,7 +24,7 @@
   <div style="display: flex; flex-direction: row; flex-wrap: wrap;">
     <%= for dc <- @dashboard_components do %>
       <div style="display: flex; align-items: center; border: 1px solid #666; padding: 0.5em; margin: 0 0.5em 0.5em 0;" phx-click="remove-component" phx-value-dc-id="<%= dc.id %>">
-        <span style="color: red; margin-right: 0.2em; font-size: 1.2em;">-</span> <%= dc.component.name %>
+        <span style="color: red; margin-right: 0.2em; font-size: 1.2em;">-</span> <%= dc.sequence %>: <%= dc.component.name %>
       </div>
     <% end %>
   </div>
