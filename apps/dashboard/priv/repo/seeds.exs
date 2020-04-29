@@ -23,6 +23,13 @@ components = [
     module: "DashboardWeb.Components.PersonUpdated",
     name: "Recently Updated Profiles",
     refresh_type: "poll"
+  },
+  %{
+    api_path: "/people/v2/forms?order=-created_at&per_page=5&fields[Form]=name,submission_count",
+    assign: "forms",
+    module: "DashboardWeb.Components.FormsOverview",
+    name: "Forms Overview",
+    refresh_type: "poll"
   }
 ]
 

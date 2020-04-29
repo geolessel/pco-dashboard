@@ -12,6 +12,7 @@
 <% end %>
 
 <%= for component <- @components do %>
+  <h3><%= component.name %></h3>
   <%= live_component(@socket,
                      Dashboard.Dashboards.Component.to_module(component),
                      user_token: @user_token,
