@@ -20,6 +20,6 @@ defmodule Dashboard.Dashboards.Component do
   end
 
   def to_module(%__MODULE__{module: module}) do
-    String.to_atom("Elixir." <> module)
+    String.to_existing_atom("Elixir." <> module)
   end
 end

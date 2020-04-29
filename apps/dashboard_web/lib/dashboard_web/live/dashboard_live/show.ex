@@ -21,22 +21,19 @@ defmodule DashboardWeb.DashboardLive.Show do
     user = Accounts.get_user_by_session_token(socket.assigns.user_token)
     dashboard = Dashboards.get_dashboard_by_slug!(slug, user.id)
 
-    # TODO: only load the components for this dashboard
-
     {:noreply,
      socket
      |> assign(:page_title, page_title(socket.assigns.live_action))
-     |> assign(:components, Dashboards.list_components())
-     |> assign(:people, [])
+     |> assign(:components, dashboard.dashboard_components)
      |> assign(:dashboard, dashboard)}
   end
 
   @impl true
   def handle_info(:tell_components_to_update, socket) do
-    Enum.each(socket.assigns.components, fn component ->
-      send_update(Component.to_module(component),
-        id: component.id,
-        component: component,
+    Enum.each(socket.assigns.components, fn dc ->
+      send_update(Component.to_module(dc.component),
+        id: dc.id,
+        component: dc.component,
         user_token: socket.assigns.user_token
       )
     end)

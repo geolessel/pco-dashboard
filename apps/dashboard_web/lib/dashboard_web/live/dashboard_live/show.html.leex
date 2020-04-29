@@ -1,21 +1,9 @@
-<h1>Show Dashboard</h1>
-
-<% # TODO: probably won't need this unless we want to edit which components are active %>
-
-<%= if @live_action in [:edit] do %>
-  <%= live_modal @socket, DashboardWeb.DashboardLive.FormComponent,
-    id: @dashboard.id,
-    title: @page_title,
-    action: @live_action,
-    dashboard: @dashboard,
-    return_to: Routes.dashboard_show_path(@socket, :show, @dashboard) %>
-<% end %>
-
-<%= for component <- @components do %>
-  <h3><%= component.name %></h3>
-  <%= live_component(@socket,
-                     Dashboard.Dashboards.Component.to_module(component),
-                     user_token: @user_token,
-                     id: component.id,
-                     component: component) %>
-<% end %>
+<div>
+  <%= for dc <- @components do %>
+    <%= live_component(@socket,
+                      Dashboard.Dashboards.Component.to_module(dc.component),
+                      user_token: @user_token,
+                      id: dc.id,
+                      component: dc.component) %>
+  <% end %>
+</div>

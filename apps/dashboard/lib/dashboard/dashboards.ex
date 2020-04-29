@@ -6,7 +6,7 @@ defmodule Dashboard.Dashboards do
   import Ecto.Query, warn: false
   alias Dashboard.Repo
 
-  alias Dashboard.Dashboards.{Dashboard, Component}
+  alias Dashboard.Dashboards.{Dashboard, DashboardComponent, Component}
 
   @doc """
   Returns the list of dashboards for a user.
@@ -56,7 +56,9 @@ defmodule Dashboard.Dashboards do
 
   """
   def get_dashboard_by_slug!(slug, user_id) do
-    Repo.get_by!(Dashboard, %{slug: slug, user_id: user_id})
+    Dashboard
+    |> Repo.get_by!(%{slug: slug, user_id: user_id})
+    |> Repo.preload(:components)
   end
 
   @doc """
@@ -216,5 +218,27 @@ defmodule Dashboard.Dashboards do
   """
   def change_component(%Component{} = component, attrs \\ %{}) do
     Component.changeset(component, attrs)
+  end
+
+  def get_dashboard_component_of_dashboard!(%Dashboard{id: dashboard_id}, id) do
+    Repo.get_by!(DashboardComponent, %{id: id, dashboard_id: dashboard_id})
+  end
+
+  def change_dashboard_component(%DashboardComponent{} = dc, attrs \\ %{}) do
+    DashboardComponent.changeset(dc, attrs)
+  end
+
+  def create_dashboard_component(attrs \\ %{}) do
+    %DashboardComponent{}
+    |> DashboardComponent.changeset(attrs)
+    |> Repo.insert()
+    |> case do
+      {:ok, dc} -> {:ok, Repo.preload(dc, :component)}
+      other -> other
+    end
+  end
+
+  def delete_dashboard_component(%DashboardComponent{} = dc) do
+    Repo.delete(dc)
   end
 end
