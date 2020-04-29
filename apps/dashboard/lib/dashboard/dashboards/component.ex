@@ -18,4 +18,8 @@ defmodule Dashboard.Dashboards.Component do
     |> cast(attrs, [:name, :api_path, :module, :assign, :refresh_type])
     |> validate_required([:name, :api_path, :module, :assign, :refresh_type])
   end
+
+  def to_module(%__MODULE__{module: module}) do
+    String.to_existing_atom("Elixir." <> module)
+  end
 end

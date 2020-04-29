@@ -75,6 +75,8 @@ defmodule DashboardWeb.Router do
 
     live "/dashboards/:slug", DashboardLive.Show, :show
     live "/dashboards/:slug/show/edit", DashboardLive.Show, :edit
+
+    live "/dashboards/:slug/layout", DashboardLive.Layout, :edit
   end
 
   scope "/", DashboardWeb do

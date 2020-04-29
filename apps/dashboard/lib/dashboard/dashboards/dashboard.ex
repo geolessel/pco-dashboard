@@ -6,6 +6,8 @@ defmodule Dashboard.Dashboards.Dashboard do
     field :name, :string
     field :slug, :string
     belongs_to :user, Dashboard.Accounts.User
+    has_many :dashboard_components, Dashboard.Dashboards.DashboardComponent
+    has_many :components, through: [:dashboard_components, :component]
 
     timestamps()
   end

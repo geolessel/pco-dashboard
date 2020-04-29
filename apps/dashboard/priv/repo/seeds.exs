@@ -20,8 +20,15 @@ components = [
   %{
     api_path: "/people/v2/people?order=-updated_at&per_page=5&fields[Person]=name,updated_at",
     assign: "people",
-    module: "Dashboard.Components.PersonUpdated",
+    module: "DashboardWeb.Components.PersonUpdated",
     name: "Recently Updated Profiles",
+    refresh_type: "poll"
+  },
+  %{
+    api_path: "/people/v2/forms?order=-created_at&per_page=5&fields[Form]=name,submission_count",
+    assign: "forms",
+    module: "DashboardWeb.Components.FormsOverview",
+    name: "Forms Overview",
     refresh_type: "poll"
   }
 ]
@@ -30,7 +37,7 @@ components
 |> Enum.each(fn attrs ->
   IO.puts("  - #{attrs.name}")
 
-  case Repo.get_by(Component, attrs) do
+  case Repo.get_by(Component, %{name: attrs.name}) do
     nil -> %Component{}
     c -> c
   end
