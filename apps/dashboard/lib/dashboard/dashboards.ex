@@ -39,7 +39,11 @@ defmodule Dashboard.Dashboards do
       ** (Ecto.NoResultsError)
 
   """
-  def get_dashboard!(id, user_id), do: Repo.get_by!(Dashboard, %{id: id, user_id: user_id})
+  def get_dashboard!(id, user_id) do
+    Dashboard
+    |> Repo.get_by!(%{id: id, user_id: user_id})
+    |> preload_components()
+  end
 
   @doc """
   Gets a single dashboard from a slug and user_id.
@@ -58,7 +62,11 @@ defmodule Dashboard.Dashboards do
   def get_dashboard_by_slug!(slug, user_id) do
     Dashboard
     |> Repo.get_by!(%{slug: slug, user_id: user_id})
-    |> Repo.preload(:components,
+    |> preload_components()
+  end
+
+  defp preload_components(query) do
+    Repo.preload(query, :components,
       dashboard_components: from(dc in DashboardComponent, order_by: dc.sequence)
     )
   end
@@ -241,7 +249,17 @@ defmodule Dashboard.Dashboards do
   end
 
   def delete_dashboard_component(%DashboardComponent{} = dc) do
-    Repo.delete(dc)
+    Ecto.Multi.new()
+    |> Ecto.Multi.delete(:delete, dc)
+    |> Ecto.Multi.update_all(
+      :resequence,
+      from(d in DashboardComponent,
+        where: d.dashboard_id == ^dc.dashboard_id,
+        where: d.sequence > ^dc.sequence
+      ),
+      inc: [sequence: -1]
+    )
+    |> Repo.transaction()
   end
 
   def get_max_sequence_for_dashboard(%Dashboard{id: did} = dashboard) do

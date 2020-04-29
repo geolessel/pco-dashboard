@@ -61,11 +61,14 @@ defmodule DashboardWeb.DashboardLive.Layout do
     |> Dashboards.delete_dashboard_component()
     |> case do
       {:ok, _} ->
+        user = Accounts.get_user_by_session_token(socket.assigns.user_token)
+        dashboard = Dashboards.get_dashboard!(dashboard.id, user.id)
+
         {:noreply,
          assign(
            socket,
            :dashboard_components,
-           Enum.filter(dashboard_components, fn %{id: id} -> id != String.to_integer(dc_id) end)
+           dashboard.dashboard_components
          )}
     end
   end
