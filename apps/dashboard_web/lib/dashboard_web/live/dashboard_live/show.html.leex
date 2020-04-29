@@ -12,5 +12,9 @@
 <% end %>
 
 <%= for component <- @components do %>
-  <%= live_component(@socket, String.to_atom("Elixir." <> component.module), [{component.assign, @people}]) %>
+  <%= live_component(@socket,
+                     Dashboard.Dashboards.Component.to_module(component),
+                     user_token: @user_token,
+                     id: component.id,
+                     component: component) %>
 <% end %>

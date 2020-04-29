@@ -2,11 +2,13 @@ defmodule DashboardWeb.DashboardLive.Show do
   use DashboardWeb, :live_view
 
   alias Dashboard.{Accounts, Dashboards}
+  alias Dashboard.Dashboards.Component
+
+  @poll_interval 30_000
 
   @impl true
   def mount(_params, %{"user_token" => user_token} = _session, socket) do
-    send(self(), :fetch_people)
-    :timer.send_interval(30_000, :fetch_people)
+    :timer.send_interval(@poll_interval, :tell_components_to_update)
 
     {:ok,
      socket
@@ -19,39 +21,25 @@ defmodule DashboardWeb.DashboardLive.Show do
     user = Accounts.get_user_by_session_token(socket.assigns.user_token)
     dashboard = Dashboards.get_dashboard_by_slug!(slug, user.id)
 
-    components = [
-      %{
-        assign: :people,
-        module: "DashboardWeb.Components.PersonUpdated",
-        api_path: "/people/v2/people?order=-updated_at&per_page=5&fields[Person]=name,updated_at"
-      }
-    ]
+    # TODO: only load the components for this dashboard
 
     {:noreply,
      socket
      |> assign(:page_title, page_title(socket.assigns.live_action))
-     |> assign(:components, components)
+     |> assign(:components, Dashboards.list_components())
      |> assign(:people, [])
      |> assign(:dashboard, dashboard)}
   end
 
   @impl true
-  def handle_info(:fetch_people, socket) do
-    user = Accounts.get_user_by_session_token(socket.assigns.user_token)
-
-    socket =
-      Enum.reduce(socket.assigns.components, socket, fn component, acc ->
-        assign(
-          socket,
-          component.assign,
-          Map.get(
-            Dashboard.PlanningCenterApi.Client.get(user, component.api_path),
-            :body,
-            %{}
-          )
-          |> Map.get("data", [])
-        )
-      end)
+  def handle_info(:tell_components_to_update, socket) do
+    Enum.each(socket.assigns.components, fn component ->
+      send_update(Component.to_module(component),
+        id: component.id,
+        component: component,
+        user_token: socket.assigns.user_token
+      )
+    end)
 
     {:noreply, socket}
   end

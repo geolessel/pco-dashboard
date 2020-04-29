@@ -1,9 +1,24 @@
 defmodule DashboardWeb.Components.PersonUpdated do
   use DashboardWeb, :live_component
 
+  alias Dashboard.Accounts
+
   @impl true
   def mount(socket) do
-    {:ok, socket}
+    {:ok, assign(socket, :people, [])}
+  end
+
+  @impl true
+  def update(%{component: component} = assigns, socket) do
+    user = Accounts.get_user_by_session_token(assigns.user_token)
+
+    people =
+      user
+      |> Dashboard.PlanningCenterApi.Client.get(component.api_path)
+      |> Map.get(:body, %{})
+      |> Map.get("data", [])
+
+    {:ok, assign(socket, :people, people)}
   end
 
   @impl true
