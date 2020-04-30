@@ -66,8 +66,8 @@ defmodule Dashboard.Dashboards do
   end
 
   defp preload_components(query) do
-    Repo.preload(query, :components,
-      dashboard_components: from(dc in DashboardComponent, order_by: dc.sequence)
+    Repo.preload(query,
+      dashboard_components: {from(dc in DashboardComponent, order_by: dc.sequence), [:component]}
     )
   end
 
@@ -266,5 +266,53 @@ defmodule Dashboard.Dashboards do
     Repo.one(
       from dc in DashboardComponent, where: dc.dashboard_id == ^did, select: max(dc.sequence)
     )
+  end
+
+  def reorder_component(%DashboardComponent{} = dc, new_sequence) do
+    {resequence_others_query, direction} =
+      cond do
+        # moving closer to 0
+        dc.sequence >= new_sequence ->
+          {from(d in DashboardComponent,
+             where: d.dashboard_id == ^dc.dashboard_id,
+             where: d.sequence >= ^new_sequence,
+             where: d.sequence < ^dc.sequence,
+             order_by: [desc: d.sequence]
+           ), 1}
+
+        # moving away from 0
+        dc.sequence <= new_sequence ->
+          {from(d in DashboardComponent,
+             where: d.dashboard_id == ^dc.dashboard_id,
+             where: d.sequence <= ^new_sequence,
+             where: d.sequence > ^dc.sequence,
+             order_by: [asc: d.sequence]
+           ), -1}
+      end
+
+    resequence_others =
+      resequence_others_query
+      |> Repo.all()
+      |> Enum.reduce(Ecto.Multi.new(), fn component, query ->
+        query
+        |> Ecto.Multi.update(
+          "resequence_#{component.id}_from_#{component.sequence}_to_#{
+            component.sequence + direction
+          }",
+          DashboardComponent.changeset(component, %{sequence: component.sequence + direction})
+        )
+      end)
+
+    Ecto.Multi.new()
+    |> Ecto.Multi.update(
+      :resequence_target_temp,
+      DashboardComponent.changeset(dc, %{sequence: -1})
+    )
+    |> Ecto.Multi.append(resequence_others)
+    |> Ecto.Multi.update(
+      :resequence_target,
+      DashboardComponent.changeset(dc, %{sequence: new_sequence})
+    )
+    |> Repo.transaction()
   end
 end

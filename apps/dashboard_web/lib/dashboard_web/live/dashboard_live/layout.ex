@@ -53,8 +53,6 @@ defmodule DashboardWeb.DashboardLive.Layout do
         %{"dc-id" => dc_id} = params,
         %{assigns: %{dashboard: dashboard, dashboard_components: dashboard_components}} = socket
       ) do
-    dashboard = socket.assigns.dashboard
-
     # TODO: handle the error!
     dashboard
     |> Dashboards.get_dashboard_component_of_dashboard!(dc_id)
@@ -70,6 +68,26 @@ defmodule DashboardWeb.DashboardLive.Layout do
            :dashboard_components,
            dashboard.dashboard_components
          )}
+    end
+  end
+
+  @impl true
+  def handle_event(
+        "reorder-component",
+        %{"dc_id" => dc_id, "new_sequence" => new_sequence},
+        socket
+      ) do
+    dashboard = socket.assigns.dashboard
+
+    # TODO: handle error
+    dashboard
+    |> Dashboards.get_dashboard_component_of_dashboard!(dc_id)
+    |> Dashboards.reorder_component(new_sequence)
+    |> case do
+      {:ok, r} ->
+        user = Accounts.get_user_by_session_token(socket.assigns.user_token)
+        dashboard = Dashboards.get_dashboard!(dashboard.id, user.id)
+        {:noreply, assign(socket, :dashboard_components, dashboard.dashboard_components)}
     end
   end
 
