@@ -249,16 +249,26 @@ defmodule Dashboard.Dashboards do
   end
 
   def delete_dashboard_component(%DashboardComponent{} = dc) do
-    Ecto.Multi.new()
-    |> Ecto.Multi.delete(:delete, dc)
-    |> Ecto.Multi.update_all(
-      :resequence,
+    components =
       from(d in DashboardComponent,
         where: d.dashboard_id == ^dc.dashboard_id,
-        where: d.sequence > ^dc.sequence
-      ),
-      inc: [sequence: -1]
-    )
+        where: d.sequence > ^dc.sequence,
+        order_by: d.sequence
+      )
+      |> Repo.all()
+
+    resequence_multi =
+      Enum.reduce(components, Ecto.Multi.new(), fn component, query ->
+        query
+        |> Ecto.Multi.update(
+          "resequence_#{component.id}",
+          DashboardComponent.changeset(component, %{sequence: component.sequence - 1})
+        )
+      end)
+
+    Ecto.Multi.new()
+    |> Ecto.Multi.delete(:delete, dc)
+    |> Ecto.Multi.append(resequence_multi)
     |> Repo.transaction()
   end
 
