@@ -4,12 +4,9 @@ defmodule DashboardWeb.DashboardLive.Show do
   alias Dashboard.{Accounts, Dashboards}
   alias Dashboard.Dashboards.Component
 
-  @poll_interval 10_000
-
   @impl true
   def mount(_params, %{"user_token" => user_token} = _session, socket) do
     user = Accounts.get_user_by_session_token(user_token)
-    :timer.send_interval(@poll_interval, :tell_components_to_update)
 
     {:ok,
      socket

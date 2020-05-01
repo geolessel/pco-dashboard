@@ -45,6 +45,7 @@ defmodule Dashboard.Stores.ComponentStore do
       state
       |> Map.put(state.component.assign, [])
       |> Map.put(:subscribers, [])
+      |> Map.put(:last_update, nil)
       |> Map.put(:timer, timer)
 
     {:ok, state}
@@ -82,6 +83,8 @@ defmodule Dashboard.Stores.ComponentStore do
       }"
     )
 
+    maybe_update_immediately(state.last_update)
+
     {:noreply, %{state | subscribers: subscribers}}
   end
 
@@ -101,16 +104,35 @@ defmodule Dashboard.Stores.ComponentStore do
     {:noreply, %{state | subscribers: subscribers}}
   end
 
+  @doc """
+  Fetch updates from the Planning Center API.
+
+  Also handles letting subscribers know there is new data to enjoy.
+
+  If there are no subscribers, don't bother making the request.
+  """
+  def handle_info(:update, %{subscribers: subscribers} = state) when length(subscribers) == 0,
+    do: {:noreply, state}
+
   def handle_info(:update, state) do
     state =
-      Map.put(
-        state,
+      state
+      |> Map.put(
         state.component.assign,
         state.user
         |> Dashboard.PlanningCenterApi.Client.get(state.component.api_path)
         |> Map.get(:body, %{})
         |> Map.get("data", [])
       )
+      |> Map.put(
+        :last_update,
+        DateTime.utc_now()
+      )
+
+    state.subscribers
+    |> Enum.each(fn subscriber ->
+      Process.send(subscriber, :tell_components_to_update, [])
+    end)
 
     {:noreply, state}
   end
@@ -140,4 +162,14 @@ defmodule Dashboard.Stores.ComponentStore do
   # ┌──────────────────┐
   # │ Helper Functions │
   # └──────────────────┘
+
+  def maybe_update_immediately(nil), do: send(self(), :update)
+
+  def maybe_update_immediately(last_update) do
+    if DateTime.diff(DateTime.utc_now(), last_update) > @poll_interval do
+      send(self(), :update)
+    else
+      :ok
+    end
+  end
 end
