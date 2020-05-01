@@ -1,4 +1,4 @@
-<div>
+<div class="grid grid-cols-5 gap-8 p-8">
   <%= for dc <- @components do %>
     <%= live_component(@socket,
                       Dashboard.Dashboards.Component.to_module(dc.component),
