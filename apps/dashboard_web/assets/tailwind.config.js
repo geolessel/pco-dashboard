@@ -3,6 +3,7 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        alabaster: "#fafafa",
         app: {
           calendar: "#cc4832",
           "check-ins": "#876096",
@@ -15,6 +16,8 @@ module.exports = {
       }
     }
   },
-  variants: {},
+  variants: {
+    backgroundColor: ["responsive", "hover", "focus", "odd", "even"]
+  },
   plugins: []
 };
