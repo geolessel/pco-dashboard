@@ -1,4 +1,4 @@
-<h2><%= @title %></h2>
+<h2 class="text-lg text-gray-700 mb-8"><%= @title %></h2>
 
 <%= f = form_for @changeset, "#",
   id: "dashboard-form",
@@ -6,13 +6,28 @@
   phx_change: "validate",
   phx_submit: "save" %>
 
-  <%= label f, :name %>
-  <%= text_input f, :name %>
-  <%= error_tag f, :name %>
-
-  <%= label f, :slug %>
-  <%= text_input f, :slug %>
-  <%= error_tag f, :slug %>
-
-  <%= submit "Save", phx_disable_with: "Saving..." %>
+  <div class="grid grid-cols-3 gap-4">
+    <div class="">
+      <%= label f, :name, class: "block text-gray-500 font-bold leading-7 py-2 text-right" %>
+    </div>
+    <div class="col-span-2">
+      <%= text_input f, :name, class: "bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:bg-white focus:border-blue-500" %>
+      <p class="block leading-8 text-red-500 text-sm italic">
+        <%= error_tag f, :name %>
+      </p>
+    </div>
+    <div class="">
+      <%= label f, :slug, class: "block text-gray-500 font-bold leading-7 py-2 text-right" %>
+    </div>
+    <div class="col-span-2">
+      <%= text_input f, :slug, class: "bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:bg-white focus:border-blue-500" %>
+      <p class="block leading-8 text-red-500 text-sm italic">
+        <%= error_tag f, :slug %>
+      </p>
+    </div>
+    <div class=""></div>
+    <div class="col-span-2">
+      <%= submit "Save", phx_disable_with: "Saving...", class: "shadow bg-blue-500 hover:bg-blue-400 focus:shadow-outline focus:outline-none text-white py-2 px-4 rounded text-sm" %>
+  </div>
+  </div>
 </form>
