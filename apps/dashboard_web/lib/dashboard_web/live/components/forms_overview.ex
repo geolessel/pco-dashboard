@@ -1,8 +1,6 @@
 defmodule DashboardWeb.Components.FormsOverview do
   use DashboardWeb, :live_component
 
-  alias Dashboard.Accounts
-
   @impl true
   def mount(socket) do
     {:ok, assign(socket, :forms, [])}
@@ -10,7 +8,7 @@ defmodule DashboardWeb.Components.FormsOverview do
 
   @impl true
   def update(assigns, socket) do
-    forms = Dashboard.Stores.ComponentStore.get({:global, get_id(assigns)}, "forms")
+    forms = Dashboard.Stores.get(get_id(assigns), "forms")
 
     {:ok, assign(socket, :forms, forms)}
   end

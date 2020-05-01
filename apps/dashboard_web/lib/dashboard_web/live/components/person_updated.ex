@@ -1,8 +1,6 @@
 defmodule DashboardWeb.Components.PersonUpdated do
   use DashboardWeb, :live_component
 
-  alias Dashboard.Accounts
-
   @impl true
   def mount(socket) do
     {:ok, assign(socket, :people, [])}
@@ -10,7 +8,7 @@ defmodule DashboardWeb.Components.PersonUpdated do
 
   @impl true
   def update(assigns, socket) do
-    people = Dashboard.Stores.ComponentStore.get({:global, get_id(assigns)}, "people")
+    people = Dashboard.Stores.get(get_id(assigns), "people")
 
     {:ok, assign(socket, :people, people)}
   end
