@@ -11,6 +11,8 @@
 # and so on) as they will fail if something goes wrong.
 
 alias Dashboard.Repo
+alias Dashboard.Components
+alias Dashboard.Components.Configuration
 alias Dashboard.Dashboards
 alias Dashboard.Dashboards.Component
 
@@ -38,6 +40,19 @@ components = [
     module: "DashboardWeb.Components.CheckIns",
     name: "Check-ins",
     refresh_type: "poll"
+  },
+  %{
+    api_path: "/people/v2/lists/${list_id}/results?order=-created_at",
+    assign: "results",
+    configurations: [
+      %{
+        name: "list_id",
+        label: "List ID"
+      }
+    ],
+    module: "DashboardWeb.Components.ListResults",
+    name: "List Results",
+    refresh_type: "poll"
   }
 ]
 
@@ -45,10 +60,25 @@ components
 |> Enum.each(fn attrs ->
   IO.puts("  - #{attrs.name}")
 
-  case Repo.get_by(Component, %{name: attrs.name}) do
-    nil -> %Component{}
-    c -> c
-  end
-  |> Dashboards.change_component(attrs)
-  |> Repo.insert_or_update!()
+  component =
+    case Repo.get_by(Component, %{name: attrs.name}) do
+      nil -> %Component{}
+      c -> c
+    end
+    |> Dashboards.change_component(attrs)
+    |> Repo.insert_or_update!()
+
+  attrs
+  |> Map.get(:configurations, [])
+  |> Enum.each(fn attrs ->
+    attrs = Map.put(attrs, :component_id, component.id)
+
+    config =
+      case Repo.get_by(Configuration, attrs) do
+        nil -> %Configuration{}
+        c -> c
+      end
+      |> Components.change_configuration(attrs)
+      |> Repo.insert_or_update!()
+  end)
 end)

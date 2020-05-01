@@ -8,6 +8,7 @@ defmodule Dashboard.Dashboards.Component do
     field :module, :string
     field :name, :string, default: "poll"
     field :refresh_type, :string, default: "poll"
+    has_many :configurations, Dashboard.Components.Configuration
 
     timestamps()
   end
