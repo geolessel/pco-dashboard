@@ -9,14 +9,8 @@ defmodule DashboardWeb.Components.FormsOverview do
   end
 
   @impl true
-  def update(%{component: component, user_token: user_token}, socket) do
-    user = Accounts.get_user_by_session_token(user_token)
-
-    forms =
-      user
-      |> Dashboard.PlanningCenterApi.Client.get(component.api_path)
-      |> Map.get(:body, %{})
-      |> Map.get("data", [])
+  def update(assigns, socket) do
+    forms = Dashboard.Stores.ComponentStore.get({:global, get_id(assigns)}, "forms")
 
     {:ok, assign(socket, :forms, forms)}
   end
@@ -51,5 +45,9 @@ defmodule DashboardWeb.Components.FormsOverview do
       </div>
     </div>
     """
+  end
+
+  def get_id(assigns) do
+    "forms_overview--user_#{assigns.user_id}"
   end
 end

@@ -5,6 +5,7 @@ defmodule DashboardWeb.DashboardLive.Layout do
   alias Dashboard.Dashboards.Component
 
   @impl true
+  # TODO: can all this be done with a user_id instead of a user_token?
   def mount(_params, %{"user_token" => user_token} = _session, socket) do
     {:ok,
      socket

@@ -9,18 +9,8 @@ defmodule DashboardWeb.Components.PersonUpdated do
   end
 
   @impl true
-  @spec update(
-          %{component: atom | %{api_path: any}, user_token: any},
-          Phoenix.LiveView.Socket.t()
-        ) :: {:ok, Phoenix.LiveView.Socket.t()}
-  def update(%{component: component} = assigns, socket) do
-    user = Accounts.get_user_by_session_token(assigns.user_token)
-
-    people =
-      user
-      |> Dashboard.PlanningCenterApi.Client.get(component.api_path)
-      |> Map.get(:body, %{})
-      |> Map.get("data", [])
+  def update(assigns, socket) do
+    people = Dashboard.Stores.ComponentStore.get({:global, get_id(assigns)}, "people")
 
     {:ok, assign(socket, :people, people)}
   end
@@ -53,5 +43,9 @@ defmodule DashboardWeb.Components.PersonUpdated do
       </div>
     </div>
     """
+  end
+
+  def get_id(assigns) do
+    "person_updated--user_#{assigns.user_id}"
   end
 end

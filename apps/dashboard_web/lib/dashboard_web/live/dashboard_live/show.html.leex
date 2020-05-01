@@ -2,7 +2,7 @@
   <%= for dc <- @components do %>
     <%= live_component(@socket,
                       Dashboard.Dashboards.Component.to_module(dc.component),
-                      user_token: @user_token,
+                      user_id: @user_id,
                       id: dc.id,
                       component: dc.component) %>
   <% end %>
