@@ -1,14 +1,17 @@
-<div style="display: flex; justify-content: end; background-color: #eee; ">
-  <%= if @current_user do %>
-    <div class="nav-item"><%= @current_user.email %></div>
-    <div class="nav-item"><%= link "Dashboards", to: Routes.dashboard_index_path(@conn, :index) %></div>
-    <div class="nav-item"><%= link "Settings", to: Routes.user_settings_path(@conn, :edit) %></div>
-    <%= if function_exported?(Routes, :live_dashboard_path, 2) do %>
-      <div class="nav-item"><%= link "LiveDashboard", to: Routes.live_dashboard_path(@conn, :home) %></div>
+<nav class="bg-gray-200 flex items-center justify-between px-4 py-2">
+  <h1 class="text-lg text-bold px-4">Dashboard</h1>
+  <ul class="flex text-xs divide-x divide-gray-400">
+    <%= if @current_user do %>
+      <li class="text-gray-500 px-4"><%= @current_user.email %></li>
+      <li class="px-4"><%= link "Dashboards", to: Routes.dashboard_index_path(@conn, :index) %></li>
+      <li class="px-4"><%= link "Settings", to: Routes.user_settings_path(@conn, :edit) %></li>
+      <%= if function_exported?(Routes, :live_dashboard_path, 2) do %>
+        <li class="px-4"><%= link "LiveDashboard", to: Routes.live_dashboard_path(@conn, :home) %></li>
+      <% end %>
+      <li class="px-4 text-red-500"><%= link "Logout", to: Routes.user_session_path(@conn, :delete), method: :delete %></li>
+    <% else %>
+      <li class="px-4"><%= link "Register", to: Routes.user_registration_path(@conn, :new) %></li>
+      <li class="px-4"><%= link "Login", to: Routes.user_session_path(@conn, :new) %></li>
     <% end %>
-    <div class="nav-item"><%= link "Logout", to: Routes.user_session_path(@conn, :delete), method: :delete %></div>
-  <% else %>
-    <div class="nav-item"><%= link "Register", to: Routes.user_registration_path(@conn, :new) %></div>
-    <div class="nav-item"><%= link "Login", to: Routes.user_session_path(@conn, :new) %></div>
-  <% end %>
-</div>
+  </ul>
+</nav>
