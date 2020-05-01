@@ -10,9 +10,10 @@ defmodule Dashboard.Application do
       # Start the Ecto repository
       Dashboard.Repo,
       # Start the PubSub system
-      {Phoenix.PubSub, name: Dashboard.PubSub}
+      {Phoenix.PubSub, name: Dashboard.PubSub},
       # Start a worker by calling: Dashboard.Worker.start_link(arg)
       # {Dashboard.Worker, arg}
+      {DynamicSupervisor, strategy: :one_for_one, name: Dashboard.Stores.DynamicSupervisor}
     ]
 
     Supervisor.start_link(children, strategy: :one_for_one, name: Dashboard.Supervisor)
