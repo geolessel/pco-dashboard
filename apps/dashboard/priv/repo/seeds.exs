@@ -18,17 +18,25 @@ IO.puts("Seeding dashboard components...")
 
 components = [
   %{
-    api_path: "/people/v2/people?order=-updated_at&per_page=5&fields[Person]=name,updated_at",
+    api_path: "/people/v2/people?order=-updated_at&per_page=8&fields[Person]=name,updated_at",
     assign: "people",
     module: "DashboardWeb.Components.PersonUpdated",
     name: "Recently Updated Profiles",
     refresh_type: "poll"
   },
   %{
-    api_path: "/people/v2/forms?order=-created_at&per_page=5&fields[Form]=name,submission_count",
+    api_path: "/people/v2/forms?order=-created_at&per_page=8&fields[Form]=name,submission_count",
     assign: "forms",
     module: "DashboardWeb.Components.FormsOverview",
     name: "Forms Overview",
+    refresh_type: "poll"
+  },
+  %{
+    api_path:
+      "/check-ins/v2/check_ins?order=-updated_at&per_page=8&fields[CheckIn]=first_name,last_name,kind,medical_notes",
+    assign: "checkins",
+    module: "DashboardWeb.Components.CheckIns",
+    name: "Check-ins",
     refresh_type: "poll"
   }
 ]
