@@ -7,7 +7,7 @@
 .card {
   @apply bg-white col-span-2 overflow-hidden rounded-lg shadow shadow-lg;
   .card-header {
-    @apply bg-alabaster bg-gray-100 border-app-people border-l-2 flex items-center mt-2 px-4;
+    @apply bg-gray-100 border-product-people border-l-2 flex items-center mt-2 px-4;
     .card-title {
       @apply flex-1 font-bold mr-2 py-1 text-base text-gray-800;
     }
