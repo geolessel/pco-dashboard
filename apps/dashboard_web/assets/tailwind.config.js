@@ -5,7 +5,7 @@ module.exports = {
       colors: {
         product: {
           calendar: "#cc4832",
-          "check-ins": "#876096",
+          checkins: "#876096",
           giving: "#f2b327",
           groups: "#fb7642",
           people: "#5282e5",
