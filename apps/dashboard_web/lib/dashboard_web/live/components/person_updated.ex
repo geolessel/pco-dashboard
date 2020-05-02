@@ -18,24 +18,26 @@ defmodule DashboardWeb.Components.PersonUpdated do
   @impl true
   def render(assigns) do
     ~L"""
-    <div class="bg-white col-span-2 rounded-lg overflow-hidden shadow-base shadow-lg">
-      <div class="bg-alabaster flex mt-2 px-4 items-center border-l-2 border-app-people">
-        <h1 class="flex-1 mr-2 py-1 text-gray-800 text-base font-bold">Last Updated</h1>
-        <div class="bg-app-people text-white w-5 h-5 text-center text-sm rounded">P</div>
+    <div class="card">
+      <div class="card-header">
+        <h1 class="card-title">
+          Last Updated
+        </h1>
+        <div class="card-icon">P</div>
       </div>
       <div class="p-4">
-        <table class="table-auto leading-6 w-full">
-          <thead class="text-gray-500 uppercase text-xs text-left">
+        <table class="clean-table">
+          <thead>
             <tr>
-              <th class="px-2 py-0">Name</th>
-              <th class="px-2 py-0">Updated</th>
+              <th>Name</th>
+              <th>Updated</th>
             </tr>
           </thead>
-          <tbody class="align-baseline text-gray-700 text-sm">
+          <tbody>
             <%= for person <- @people do %>
-              <tr class="odd:bg-gray-100">
-                <td class="px-2 py-0"><%= person["attributes"]["name"] %></td>
-                <td class="px-2 py-0"><%= person["attributes"]["updated_at"] %></td>
+              <tr>
+                <td><%= person["attributes"]["name"] %></td>
+                <td><%= person["attributes"]["updated_at"] %></td>
               </tr>
             <% end %>
           </tbody>

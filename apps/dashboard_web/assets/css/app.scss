@@ -1,9 +1,41 @@
 /* This file is for your main application css. */
 @import "../node_modules/nprogress/nprogress.css";
 @import "./draggable.css";
-@import "tailwindcss/base";
-@import "tailwindcss/components";
-@import "tailwindcss/utilities";
+@tailwind base;
+@tailwind components;
+
+.card {
+  @apply bg-white col-span-2 overflow-hidden rounded-lg shadow shadow-lg;
+  .card-header {
+    @apply bg-alabaster bg-gray-100 border-app-people border-l-2 flex items-center mt-2 px-4;
+    .card-title {
+      @apply flex-1 font-bold mr-2 py-1 text-base text-gray-800;
+    }
+    .card-icon {
+      @apply bg-app-people h-5 rounded text-center text-sm text-white w-5;
+    }
+  }
+}
+
+.clean-table {
+  @apply leading-6 table-auto w-full;
+  thead {
+    @apply text-gray-500 text-left text-xs uppercase;
+  }
+  th,
+  td {
+    @apply px-2 py-0;
+  }
+  tbody {
+    @apply align-baseline text-gray-700 text-sm;
+    tr:nth-child(odd) {
+      @apply bg-gray-100;
+    }
+  }
+}
+
+/* Intentionally imported after custom component classes per https://tailwindcss.com/docs/extracting-components */
+@tailwind utilities;
 
 /* LiveView specific classes for your customizations */
 .invalid-feedback {
