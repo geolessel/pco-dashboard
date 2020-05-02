@@ -3,8 +3,7 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        alabaster: "#fafafa",
-        app: {
+        product: {
           calendar: "#cc4832",
           "check-ins": "#876096",
           giving: "#f2b327",
