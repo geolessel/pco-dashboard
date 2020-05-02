@@ -17,36 +17,18 @@ defmodule DashboardWeb.Components.FormsOverview do
 
   @impl true
   def render(assigns) do
-    ~L"""
-    <div class="card">
-      <div class="card-header">
-        <h1 class="card-title">
-          Form Overview
-        </h1>
-        <div class="card-icon">P</div>
-      </div>
-      <div class="p-4">
-        <table class="clean-table">
-          <thead>
-            <tr>
-              <th>Form</th>
-              <th>Submissions</th>
-              <th>Latest</th>
-            </tr>
-          </thead>
-          <tbody>
-            <%= for form <- @forms do %>
-              <tr>
-                <td><%= form["attributes"]["name"] %></td>
-                <td><%= form["attributes"]["submission_count"] %></td>
-                <td>???</td>
-              </tr>
-            <% end %>
-          </tbody>
-        </table>
-      </div>
-    </div>
-    """
+    assigns =
+      assigns
+      |> Map.put(:title, "Form Overview")
+      |> Map.put(:product, :people)
+      |> Map.put(:table_key, :forms)
+      |> Map.put(:table_columns, [
+        %{key: "name", label: "Form"},
+        %{key: "submission_count", label: "Submissions"},
+        %{key: "unknown", label: "Latest"}
+      ])
+
+    DashboardWeb.LayoutView.render("table-card.html", assigns)
   end
 
   def get_id(assigns) do

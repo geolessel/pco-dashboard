@@ -1,0 +1,30 @@
+<div class="card">
+  <div class="card-header">
+    <h1 class="card-title">
+      <%= @title %>
+    </h1>
+    <div class="card-icon bg-product-<%=@product%>">
+      <%= Map.get(%{people: "P"}, @product) %>
+    </div>
+  </div>
+  <div class="p-4">
+    <table class="clean-table">
+      <thead>
+        <tr>
+          <%= for col <- @table_columns do %>
+            <th><%= col.label %></th>
+          <% end %>
+        </tr>
+      </thead>
+      <tbody>
+        <%= for item <- assigns[@table_key] do %>
+          <tr>
+            <%= for col <- @table_columns do %>
+              <td><%= item["attributes"][col.key] %></td>
+            <% end %>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>

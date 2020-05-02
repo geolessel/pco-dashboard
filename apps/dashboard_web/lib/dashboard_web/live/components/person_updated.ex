@@ -17,34 +17,17 @@ defmodule DashboardWeb.Components.PersonUpdated do
 
   @impl true
   def render(assigns) do
-    ~L"""
-    <div class="card">
-      <div class="card-header">
-        <h1 class="card-title">
-          Last Updated
-        </h1>
-        <div class="card-icon">P</div>
-      </div>
-      <div class="p-4">
-        <table class="clean-table">
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Updated</th>
-            </tr>
-          </thead>
-          <tbody>
-            <%= for person <- @people do %>
-              <tr>
-                <td><%= person["attributes"]["name"] %></td>
-                <td><%= person["attributes"]["updated_at"] %></td>
-              </tr>
-            <% end %>
-          </tbody>
-        </table>
-      </div>
-    </div>
-    """
+    assigns =
+      assigns
+      |> Map.put(:title, "Last Updated")
+      |> Map.put(:product, :people)
+      |> Map.put(:table_key, :people)
+      |> Map.put(:table_columns, [
+        %{key: "name", label: "Name"},
+        %{key: "updated_at", label: "Updated"}
+      ])
+
+    DashboardWeb.LayoutView.render("table-card.html", assigns)
   end
 
   def get_id(assigns) do
