@@ -5,7 +5,7 @@
 @tailwind components;
 
 .card {
-  @apply bg-white col-span-2 overflow-hidden rounded-lg shadow shadow-lg;
+  @apply bg-white overflow-hidden rounded-lg shadow shadow-lg;
   .card-header {
     @apply bg-gray-100 border-product-people border-l-2 flex items-center mt-2 px-4;
     .card-title {
