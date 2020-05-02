@@ -4,7 +4,7 @@
       <%= @title %>
     </h1>
     <div class="card-icon bg-product-<%=@product%>">
-      <%= Map.get(%{people: "P"}, @product) %>
+      <%= Map.get(%{checkins: "C", people: "P"}, @product) %>
     </div>
   </div>
   <div class="p-4">
