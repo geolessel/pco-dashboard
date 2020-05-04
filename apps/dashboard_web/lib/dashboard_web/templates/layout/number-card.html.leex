@@ -1,0 +1,23 @@
+<div class="card col-span-<%= Map.get(assigns, :grid_width, 1) %>">
+  <div class="card-header">
+    <h1 class="card-title">
+      <%= @title %>
+    </h1>
+    <div class="card-icon bg-product-<%=@product%>">
+      <%= Map.get(%{checkins: "C", people: "P"}, @product) %>
+    </div>
+  </div>
+  <div class="p-4">
+    <h1 class="text-6xl font-bold text-gray-800 leading-none">
+      <%= @data_number %>
+    </h1>
+    <h3 class="font-semibold text-xs uppercase text-gray-500 leading-none">
+      This week
+    <h3>
+    <% arbitrary_comparison_number = 30 %>
+    <h3 class="text-<%= DashboardWeb.ComponentHelpers.get_trend_color(@data_number, arbitrary_comparison_number) %>-500 mt-4 font-bold">
+     <%= DashboardWeb.ComponentHelpers.get_trend_icon(@data_number, arbitrary_comparison_number) %>
+     <%= DashboardWeb.ComponentHelpers.get_trend_percent(@data_number, arbitrary_comparison_number) %>%
+    </h3>
+  </div>
+</div>

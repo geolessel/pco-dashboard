@@ -21,6 +21,7 @@ defmodule DashboardWeb.Components.FormsOverview do
       |> Map.put(:title, "Form Overview")
       |> Map.put(:product, :people)
       |> Map.put(:table_key, :forms)
+      |> Map.put(:grid_height, 4)
       |> Map.put(:table_columns, [
         %{key: "name", label: "Form"},
         %{key: "submission_count", label: "Submissions"},
