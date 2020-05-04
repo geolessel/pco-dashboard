@@ -280,7 +280,7 @@ defmodule Dashboard.Dashboards do
     |> Repo.transaction()
   end
 
-  def get_max_sequence_for_dashboard(%Dashboard{id: did} = dashboard) do
+  def get_max_sequence_for_dashboard(%Dashboard{id: did}) do
     Repo.one(
       from dc in DashboardComponent, where: dc.dashboard_id == ^did, select: max(dc.sequence)
     )

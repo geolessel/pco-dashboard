@@ -66,7 +66,7 @@ defmodule DashboardWeb.UserSettingsController do
     user = conn.assigns.current_user
 
     case Accounts.update_user_access_token(user, user_params) do
-      {:ok, user} ->
+      {:ok, _user} ->
         conn
         |> put_flash(:info, "Personal Access Token updated successfully.")
         |> redirect(to: Routes.user_settings_path(conn, :edit))

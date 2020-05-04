@@ -159,11 +159,7 @@ defmodule Dashboard.Stores.ComponentStore do
     {:noreply, state}
   end
 
-  # def terminate(reason, state) do
-  #   :ok
-  # end
-
-  def terminate(reason, state) do
+  def terminate(_reason, state) do
     :timer.cancel(state.timer)
     :ok
   end

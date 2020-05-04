@@ -36,7 +36,7 @@ defmodule DashboardWeb.Components.PersonUpdated do
   end
 
   @impl DashboardWeb.Behaviours.ComponentLiveView
-  def genserver_id(assigns, dc \\ %Dashboard.Dashboards.DashboardComponent{}) do
+  def genserver_id(assigns, _dc \\ %Dashboard.Dashboards.DashboardComponent{}) do
     "person_updated--user_#{assigns.user_id}"
   end
 end

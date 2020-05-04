@@ -2,7 +2,6 @@ defmodule DashboardWeb.DashboardLive.Layout do
   use DashboardWeb, :live_view
 
   alias Dashboard.{Accounts, Dashboards}
-  alias Dashboard.Dashboards.Component
 
   @impl true
   # TODO: can all this be done with a user_id instead of a user_token?
@@ -27,7 +26,7 @@ defmodule DashboardWeb.DashboardLive.Layout do
   end
 
   @impl true
-  def handle_event("add-component", %{"component-id" => component_id} = params, socket) do
+  def handle_event("add-component", %{"component-id" => component_id}, socket) do
     user = Accounts.get_user_by_session_token(socket.assigns.user_token)
     dashboard = socket.assigns.dashboard
 
@@ -51,8 +50,8 @@ defmodule DashboardWeb.DashboardLive.Layout do
   @impl true
   def handle_event(
         "remove-component",
-        %{"dc-id" => dc_id} = params,
-        %{assigns: %{dashboard: dashboard, dashboard_components: dashboard_components}} = socket
+        %{"dc-id" => dc_id} = _params,
+        %{assigns: %{dashboard: dashboard}} = socket
       ) do
     # TODO: handle the error!
     dashboard
@@ -85,7 +84,7 @@ defmodule DashboardWeb.DashboardLive.Layout do
     |> Dashboards.get_dashboard_component_of_dashboard!(dc_id)
     |> Dashboards.reorder_component(new_sequence)
     |> case do
-      {:ok, r} ->
+      {:ok, _} ->
         user = Accounts.get_user_by_session_token(socket.assigns.user_token)
         dashboard = Dashboards.get_dashboard!(dashboard.id, user.id)
         {:noreply, assign(socket, :dashboard_components, dashboard.dashboard_components)}
