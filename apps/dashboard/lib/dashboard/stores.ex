@@ -13,4 +13,8 @@ defmodule Dashboard.Stores do
   def unsubscribe(name, subscriber_pid) do
     Dashboard.Stores.ComponentStore.unsubscribe({:global, name}, subscriber_pid)
   end
+
+  def get(name, keyword) do
+    Dashboard.Stores.ComponentStore.get({:global, name}, keyword)
+  end
 end

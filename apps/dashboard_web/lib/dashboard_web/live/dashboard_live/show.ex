@@ -22,13 +22,17 @@ defmodule DashboardWeb.DashboardLive.Show do
     component_subscriptions =
       dashboard.dashboard_components
       |> Enum.map(fn dc ->
-        name = Dashboard.Dashboards.Component.to_module(dc.component).get_id(socket.assigns)
+        name =
+          Dashboard.Dashboards.Component.to_module(dc.component).genserver_id(
+            socket.assigns,
+            dc
+          )
 
         {:ok, pid} =
           Dashboard.Stores.subscribe(
             name,
             self(),
-            dc.component,
+            dc,
             user
           )
 
@@ -49,6 +53,7 @@ defmodule DashboardWeb.DashboardLive.Show do
       send_update(Component.to_module(dc.component),
         id: dc.id,
         component: dc.component,
+        dashboard_component: dc,
         user_id: socket.assigns.user_id
       )
     end)

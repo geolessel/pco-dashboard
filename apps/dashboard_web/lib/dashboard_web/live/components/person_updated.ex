@@ -1,7 +1,6 @@
 defmodule DashboardWeb.Components.PersonUpdated do
   use DashboardWeb, :live_component
-
-  alias Dashboard.Accounts
+  @behaviour DashboardWeb.Behaviours.ComponentLiveView
 
   @impl true
   def mount(socket) do
@@ -10,7 +9,7 @@ defmodule DashboardWeb.Components.PersonUpdated do
 
   @impl true
   def update(assigns, socket) do
-    people = Dashboard.Stores.ComponentStore.get({:global, get_id(assigns)}, "people")
+    people = Dashboard.Stores.get(genserver_id(assigns), "people")
 
     {:ok, assign(socket, :people, people)}
   end
@@ -19,18 +18,25 @@ defmodule DashboardWeb.Components.PersonUpdated do
   def render(assigns) do
     assigns =
       assigns
-      |> Map.put(:title, "Last Updated")
+      |> Map.put(:title, "Recently Updated")
       |> Map.put(:product, :people)
       |> Map.put(:table_key, :people)
       |> Map.put(:table_columns, [
         %{key: "name", label: "Name"},
-        %{key: "updated_at", label: "Updated"}
+        %{
+          get_value: fn col ->
+            {:ok, datetime, 0} = DateTime.from_iso8601(col["attributes"]["updated_at"])
+            Timex.from_now(datetime)
+          end,
+          label: "Updated"
+        }
       ])
 
     DashboardWeb.LayoutView.render("table-card.html", assigns)
   end
 
-  def get_id(assigns) do
+  @impl DashboardWeb.Behaviours.ComponentLiveView
+  def genserver_id(assigns, dc \\ %Dashboard.Dashboards.DashboardComponent{}) do
     "person_updated--user_#{assigns.user_id}"
   end
 end

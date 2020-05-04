@@ -7,7 +7,12 @@ defmodule Dashboard.Stores.ComponentStore do
 
   def start_link(opts \\ []) do
     opts = Keyword.merge([name: __MODULE__], opts)
-    GenServer.start_link(__MODULE__, %{component: opts[:component], user: opts[:user]}, opts)
+
+    GenServer.start_link(
+      __MODULE__,
+      %{dashboard_component: opts[:component], user: opts[:user]},
+      opts
+    )
   end
 
   def subscribe(pid, subscriber_pid) do
@@ -43,8 +48,10 @@ defmodule Dashboard.Stores.ComponentStore do
 
     state =
       state
-      |> Map.put(state.component.assign, [])
+      |> Map.put(state.dashboard_component.component.assign, [])
+      |> Map.put(:component, state.dashboard_component.component)
       |> Map.put(:subscribers, [])
+      |> Map.put(:last_response, %Dashboard.PlanningCenterApi.Response{})
       |> Map.put(:last_update, nil)
       |> Map.put(:timer, timer)
 
@@ -52,11 +59,11 @@ defmodule Dashboard.Stores.ComponentStore do
   end
 
   def handle_call({:get, keyword}, _, state) do
-    {:reply, Map.get(state, keyword, []), state}
+    {:reply, Map.get(state, keyword), state}
   end
 
   def handle_call(:get_all, _, state) do
-    {:reply, Map.get(state, state.component.assign, []), state}
+    {:reply, Map.get(state, state.component.assign), state}
   end
 
   def handle_call(:inspect, _, state) do
@@ -115,19 +122,21 @@ defmodule Dashboard.Stores.ComponentStore do
     do: {:noreply, state}
 
   def handle_info(:update, state) do
+    path = prepare_api_path(state.dashboard_component)
+
+    response =
+      state.user
+      |> Dashboard.PlanningCenterApi.Client.get(path)
+      |> Map.get(:body, %{})
+
     state =
       state
       |> Map.put(
         state.component.assign,
-        state.user
-        |> Dashboard.PlanningCenterApi.Client.get(state.component.api_path)
-        |> Map.get(:body, %{})
-        |> Map.get("data", [])
+        Map.get(response, "data", [])
       )
-      |> Map.put(
-        :last_update,
-        DateTime.utc_now()
-      )
+      |> Map.put(:last_response, response)
+      |> Map.put(:last_update, DateTime.utc_now())
 
     state.subscribers
     |> Enum.each(fn subscriber ->
@@ -171,5 +180,15 @@ defmodule Dashboard.Stores.ComponentStore do
     else
       :ok
     end
+  end
+
+  def prepare_api_path(component) do
+    component
+    |> Dashboard.Dashboards.preload_configurations_of_component()
+    |> Map.get(:configurations, [])
+    |> Enum.reduce(component.component.api_path, fn %{configuration: %{name: name}, value: value},
+                                                    path ->
+      String.replace(path, "${#{name}}", value)
+    end)
   end
 end

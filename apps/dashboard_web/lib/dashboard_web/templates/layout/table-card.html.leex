@@ -20,7 +20,13 @@
         <%= for item <- assigns[@table_key] do %>
           <tr>
             <%= for col <- @table_columns do %>
-              <td><%= item["attributes"][col.key] %></td>
+              <td>
+                <%= if Map.get(col, :get_value) do %>
+                  <%= col.get_value.(item) %>
+                <% else %>
+                  <%= item["attributes"][col.key] %>
+                <% end %>
+              </td>
             <% end %>
           </tr>
         <% end %>

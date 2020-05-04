@@ -1,30 +1,28 @@
-defmodule DashboardWeb.Components.FormsOverview do
+defmodule DashboardWeb.Components.ListResults do
   use DashboardWeb, :live_component
   @behaviour DashboardWeb.Behaviours.ComponentLiveView
 
   @impl true
   def mount(socket) do
-    {:ok, assign(socket, :forms, [])}
+    {:ok, assign(socket, :results, [])}
   end
 
   @impl true
   def update(assigns, socket) do
-    forms = Dashboard.Stores.get(genserver_id(assigns), "forms")
+    results = Dashboard.Stores.get(genserver_id(assigns, assigns.dashboard_component), "results")
 
-    {:ok, assign(socket, :forms, forms)}
+    {:ok, assign(socket, :results, results)}
   end
 
   @impl true
   def render(assigns) do
     assigns =
       assigns
-      |> Map.put(:title, "Form Overview")
+      |> Map.put(:title, "List Results - LIST NAME HERE")
       |> Map.put(:product, :people)
-      |> Map.put(:table_key, :forms)
+      |> Map.put(:table_key, :results)
       |> Map.put(:table_columns, [
-        %{key: "name", label: "Form"},
-        %{key: "submission_count", label: "Submissions"},
-        %{key: "unknown", label: "Latest"}
+        %{key: "name", label: "Name"}
       ])
 
     DashboardWeb.LayoutView.render("table-card.html", assigns)
@@ -32,6 +30,8 @@ defmodule DashboardWeb.Components.FormsOverview do
 
   @impl DashboardWeb.Behaviours.ComponentLiveView
   def genserver_id(assigns, dc \\ %Dashboard.Dashboards.DashboardComponent{}) do
-    "forms_overview--user_#{assigns.user_id}"
+    suffix = Dashboard.Dashboards.DashboardComponent.genserver_name_suffix(dc)
+
+    "list_results--user_#{assigns.user_id}#{suffix}"
   end
 end

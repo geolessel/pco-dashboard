@@ -1,5 +1,6 @@
 defmodule DashboardWeb.Components.CheckIns do
   use DashboardWeb, :live_component
+  @behaviour DashboardWeb.Behaviours.ComponentLiveView
 
   alias Dashboard.Accounts
 
@@ -10,7 +11,7 @@ defmodule DashboardWeb.Components.CheckIns do
 
   @impl true
   def update(assigns, socket) do
-    checkins = Dashboard.Stores.ComponentStore.get({:global, get_id(assigns)}, "checkins")
+    checkins = Dashboard.Stores.get(genserver_id(assigns), "checkins")
 
     {:ok, assign(socket, :checkins, checkins)}
   end
@@ -33,7 +34,8 @@ defmodule DashboardWeb.Components.CheckIns do
     DashboardWeb.LayoutView.render("table-card.html", assigns)
   end
 
-  def get_id(assigns) do
+  @impl DashboardWeb.Behaviours.ComponentLiveView
+  def genserver_id(assigns, dc \\ %Dashboard.Dashboards.DashboardComponent{}) do
     "checkins--user_#{assigns.user_id}"
   end
 end
