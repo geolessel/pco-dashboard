@@ -18,12 +18,18 @@ defmodule DashboardWeb.Components.PersonUpdated do
   def render(assigns) do
     assigns =
       assigns
-      |> Map.put(:title, "Last Updated")
+      |> Map.put(:title, "Recently Updated")
       |> Map.put(:product, :people)
       |> Map.put(:table_key, :people)
       |> Map.put(:table_columns, [
         %{key: "name", label: "Name"},
-        %{key: "updated_at", label: "Updated"}
+        %{
+          get_value: fn col ->
+            {:ok, datetime, 0} = DateTime.from_iso8601(col["attributes"]["updated_at"])
+            Timex.from_now(datetime)
+          end,
+          label: "Updated"
+        }
       ])
 
     DashboardWeb.LayoutView.render("table-card.html", assigns)

@@ -23,7 +23,10 @@ defmodule DashboardWeb.Components.ListResults do
       |> Map.put(:table_key, :results)
       |> Map.put(:table_columns, [
         %{key: "name", label: "Name"},
-        %{key: "created_at", label: "Created"}
+        %{
+          key: "created_at",
+          label: "Created"
+        }
       ])
 
     DashboardWeb.LayoutView.render("table-card.html", assigns)
