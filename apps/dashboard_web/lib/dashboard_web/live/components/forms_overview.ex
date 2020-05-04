@@ -1,5 +1,6 @@
 defmodule DashboardWeb.Components.FormsOverview do
   use DashboardWeb, :live_component
+  @behaviour DashboardWeb.Behaviours.ComponentLiveView
 
   @impl true
   def mount(socket) do
@@ -8,7 +9,7 @@ defmodule DashboardWeb.Components.FormsOverview do
 
   @impl true
   def update(assigns, socket) do
-    forms = Dashboard.Stores.get(get_id(assigns), "forms")
+    forms = Dashboard.Stores.get(genserver_id(assigns), "forms")
 
     {:ok, assign(socket, :forms, forms)}
   end
@@ -29,7 +30,8 @@ defmodule DashboardWeb.Components.FormsOverview do
     DashboardWeb.LayoutView.render("table-card.html", assigns)
   end
 
-  def get_id(assigns, configs \\ []) do
+  @impl DashboardWeb.Behaviours.ComponentLiveView
+  def genserver_id(assigns, dc \\ %Dashboard.Dashboards.DashboardComponent{}) do
     "forms_overview--user_#{assigns.user_id}"
   end
 end

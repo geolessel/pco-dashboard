@@ -1,5 +1,6 @@
 defmodule DashboardWeb.Components.ListResults do
   use DashboardWeb, :live_component
+  @behaviour DashboardWeb.Behaviours.ComponentLiveView
 
   @impl true
   def mount(socket) do
@@ -8,7 +9,7 @@ defmodule DashboardWeb.Components.ListResults do
 
   @impl true
   def update(assigns, socket) do
-    results = Dashboard.Stores.get(get_id(assigns, assigns.dashboard_component), "results")
+    results = Dashboard.Stores.get(genserver_id(assigns, assigns.dashboard_component), "results")
 
     {:ok, assign(socket, :results, results)}
   end
@@ -28,7 +29,8 @@ defmodule DashboardWeb.Components.ListResults do
     DashboardWeb.LayoutView.render("table-card.html", assigns)
   end
 
-  def get_id(assigns, dc) do
+  @impl DashboardWeb.Behaviours.ComponentLiveView
+  def genserver_id(assigns, dc \\ %Dashboard.Dashboards.DashboardComponent{}) do
     suffix = Dashboard.Dashboards.DashboardComponent.genserver_name_suffix(dc)
 
     "list_results--user_#{assigns.user_id}#{suffix}"

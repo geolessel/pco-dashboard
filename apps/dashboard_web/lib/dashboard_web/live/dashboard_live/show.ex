@@ -23,7 +23,7 @@ defmodule DashboardWeb.DashboardLive.Show do
       dashboard.dashboard_components
       |> Enum.map(fn dc ->
         name =
-          Dashboard.Dashboards.Component.to_module(dc.component).get_id(
+          Dashboard.Dashboards.Component.to_module(dc.component).genserver_id(
             socket.assigns,
             dc
           )
