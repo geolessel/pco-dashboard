@@ -31,7 +31,7 @@ defmodule DashboardWeb.Components.FormsOverview do
   end
 
   @impl DashboardWeb.Behaviours.ComponentLiveView
-  def genserver_id(assigns, dc \\ %Dashboard.Dashboards.DashboardComponent{}) do
+  def genserver_id(assigns, _dc \\ %Dashboard.Dashboards.DashboardComponent{}) do
     "forms_overview--user_#{assigns.user_id}"
   end
 end

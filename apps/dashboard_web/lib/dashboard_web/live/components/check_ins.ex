@@ -2,8 +2,6 @@ defmodule DashboardWeb.Components.CheckIns do
   use DashboardWeb, :live_component
   @behaviour DashboardWeb.Behaviours.ComponentLiveView
 
-  alias Dashboard.Accounts
-
   @impl true
   def mount(socket) do
     {:ok, assign(socket, :checkins, [])}
@@ -35,7 +33,7 @@ defmodule DashboardWeb.Components.CheckIns do
   end
 
   @impl DashboardWeb.Behaviours.ComponentLiveView
-  def genserver_id(assigns, dc \\ %Dashboard.Dashboards.DashboardComponent{}) do
+  def genserver_id(assigns, _dc \\ %Dashboard.Dashboards.DashboardComponent{}) do
     "checkins--user_#{assigns.user_id}"
   end
 end
