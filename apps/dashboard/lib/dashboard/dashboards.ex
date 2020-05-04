@@ -154,7 +154,9 @@ defmodule Dashboard.Dashboards do
 
   """
   def list_components do
-    Repo.all(Component)
+    Component
+    |> Repo.all()
+    |> Repo.preload(:configurations)
   end
 
   @doc """
