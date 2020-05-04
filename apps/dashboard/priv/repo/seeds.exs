@@ -67,6 +67,20 @@ components = [
     module: "DashboardWeb.Components.FormSubmissions",
     name: "Form Submissions",
     refresh_type: "poll"
+  },
+  %{
+    api_path: "/check-ins/v2/check_ins?order=updated_at&filter=regular&per_page=500&offset=4850",
+    assign: "check_in_count",
+    module: "DashboardWeb.Components.CheckInCount",
+    name: "Total Check-ins",
+    refresh_type: "poll"
+  },
+  %{
+    api_path: "/check-ins/v2/headcounts",
+    assign: "headcounts",
+    module: "DashboardWeb.Components.Headcounts",
+    name: "Headcounts",
+    refresh_type: "poll"
   }
 ]
 
