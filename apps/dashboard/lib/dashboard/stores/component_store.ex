@@ -59,11 +59,11 @@ defmodule Dashboard.Stores.ComponentStore do
   end
 
   def handle_call({:get, keyword}, _, state) do
-    {:reply, Map.get(state, keyword, []), state}
+    {:reply, Map.get(state, keyword), state}
   end
 
   def handle_call(:get_all, _, state) do
-    {:reply, Map.get(state, state.component.assign, []), state}
+    {:reply, Map.get(state, state.component.assign), state}
   end
 
   def handle_call(:inspect, _, state) do

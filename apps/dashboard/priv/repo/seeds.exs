@@ -53,6 +53,20 @@ components = [
     module: "DashboardWeb.Components.ListResults",
     name: "List Results",
     refresh_type: "poll"
+  },
+  %{
+    api_path:
+      "/people/v2/forms/${form_id}/form_submissions?include=person&per_page=8&order=-created_at",
+    assign: "submissions",
+    configurations: [
+      %{
+        name: "form_id",
+        label: "Form ID"
+      }
+    ],
+    module: "DashboardWeb.Components.FormSubmissions",
+    name: "Form Submissions",
+    refresh_type: "poll"
   }
 ]
 
