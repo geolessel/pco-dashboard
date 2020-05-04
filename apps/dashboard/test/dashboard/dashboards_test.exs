@@ -128,4 +128,61 @@ defmodule Dashboard.DashboardsTest do
       assert %Ecto.Changeset{} = Dashboards.change_component(component)
     end
   end
+
+  describe "dashboard_component_configurations" do
+    alias Dashboard.Dashboards.ComponentConfiguration
+
+    @valid_attrs %{}
+    @update_attrs %{}
+    @invalid_attrs %{}
+
+    def component_configuration_fixture(attrs \\ %{}) do
+      {:ok, component_configuration} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> Dashboards.create_component_configuration()
+
+      component_configuration
+    end
+
+    test "list_dashboard_component_configurations/0 returns all dashboard_component_configurations" do
+      component_configuration = component_configuration_fixture()
+      assert Dashboards.list_dashboard_component_configurations() == [component_configuration]
+    end
+
+    test "get_component_configuration!/1 returns the component_configuration with given id" do
+      component_configuration = component_configuration_fixture()
+      assert Dashboards.get_component_configuration!(component_configuration.id) == component_configuration
+    end
+
+    test "create_component_configuration/1 with valid data creates a component_configuration" do
+      assert {:ok, %ComponentConfiguration{} = component_configuration} = Dashboards.create_component_configuration(@valid_attrs)
+    end
+
+    test "create_component_configuration/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Dashboards.create_component_configuration(@invalid_attrs)
+    end
+
+    test "update_component_configuration/2 with valid data updates the component_configuration" do
+      component_configuration = component_configuration_fixture()
+      assert {:ok, %ComponentConfiguration{} = component_configuration} = Dashboards.update_component_configuration(component_configuration, @update_attrs)
+    end
+
+    test "update_component_configuration/2 with invalid data returns error changeset" do
+      component_configuration = component_configuration_fixture()
+      assert {:error, %Ecto.Changeset{}} = Dashboards.update_component_configuration(component_configuration, @invalid_attrs)
+      assert component_configuration == Dashboards.get_component_configuration!(component_configuration.id)
+    end
+
+    test "delete_component_configuration/1 deletes the component_configuration" do
+      component_configuration = component_configuration_fixture()
+      assert {:ok, %ComponentConfiguration{}} = Dashboards.delete_component_configuration(component_configuration)
+      assert_raise Ecto.NoResultsError, fn -> Dashboards.get_component_configuration!(component_configuration.id) end
+    end
+
+    test "change_component_configuration/1 returns a component_configuration changeset" do
+      component_configuration = component_configuration_fixture()
+      assert %Ecto.Changeset{} = Dashboards.change_component_configuration(component_configuration)
+    end
+  end
 end

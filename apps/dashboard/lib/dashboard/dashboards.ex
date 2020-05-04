@@ -6,7 +6,8 @@ defmodule Dashboard.Dashboards do
   import Ecto.Query, warn: false
   alias Dashboard.Repo
 
-  alias Dashboard.Dashboards.{Dashboard, DashboardComponent, Component}
+  # this naming is a nightmare
+  alias Dashboard.Dashboards.{Dashboard, DashboardComponent, Component, ComponentConfiguration}
 
   @doc """
   Returns the list of dashboards for a user.
@@ -324,5 +325,102 @@ defmodule Dashboard.Dashboards do
       DashboardComponent.changeset(dc, %{sequence: new_sequence})
     )
     |> Repo.transaction()
+  end
+
+  @doc """
+  Returns the list of dashboard_component_configurations.
+
+  ## Examples
+
+      iex> list_dashboard_component_configurations()
+      [%ComponentConfiguration{}, ...]
+
+  """
+  def list_dashboard_component_configurations do
+    Repo.all(ComponentConfiguration)
+  end
+
+  @doc """
+  Gets a single component_configuration.
+
+  Raises `Ecto.NoResultsError` if the Component configuration does not exist.
+
+  ## Examples
+
+      iex> get_component_configuration!(123)
+      %ComponentConfiguration{}
+
+      iex> get_component_configuration!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_component_configuration!(id), do: Repo.get!(ComponentConfiguration, id)
+
+  @doc """
+  Creates a component_configuration.
+
+  ## Examples
+
+      iex> create_component_configuration(%{field: value})
+      {:ok, %ComponentConfiguration{}}
+
+      iex> create_component_configuration(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_component_configuration(attrs \\ %{}) do
+    %ComponentConfiguration{}
+    |> ComponentConfiguration.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a component_configuration.
+
+  ## Examples
+
+      iex> update_component_configuration(component_configuration, %{field: new_value})
+      {:ok, %ComponentConfiguration{}}
+
+      iex> update_component_configuration(component_configuration, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_component_configuration(%ComponentConfiguration{} = component_configuration, attrs) do
+    component_configuration
+    |> ComponentConfiguration.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a component_configuration.
+
+  ## Examples
+
+      iex> delete_component_configuration(component_configuration)
+      {:ok, %ComponentConfiguration{}}
+
+      iex> delete_component_configuration(component_configuration)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_component_configuration(%ComponentConfiguration{} = component_configuration) do
+    Repo.delete(component_configuration)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking component_configuration changes.
+
+  ## Examples
+
+      iex> change_component_configuration(component_configuration)
+      %Ecto.Changeset{data: %ComponentConfiguration{}}
+
+  """
+  def change_component_configuration(
+        %ComponentConfiguration{} = component_configuration,
+        attrs \\ %{}
+      ) do
+    ComponentConfiguration.changeset(component_configuration, attrs)
   end
 end
