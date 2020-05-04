@@ -9,7 +9,7 @@ defmodule DashboardWeb.Components.Headcounts do
 
   @impl true
   def update(assigns, socket) do
-    headcounts = Dashboard.Stores.get({genserver_id(assigns)}, "headcounts")
+    headcounts = Dashboard.Stores.get(genserver_id(assigns), "headcounts")
 
     {:ok, assign(socket, :headcounts, headcounts)}
   end

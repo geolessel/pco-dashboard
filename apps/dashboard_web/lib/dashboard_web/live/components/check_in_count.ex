@@ -9,7 +9,7 @@ defmodule DashboardWeb.Components.CheckInCount do
 
   @impl true
   def update(assigns, socket) do
-    check_in_count = Dashboard.Stores.get({genserver_id(assigns)}, "check_in_count")
+    check_in_count = Dashboard.Stores.get(genserver_id(assigns), "check_in_count")
 
     {:ok, assign(socket, :check_in_count, check_in_count)}
   end
