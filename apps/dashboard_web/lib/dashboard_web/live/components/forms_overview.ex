@@ -29,7 +29,7 @@ defmodule DashboardWeb.Components.FormsOverview do
     DashboardWeb.LayoutView.render("table-card.html", assigns)
   end
 
-  def get_id(assigns) do
+  def get_id(assigns, configs \\ []) do
     "forms_overview--user_#{assigns.user_id}"
   end
 end

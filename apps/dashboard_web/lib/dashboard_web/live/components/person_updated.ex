@@ -28,7 +28,7 @@ defmodule DashboardWeb.Components.PersonUpdated do
     DashboardWeb.LayoutView.render("table-card.html", assigns)
   end
 
-  def get_id(assigns) do
+  def get_id(assigns, configs \\ []) do
     "person_updated--user_#{assigns.user_id}"
   end
 end

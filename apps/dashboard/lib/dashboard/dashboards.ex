@@ -68,8 +68,15 @@ defmodule Dashboard.Dashboards do
 
   defp preload_components(query) do
     Repo.preload(query,
-      dashboard_components: {from(dc in DashboardComponent, order_by: dc.sequence), [:component]}
+      dashboard_components:
+        {from(dc in DashboardComponent, order_by: dc.sequence),
+         [[component: [:configurations]], [configurations: [:configuration]]]}
     )
+  end
+
+  def preload_configurations_of_component(component) do
+    component
+    |> Repo.preload(configurations: [:configuration])
   end
 
   @doc """

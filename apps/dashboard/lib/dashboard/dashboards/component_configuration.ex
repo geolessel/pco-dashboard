@@ -13,8 +13,8 @@ defmodule Dashboard.Dashboards.ComponentConfiguration do
   @doc false
   def changeset(component_configuration, attrs) do
     component_configuration
-    |> cast(attrs, [:dashboard_configuration_id, :configuration_id, :value])
-    |> validate_required([:dashboard_configuration_id, :configuration_id, :value])
+    |> cast(attrs, [:dashboard_component_id, :configuration_id, :value])
+    |> validate_required([:dashboard_component_id, :configuration_id, :value])
     |> assoc_constraint(:dashboard_component)
     |> assoc_constraint(:configuration)
   end

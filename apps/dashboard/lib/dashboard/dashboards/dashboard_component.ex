@@ -8,6 +8,7 @@ defmodule Dashboard.Dashboards.DashboardComponent do
     belongs_to :dashboard, Dashboard.Dashboards.Dashboard
     belongs_to :component, Component
     field :sequence, :integer
+    has_many :configurations, Dashboard.Dashboards.ComponentConfiguration
 
     timestamps()
   end
@@ -20,6 +21,14 @@ defmodule Dashboard.Dashboards.DashboardComponent do
     |> assoc_constraint(:dashboard)
     |> assoc_constraint(:component)
     |> unique_constraint([:sequence, :dashboard_id])
+  end
+
+  def genserver_name_suffix(dashboard_component) do
+    dashboard_component
+    |> Map.get(:configurations, [])
+    |> Enum.reduce("", fn config, string ->
+      string <> "--#{config.configuration.name}_#{config.value}"
+    end)
   end
 
   defp ensure_sequence_set(%{"sequence" => sequence} = attrs) when is_integer(sequence), do: attrs

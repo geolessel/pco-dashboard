@@ -42,7 +42,7 @@ components = [
     refresh_type: "poll"
   },
   %{
-    api_path: "/people/v2/lists/${list_id}/results?order=-created_at",
+    api_path: "/people/v2/lists/${list_id}/people?per_page=8&order=-created_at",
     assign: "results",
     configurations: [
       %{

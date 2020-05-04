@@ -7,7 +7,12 @@ defmodule Dashboard.Stores.ComponentStore do
 
   def start_link(opts \\ []) do
     opts = Keyword.merge([name: __MODULE__], opts)
-    GenServer.start_link(__MODULE__, %{component: opts[:component], user: opts[:user]}, opts)
+
+    GenServer.start_link(
+      __MODULE__,
+      %{dashboard_component: opts[:component], user: opts[:user]},
+      opts
+    )
   end
 
   def subscribe(pid, subscriber_pid) do
@@ -43,7 +48,8 @@ defmodule Dashboard.Stores.ComponentStore do
 
     state =
       state
-      |> Map.put(state.component.assign, [])
+      |> Map.put(state.dashboard_component.component.assign, [])
+      |> Map.put(:component, state.dashboard_component.component)
       |> Map.put(:subscribers, [])
       |> Map.put(:last_update, nil)
       |> Map.put(:timer, timer)
@@ -115,12 +121,14 @@ defmodule Dashboard.Stores.ComponentStore do
     do: {:noreply, state}
 
   def handle_info(:update, state) do
+    path = prepare_api_path(state.dashboard_component)
+
     state =
       state
       |> Map.put(
         state.component.assign,
         state.user
-        |> Dashboard.PlanningCenterApi.Client.get(state.component.api_path)
+        |> Dashboard.PlanningCenterApi.Client.get(path)
         |> Map.get(:body, %{})
         |> Map.get("data", [])
       )
@@ -171,5 +179,15 @@ defmodule Dashboard.Stores.ComponentStore do
     else
       :ok
     end
+  end
+
+  def prepare_api_path(component) do
+    component
+    |> Dashboard.Dashboards.preload_configurations_of_component()
+    |> Map.get(:configurations, [])
+    |> Enum.reduce(component.component.api_path, fn %{configuration: %{name: name}, value: value},
+                                                    path ->
+      String.replace(path, "${#{name}}", value)
+    end)
   end
 end
