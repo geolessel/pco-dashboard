@@ -23,7 +23,7 @@ defmodule DashboardWeb.Components.CheckIns do
       |> Map.put(:title, "Check-ins")
       |> Map.put(:product, :checkins)
       |> Map.put(:table_key, :checkins)
-      |> Map.put(:grid_width, 5)
+      |> Map.put(:grid_width, 3)
       |> Map.put(:table_columns, [
         %{key: "kind", label: ""},
         %{key: "first_name", label: "First"},
