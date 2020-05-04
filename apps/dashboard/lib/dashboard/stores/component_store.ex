@@ -51,6 +51,7 @@ defmodule Dashboard.Stores.ComponentStore do
       |> Map.put(state.dashboard_component.component.assign, [])
       |> Map.put(:component, state.dashboard_component.component)
       |> Map.put(:subscribers, [])
+      |> Map.put(:last_response, %Dashboard.PlanningCenterApi.Response{})
       |> Map.put(:last_update, nil)
       |> Map.put(:timer, timer)
 
@@ -123,19 +124,19 @@ defmodule Dashboard.Stores.ComponentStore do
   def handle_info(:update, state) do
     path = prepare_api_path(state.dashboard_component)
 
+    response =
+      state.user
+      |> Dashboard.PlanningCenterApi.Client.get(path)
+      |> Map.get(:body, %{})
+
     state =
       state
       |> Map.put(
         state.component.assign,
-        state.user
-        |> Dashboard.PlanningCenterApi.Client.get(path)
-        |> Map.get(:body, %{})
-        |> Map.get("data", [])
+        Map.get(response, "data", [])
       )
-      |> Map.put(
-        :last_update,
-        DateTime.utc_now()
-      )
+      |> Map.put(:last_response, response)
+      |> Map.put(:last_update, DateTime.utc_now())
 
     state.subscribers
     |> Enum.each(fn subscriber ->
