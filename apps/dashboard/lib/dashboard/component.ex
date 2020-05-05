@@ -51,7 +51,6 @@ defmodule Dashboard.Component do
 
         state =
           state
-          |> Map.put(state.dashboard_component.component.assign, [])
           |> Map.put(:component, state.dashboard_component.component)
           |> Map.put(:subscribers, [])
           |> Map.put(:last_response, %Dashboard.PlanningCenterApi.Response{})
@@ -130,6 +129,7 @@ defmodule Dashboard.Component do
         state =
           state
           |> fetch_data()
+          |> process_data()
           |> put_last_update()
           |> put_extra_assigns()
 
@@ -166,13 +166,7 @@ defmodule Dashboard.Component do
       def fetch_data(%{user: user} = state) do
         data_sources()
         |> Enum.reduce(state, fn {assign, path}, map ->
-          response =
-            user
-            |> Dashboard.PlanningCenterApi.Client.get(path)
-            |> Map.get(:body, %{})
-            |> Map.get("data")
-
-          Map.put(map, assign, response)
+          Map.put(map, assign, Dashboard.PlanningCenterApi.Client.get(user, path))
         end)
       end
 
@@ -198,6 +192,8 @@ defmodule Dashboard.Component do
           String.replace(path, "${#{name}}", value)
         end)
       end
+
+      def process_data(state), do: state
 
       def put_extra_assigns(state), do: state
 
