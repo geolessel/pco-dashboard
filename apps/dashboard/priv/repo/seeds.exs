@@ -69,7 +69,7 @@ components = [
     refresh_type: "poll"
   },
   %{
-    api_path: "/check-ins/v2/check_ins?order=updated_at&filter=regular&per_page=500&offset=4850",
+    api_path: "/check-ins/v2/check_ins?order=updated_at&where[created_at][gte]=2020-05-02",
     assign: "check_in_count",
     module: "DashboardWeb.Components.CheckInCount",
     name: "Total Check-ins",
