@@ -9,7 +9,7 @@ defmodule DashboardWeb.Components.FormsOverview do
 
   @impl true
   def update(assigns, socket) do
-    forms = Dashboard.Stores.get(genserver_id(assigns), "forms")
+    forms = Dashboard.Stores.get(data_module(), genserver_id(assigns), :forms, [])
 
     {:ok, assign(socket, :forms, forms)}
   end
@@ -35,4 +35,7 @@ defmodule DashboardWeb.Components.FormsOverview do
   def genserver_id(assigns, _dc \\ %Dashboard.Dashboards.DashboardComponent{}) do
     "forms_overview--user_#{assigns.user_id}"
   end
+
+  @impl DashboardWeb.Behaviours.ComponentLiveView
+  def data_module, do: Dashboard.Components.FormsOverview
 end

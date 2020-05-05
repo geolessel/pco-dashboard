@@ -10,14 +10,14 @@ defmodule DashboardWeb.Components.FormSubmissions do
   @impl true
   def update(assigns, socket) do
     id = genserver_id(assigns, assigns.dashboard_component)
-    submissions = Dashboard.Stores.get(id, "submissions")
+    submissions = Dashboard.Stores.get(data_module(), id, :submissions, [])
 
     {:ok, socket |> assign(:submissions, submissions) |> assign(:genserver_id, id)}
   end
 
   @impl true
   def render(assigns) do
-    response = Dashboard.Stores.get(assigns.genserver_id, :last_response)
+    included = Dashboard.Stores.get(data_module(), assigns.genserver_id, :included)
 
     assigns =
       assigns
@@ -30,8 +30,7 @@ defmodule DashboardWeb.Components.FormSubmissions do
             person_id = item["relationships"]["person"]["data"]["id"]
 
             person =
-              response
-              |> Map.get("included", [])
+              included
               |> Enum.find(fn include ->
                 include["type"] == "Person" && include["id"] == person_id
               end)
@@ -58,4 +57,7 @@ defmodule DashboardWeb.Components.FormSubmissions do
 
     "form_submissions--user_#{assigns.user_id}#{suffix}"
   end
+
+  @impl DashboardWeb.Behaviours.ComponentLiveView
+  def data_module, do: Dashboard.Components.FormSubmissions
 end

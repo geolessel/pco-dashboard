@@ -10,16 +10,14 @@ defmodule DashboardWeb.Components.CheckInCount do
   @impl true
   def update(assigns, socket) do
     id = genserver_id(assigns, assigns.dashboard_component)
-    check_in_count = Dashboard.Stores.get(id, "check_in_count")
+    check_in_count = Dashboard.Stores.get(data_module(), id, :check_in_count)
 
     {:ok, socket |> assign(:check_in_count, check_in_count) |> assign(:genserver_id, id)}
   end
 
   @impl true
   def render(assigns) do
-    response = Dashboard.Stores.get(assigns.genserver_id, :last_response)
-
-    total_count = response["meta"]["total_count"]
+    total_count = Dashboard.Stores.get(data_module(), assigns.genserver_id, :total_count)
 
     assigns =
       assigns
@@ -36,4 +34,7 @@ defmodule DashboardWeb.Components.CheckInCount do
   def genserver_id(assigns, _dc \\ %Dashboard.Dashboards.DashboardComponent{}) do
     "check_in_count--user_#{assigns.user_id}"
   end
+
+  @impl DashboardWeb.Behaviours.ComponentLiveView
+  def data_module, do: Dashboard.Components.CheckInCount
 end

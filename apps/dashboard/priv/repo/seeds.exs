@@ -20,30 +20,21 @@ IO.puts("Seeding dashboard components...")
 
 components = [
   %{
-    api_path: "/people/v2/people?order=-updated_at&per_page=8&fields[Person]=name,updated_at",
-    assign: "people",
     module: "DashboardWeb.Components.PersonUpdated",
     name: "Recently Updated Profiles",
     refresh_type: "poll"
   },
   %{
-    api_path: "/people/v2/forms?order=-created_at&per_page=8&fields[Form]=name,submission_count",
-    assign: "forms",
     module: "DashboardWeb.Components.FormsOverview",
     name: "Forms Overview",
     refresh_type: "poll"
   },
   %{
-    api_path:
-      "/check-ins/v2/check_ins?order=-updated_at&per_page=8&fields[CheckIn]=first_name,last_name,kind,medical_notes",
-    assign: "checkins",
     module: "DashboardWeb.Components.CheckIns",
     name: "Check-ins",
     refresh_type: "poll"
   },
   %{
-    api_path: "/people/v2/lists/${list_id}/people?per_page=8&order=-created_at",
-    assign: "results",
     configurations: [
       %{
         name: "list_id",
@@ -55,9 +46,6 @@ components = [
     refresh_type: "poll"
   },
   %{
-    api_path:
-      "/people/v2/forms/${form_id}/form_submissions?include=person&per_page=8&order=-created_at",
-    assign: "submissions",
     configurations: [
       %{
         name: "form_id",
@@ -69,15 +57,11 @@ components = [
     refresh_type: "poll"
   },
   %{
-    api_path: "/check-ins/v2/check_ins?order=updated_at&where[created_at][gte]=2020-05-02",
-    assign: "check_in_count",
     module: "DashboardWeb.Components.CheckInCount",
     name: "Total Check-ins",
     refresh_type: "poll"
   },
   %{
-    api_path: "/check-ins/v2/headcounts",
-    assign: "headcounts",
     module: "DashboardWeb.Components.Headcounts",
     name: "Headcounts",
     refresh_type: "poll"

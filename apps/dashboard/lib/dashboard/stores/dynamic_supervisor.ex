@@ -5,10 +5,10 @@ defmodule Dashboard.Stores.DynamicSupervisor do
     DynamicSupervisor.start_link(__MODULE__, args, name: __MODULE__)
   end
 
-  def start_child(name, component, user) do
+  def start_child(module, name, component, user) do
     DynamicSupervisor.start_child(
       __MODULE__,
-      {Dashboard.Stores.ComponentStore, name: {:global, name}, component: component, user: user}
+      {module, name: {:global, name}, component: component, user: user}
     )
   end
 
