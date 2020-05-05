@@ -15,7 +15,6 @@ defmodule Dashboard.Components.CheckIns do
       response
       |> Map.get(:body, %{})
       |> Map.get("data")
-      |> IO.inspect()
 
     Map.put(state, :checkins, checkins)
   end

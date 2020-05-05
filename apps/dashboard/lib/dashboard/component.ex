@@ -165,6 +165,7 @@ defmodule Dashboard.Component do
 
       def fetch_data(%{user: user} = state) do
         data_sources()
+        |> prepare_api_paths(state)
         |> Enum.reduce(state, fn {assign, path}, map ->
           Map.put(map, assign, Dashboard.PlanningCenterApi.Client.get(user, path))
         end)
@@ -180,15 +181,24 @@ defmodule Dashboard.Component do
         end
       end
 
-      def prepare_api_path(component) do
-        component
-        |> Dashboard.Dashboards.preload_configurations_of_component()
-        |> Map.get(:configurations, [])
-        |> Enum.reduce(component.component.api_path, fn %{
-                                                          configuration: %{name: name},
-                                                          value: value
-                                                        },
-                                                        path ->
+      def prepare_api_paths(sources, %{dashboard_component: component} = state) do
+        configs =
+          component
+          |> Dashboard.Dashboards.preload_configurations_of_component()
+          |> Map.get(:configurations, [])
+
+        sources
+        |> Enum.reduce(sources, fn {key, path}, acc ->
+          Map.update(acc, key, path, &replace_config_values(&1, configs))
+        end)
+      end
+
+      def replace_config_values(path, configs) do
+        Enum.reduce(configs, path, fn %{
+                                        configuration: %{name: name},
+                                        value: value
+                                      },
+                                      path ->
           String.replace(path, "${#{name}}", value)
         end)
       end
