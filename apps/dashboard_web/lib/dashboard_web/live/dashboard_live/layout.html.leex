@@ -36,9 +36,16 @@
   <h2>Active Components</h2>
   <div id="sortable-container" phx-hook="ComponentDragAndDrop" style="display: flex; flex-direction: row; flex-wrap: wrap; border: 1px solid #eee;">
     <%= for dc <- @dashboard_components do %>
-      <div style="background: white; display: flex; align-items: center; border: 1px solid #666; padding: 0.5em; margin: 0 0.5em 0.5em 0;" class="sortable" data-dc-id="<%= dc.id %>">
-        <span phx-click="remove-component" phx-value-dc-id="<%= dc.id %>" style="cursor: pointer; color: red; margin-right: 0.2em; font-size: 1.2em;">-</span>
-        <%= dc.sequence %>: <%= dc.component.name %>
+      <div style="background: white; display: flex; flex-direction: column; border: 1px solid #666; padding: 0.5em; margin: 0 0.5em 0.5em 0;" class="sortable" data-dc-id="<%= dc.id %>">
+        <div style="display: flex; flex-direction: row; align-items: center;">
+          <span phx-click="remove-component" phx-value-dc-id="<%= dc.id %>" style="cursor: pointer; color: red; margin-right: 0.2em; font-size: 1.2em;">-</span>
+          <%= dc.sequence %>: <%= dc.component.name %>
+        </div>
+        <%= for config <- dc.configurations do %>
+          <div>
+            <%= config.configuration.label %>: <%= config.value %>
+          </div>
+        <% end %>
       </div>
     <% end %>
   </div>
