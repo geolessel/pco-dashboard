@@ -65,6 +65,11 @@ components = [
     module: "DashboardWeb.Components.Headcounts",
     name: "Headcounts",
     refresh_type: "poll"
+  },
+  %{
+    module: "DashboardWeb.Components.ProfilesCreatedOverWeek",
+    name: "Profiles Created",
+    refresh_type: "poll"
   }
 ]
 
