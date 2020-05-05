@@ -16,8 +16,8 @@ defmodule DashboardWeb.ComponentHelpers do
   defp add_plus_str(num) when num > 0, do: "+#{num}"
   defp add_plus_str(num), do: "#{num}"
 
-  defp get_percent(0, 0), do: 0
-  defp get_percent(_, 0), do: -100
-  defp get_percent(0, _), do: 100
-  defp get_percent(cur, prev), do: (cur / prev - 1) * 100
+  defp get_percent(0, 0), do: 0.0
+  defp get_percent(_, 0), do: -100.0
+  defp get_percent(0, _), do: 100.0
+  defp get_percent(cur, prev), do: (cur / prev - 1) * 100.0
 end
