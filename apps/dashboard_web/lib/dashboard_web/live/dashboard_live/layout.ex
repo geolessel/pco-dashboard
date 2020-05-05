@@ -26,12 +26,52 @@ defmodule DashboardWeb.DashboardLive.Layout do
   end
 
   @impl true
-  def handle_event("add-component", %{"component-id" => component_id}, socket) do
+  def handle_event("add-component", %{"component" => %{"has_config" => "true"} = params}, socket) do
+    user = Accounts.get_user_by_session_token(socket.assigns.user_token)
+    dashboard = socket.assigns.dashboard
+
+    configs =
+      params
+      |> Enum.reduce([], fn {key, val}, list ->
+        case Regex.run(~r|^configuration_(\d)+|, key) do
+          nil ->
+            list
+
+          [_full_key, id] ->
+            [%{"configuration_id" => id, "value" => val} | list]
+        end
+      end)
+
+    # TODO: handle the error!
+    # TODO: maybe DRY this up a bit along with unconfigurable components
+    case Dashboards.create_dashboard_component_and_configurations(
+           %{
+             dashboard_id: dashboard.id,
+             component_id: params["component_id"],
+             user_id: user.id
+           },
+           configs
+         ) do
+      {:ok, dc} ->
+        {:noreply,
+         assign(
+           socket,
+           :dashboard_components,
+           Dashboards.get_dashboard!(dashboard.id, user.id) |> Map.get(:dashboard_components)
+         )}
+    end
+  end
+
+  @impl true
+  def handle_event(
+        "add-component",
+        %{"component" => %{"component_id" => component_id} = params},
+        socket
+      ) do
     user = Accounts.get_user_by_session_token(socket.assigns.user_token)
     dashboard = socket.assigns.dashboard
 
     # TODO: handle the error!
-    # TODO: is the double-reverse of the list faster or slower than appending the list directly?
     case Dashboards.create_dashboard_component(%{
            dashboard_id: dashboard.id,
            component_id: component_id,
@@ -42,7 +82,7 @@ defmodule DashboardWeb.DashboardLive.Layout do
          assign(
            socket,
            :dashboard_components,
-           Enum.reverse([dc | Enum.reverse(socket.assigns.dashboard_components)])
+           Dashboards.get_dashboard!(dashboard.id, user.id) |> Map.get(:dashboard_components)
          )}
     end
   end

@@ -154,7 +154,9 @@ defmodule Dashboard.Dashboards do
 
   """
   def list_components do
-    Repo.all(Component)
+    Component
+    |> Repo.all()
+    |> Repo.preload(:configurations)
   end
 
   @doc """
@@ -254,6 +256,38 @@ defmodule Dashboard.Dashboards do
       {:ok, dc} -> {:ok, Repo.preload(dc, :component)}
       other -> other
     end
+  end
+
+  def create_dashboard_component_and_configurations(attrs, configurations) do
+    configurations_multi =
+      configurations
+      |> Enum.reduce(Ecto.Multi.new(), fn configuration, query ->
+        query
+        |> Ecto.Multi.run(
+          "create_configuration_for_#{Map.get(configuration, "configuration_id")}",
+          fn _,
+             %{
+               dashboard_component: %{
+                 id: dashboard_component_id
+               }
+             } ->
+            ComponentConfiguration.changeset(
+              %ComponentConfiguration{},
+              Map.put(configuration, "dashboard_component_id", dashboard_component_id)
+            )
+            |> Repo.insert()
+          end
+        )
+      end)
+
+    Ecto.Multi.new()
+    |> Ecto.Multi.run(:dashboard_component, fn _, changes ->
+      %DashboardComponent{}
+      |> DashboardComponent.changeset(attrs)
+      |> Repo.insert()
+    end)
+    |> Ecto.Multi.append(configurations_multi)
+    |> Repo.transaction()
   end
 
   def delete_dashboard_component(%DashboardComponent{} = dc) do

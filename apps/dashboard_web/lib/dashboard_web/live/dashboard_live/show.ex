@@ -62,6 +62,19 @@ defmodule DashboardWeb.DashboardLive.Show do
   end
 
   @impl true
+  def handle_event("keyboard-shortcut", %{"key" => "L"}, socket) do
+    {:noreply,
+     push_redirect(socket,
+       to: Routes.dashboard_layout_path(socket, :edit, socket.assigns.dashboard)
+     )}
+  end
+
+  @impl true
+  def handle_event("keyboard-shortcut", _, socket) do
+    {:noreply, socket}
+  end
+
+  @impl true
   def terminate(_reason, socket) do
     socket.assigns.component_subscriptions
     |> Enum.each(fn {name, _pid} -> Dashboard.Stores.unsubscribe(name, self()) end)
