@@ -14,8 +14,8 @@
     <h3 class="font-semibold text-xs uppercase text-gray-500 leading-none">
       This week
     <h3>
-    <% arbitrary_comparison_number = 30 %>
-    <h3 class="text-<%= DashboardWeb.ComponentHelpers.get_trend_color(@data_number, arbitrary_comparison_number) %>-500 mt-4 font-bold text-sm md:text-lg whitespace-no-wrap">
+    <% arbitrary_comparison_number = 800 %>
+    <h3 class="text-<%= DashboardWeb.ComponentHelpers.get_trend_color(@data_number, arbitrary_comparison_number) %>-500 mt-4 font-bold text-sm md:text-base lg:text-lg whitespace-no-wrap">
      <%= DashboardWeb.ComponentHelpers.get_trend_icon(@data_number, arbitrary_comparison_number) %>
      <%= DashboardWeb.ComponentHelpers.get_trend_percent(@data_number, arbitrary_comparison_number) %>%
     </h3>
