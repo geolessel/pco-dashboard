@@ -51,7 +51,8 @@ defmodule DashboardWeb.MixProject do
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},
       {:phx_gen_auth, "~> 0.1.0", only: [:dev], runtime: false},
-      {:timex, "~> 3.6"}
+      {:timex, "~> 3.6"},
+      {:number, "~> 1.0.1"}
     ]
   end
 
