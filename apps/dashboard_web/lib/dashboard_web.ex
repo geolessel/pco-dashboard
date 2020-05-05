@@ -90,6 +90,8 @@ defmodule DashboardWeb do
       import DashboardWeb.ErrorHelpers
       import DashboardWeb.Gettext
       alias DashboardWeb.Router.Helpers, as: Routes
+
+      import DashboardWeb.ComponentHelpers
     end
   end
 

@@ -9,7 +9,7 @@ defmodule DashboardWeb.Components.PersonUpdated do
 
   @impl true
   def update(assigns, socket) do
-    people = Dashboard.Stores.get(data_module(), genserver_id(assigns), :people)
+    people = Dashboard.Stores.get(data_module(), genserver_id(assigns), :people, [])
 
     {:ok, assign(socket, :people, people)}
   end

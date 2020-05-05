@@ -24,8 +24,9 @@ defmodule DashboardWeb.Components.CheckInCount do
       |> Map.put(:title, "Check-ins")
       |> Map.put(:product, :checkins)
       |> Map.put(:grid_width, 1)
-      |> Map.put(:data_key, :check_in_count)
       |> Map.put(:data_number, total_count)
+      |> Map.put(:timeframe, "This week")
+      |> Map.put(:comparison_number, 800)
 
     DashboardWeb.LayoutView.render("number-card.html", assigns)
   end
