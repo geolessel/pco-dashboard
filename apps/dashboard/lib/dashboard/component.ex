@@ -65,7 +65,7 @@ defmodule Dashboard.Component do
       end
 
       def handle_call(:get_all, _, state) do
-        {:reply, Map.get(state, state.component.assign), state}
+        {:reply, state, state}
       end
 
       def handle_call(:inspect, _, state) do

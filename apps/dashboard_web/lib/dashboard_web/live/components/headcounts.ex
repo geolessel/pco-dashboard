@@ -10,24 +10,22 @@ defmodule DashboardWeb.Components.Headcounts do
   @impl true
   def update(assigns, socket) do
     id = genserver_id(assigns, assigns.dashboard_component)
-    headcounts = Dashboard.Stores.get(id, "headcounts")
 
-    {:ok, socket |> assign(:headcounts, headcounts) |> assign(:genserver_id, id)}
+    %{headcounts: headcounts, total_count: total_count} =
+      Dashboard.Stores.get_all(data_module(), id)
+
+    {:ok, socket |> assign(:headcounts, headcounts) |> assign(:total_count, total_count)}
   end
 
   @impl true
   def render(assigns) do
-    response = Dashboard.Stores.get(assigns.genserver_id, :last_response)
-
-    total_count = response["meta"]["total_count"]
-
     assigns =
       assigns
       |> Map.put(:title, "Headcounts")
       |> Map.put(:product, :checkins)
       |> Map.put(:grid_width, 1)
       |> Map.put(:data_key, :headcounts)
-      |> Map.put(:data_number, total_count)
+      |> Map.put(:data_number, assigns.total_count)
 
     DashboardWeb.LayoutView.render("number-card.html", assigns)
   end
@@ -36,4 +34,7 @@ defmodule DashboardWeb.Components.Headcounts do
   def genserver_id(assigns, _dc \\ %Dashboard.Dashboards.DashboardComponent{}) do
     "headcounts--user_#{assigns.user_id}"
   end
+
+  @impl DashboardWeb.Behaviours.ComponentLiveView
+  def data_module, do: Dashboard.Components.Headcounts
 end

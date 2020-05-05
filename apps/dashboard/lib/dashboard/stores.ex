@@ -20,4 +20,11 @@ defmodule Dashboard.Stores do
       val -> val
     end
   end
+
+  def get_all(module, name, default \\ nil) do
+    case module.get_all({:global, name}) do
+      nil -> default
+      val -> val
+    end
+  end
 end
