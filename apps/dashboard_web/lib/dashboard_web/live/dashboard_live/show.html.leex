@@ -1,4 +1,4 @@
-<div class="grid grid-cols-5 gap-8 p-8">
+<div class="grid grid-cols-5 gap-8 p-8" phx-window-keyup="keyboard-shortcut">
   <%= for dc <- @components do %>
     <%= live_component(@socket,
                       Dashboard.Dashboards.Component.to_module(dc.component),
