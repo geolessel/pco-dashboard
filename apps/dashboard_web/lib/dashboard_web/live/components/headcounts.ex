@@ -24,8 +24,9 @@ defmodule DashboardWeb.Components.Headcounts do
       |> Map.put(:title, "Headcounts")
       |> Map.put(:product, :checkins)
       |> Map.put(:grid_width, 1)
-      |> Map.put(:data_key, :headcounts)
       |> Map.put(:data_number, assigns.total_count)
+      |> Map.put(:timeframe, "This week")
+      |> Map.put(:comparison_number, 800)
 
     DashboardWeb.LayoutView.render("number-card.html", assigns)
   end

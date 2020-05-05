@@ -203,8 +203,6 @@ defmodule Dashboard.Component do
         end)
       end
 
-      def process_data(state), do: state
-
       def put_extra_assigns(state), do: state
 
       def put_last_update(state), do: Map.put(state, :last_update, DateTime.utc_now())
