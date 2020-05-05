@@ -8,38 +8,32 @@
     user_id: @user_id %>
 <% end %>
 
-<div class="flex flex-col items-center justify-center mt-8 w-full">
-  <div>
-    <div class="flex mb-4">
-      <div class="bg-green-500 text-sm text-white rounded leading-8 px-2"><%= live_patch "New Dashboard", to: Routes.dashboard_index_path(@socket, :new) %></div>
-    </div>
-    <div class="border p-4 bg-white">
-      <table class="table-auto leading-8 w-full" style="min-width: 600px">
-        <thead class="text-gray-500 uppercase text-xs text-left">
-          <tr>
-            <th class="px-4 py-0">Name</th>
-            <th class="px-4 py-0">Slug</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody id="dashboards" class="align-baseline text-gray-700 text-sm">
-          <%= for dashboard <- @dashboards do %>
-            <tr id="dashboard-<%= dashboard.id %>">
-              <td class="px-4 py-0"><%= dashboard.name %></td>
-              <td class="px-4 py-0"><%= dashboard.slug %></td>
-
-              <td class="flex px-4 py-0 items-center">
-                <button class="px-4 py-0 border border-blue-500 leading-0 rounded text-blue-500 text-underline text-xs"><%= live_redirect "Show", to: Routes.dashboard_show_path(@socket, :show, dashboard) %></button>
-                <ul class="flex text-xs divide-x divide-gray-400">
-                  <li class="px-4 text-blue-500 hover:underline"><%= live_patch "Edit", to: Routes.dashboard_index_path(@socket, :edit, dashboard) %></li>
-                  <li class="px-4 text-blue-500 hover:underline"><%= live_redirect "Layout", to: Routes.dashboard_layout_path(@socket, :edit, dashboard) %></li>
-                  <li class="px-4 text-red-500 hover:underline"><%= link "Delete", to: "#", phx_click: "delete", phx_value_slug: dashboard.slug, data: [confirm: "Are you sure?"] %></li>
-                </ul>
-              </td>
-            </tr>
-          <% end %>
-        </tbody>
-      </table>
-    </div>
-    </div>
+<div class="flex flex-col w-full p-8">
+  <div class="flex flex-row items-center justify-between mb-8">
+    <h1 class="text-gray-800 text-lg">Dashboards</h1>
+    <button class="bg-green-500 text-sm text-white rounded leading-8 px-3"><%= live_patch "New dashboard", to: Routes.dashboard_index_path(@socket, :new) %></button>
+  </div>
+  <div class="grid grid-cols-3 gap-8 mb-8">
+    <%= for dashboard <- @dashboards do %>
+      <div class="card flex flex-col divide-y divide-gray-200">
+        <div class="p-4 flex flex-1 items-center justify-between pb-4">
+          <h1 class="text-blue-600 font-bold text-base mr-4">
+            <%= live_redirect dashboard.name, to: Routes.dashboard_show_path(@socket, :show, dashboard), class: "text-blue-600 hover:underline hover:text-blue-800" %>
+          </h1>
+          <code class="bg-gray-200 text-gray-600 px-2 text-xs">
+            <%= live_redirect "/#{dashboard.slug}", to: Routes.dashboard_show_path(@socket, :show, dashboard), class: "text-blue-600 hover:underline hover:text-blue-800" %>
+          </code>
+        </div>
+        <div class="px-4 py-2 bg-gray-100 flex items-center justify-between">
+          <div class="flex items-center">
+            <div class="bg-blue-600 border border-blue-600 text-white text-xs px-2 rounded hover:bg-blue-700"><%= live_redirect "Edit layout", to: Routes.dashboard_layout_path(@socket, :edit, dashboard) %></div>
+          </div>
+          <ul class="flex text-xs">
+            <li class="border border-blue-600 px-1 rounded text-blue-600 hover:text-blue-800 mr-2"><%= live_patch "Rename", to: Routes.dashboard_index_path(@socket, :edit, dashboard) %></li>
+            <li class="border border-red-600 px-1 rounded text-red-600 hover:text-red-800"><%= link "Delete", to: "#", phx_click: "delete", phx_value_slug: dashboard.slug, data: [confirm: "Are you sure?"] %></li>
+          </ul>
+        </div>
+      </div>
+      <% end %>
+  </div>
 </div>
