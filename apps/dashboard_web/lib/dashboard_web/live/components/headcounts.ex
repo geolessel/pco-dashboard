@@ -33,9 +33,7 @@ defmodule DashboardWeb.Components.Headcounts do
   end
 
   @impl DashboardWeb.Behaviours.ComponentLiveView
-  def genserver_id(assigns, dc \\ %Dashboard.Dashboards.DashboardComponent{}) do
-    suffix = Dashboard.Dashboards.DashboardComponent.genserver_name_suffix(dc)
-
-    "headcounts--user_#{assigns.user_id}#{suffix}"
+  def genserver_id(assigns, _dc \\ %Dashboard.Dashboards.DashboardComponent{}) do
+    "headcounts--user_#{assigns.user_id}"
   end
 end

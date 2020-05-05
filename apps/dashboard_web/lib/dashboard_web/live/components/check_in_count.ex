@@ -33,9 +33,7 @@ defmodule DashboardWeb.Components.CheckInCount do
   end
 
   @impl DashboardWeb.Behaviours.ComponentLiveView
-  def genserver_id(assigns, dc \\ %Dashboard.Dashboards.DashboardComponent{}) do
-    suffix = Dashboard.Dashboards.DashboardComponent.genserver_name_suffix(dc)
-
-    "check_in_count--user_#{assigns.user_id}#{suffix}"
+  def genserver_id(assigns, _dc \\ %Dashboard.Dashboards.DashboardComponent{}) do
+    "check_in_count--user_#{assigns.user_id}"
   end
 end
