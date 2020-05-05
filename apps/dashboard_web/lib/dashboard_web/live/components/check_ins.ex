@@ -9,7 +9,7 @@ defmodule DashboardWeb.Components.CheckIns do
 
   @impl true
   def update(assigns, socket) do
-    checkins = Dashboard.Stores.get(genserver_id(assigns), "checkins")
+    checkins = Dashboard.Stores.get(data_module(), genserver_id(assigns), :checkins, [])
 
     {:ok, assign(socket, :checkins, checkins)}
   end
@@ -36,4 +36,7 @@ defmodule DashboardWeb.Components.CheckIns do
   def genserver_id(assigns, _dc \\ %Dashboard.Dashboards.DashboardComponent{}) do
     "checkins--user_#{assigns.user_id}"
   end
+
+  @impl DashboardWeb.Behaviours.ComponentLiveView
+  def data_module, do: Dashboard.Components.CheckIns
 end

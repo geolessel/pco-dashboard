@@ -14,7 +14,10 @@ defmodule Dashboard.Stores do
     module.unsubscribe({:global, name}, subscriber_pid)
   end
 
-  def get(module, name, keyword) do
-    module.get({:global, name}, keyword)
+  def get(module, name, keyword, default \\ nil) do
+    case module.get({:global, name}, keyword) do
+      nil -> default
+      val -> val
+    end
   end
 end
