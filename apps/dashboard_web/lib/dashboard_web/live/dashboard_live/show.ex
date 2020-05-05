@@ -22,21 +22,24 @@ defmodule DashboardWeb.DashboardLive.Show do
     component_subscriptions =
       dashboard.dashboard_components
       |> Enum.map(fn dc ->
+        module = Dashboard.Dashboards.Component.to_module(dc.component)
+
         name =
-          Dashboard.Dashboards.Component.to_module(dc.component).genserver_id(
+          module.genserver_id(
             socket.assigns,
             dc
           )
 
         {:ok, pid} =
           Dashboard.Stores.subscribe(
+            module.data_module(),
             name,
             self(),
             dc,
             user
           )
 
-        {name, pid}
+        {module.data_module(), name, pid}
       end)
 
     {:noreply,
@@ -77,7 +80,9 @@ defmodule DashboardWeb.DashboardLive.Show do
   @impl true
   def terminate(_reason, socket) do
     socket.assigns.component_subscriptions
-    |> Enum.each(fn {name, _pid} -> Dashboard.Stores.unsubscribe(name, self()) end)
+    |> Enum.each(fn {data_module, name, _pid} ->
+      Dashboard.Stores.unsubscribe(data_module, name, self())
+    end)
   end
 
   defp page_title(:show), do: "Show Dashboard"
