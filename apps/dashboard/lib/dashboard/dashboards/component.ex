@@ -3,10 +3,8 @@ defmodule Dashboard.Dashboards.Component do
   import Ecto.Changeset
 
   schema "components" do
-    field :api_path, :string
-    field :assign, :string
     field :module, :string
-    field :name, :string, default: "poll"
+    field :name, :string
     field :refresh_type, :string, default: "poll"
     has_many :configurations, Dashboard.Components.Configuration
 
@@ -16,8 +14,8 @@ defmodule Dashboard.Dashboards.Component do
   @doc false
   def changeset(component, attrs) do
     component
-    |> cast(attrs, [:name, :api_path, :module, :assign, :refresh_type])
-    |> validate_required([:name, :api_path, :module, :assign, :refresh_type])
+    |> cast(attrs, [:name, :module, :refresh_type])
+    |> validate_required([:name, :module, :refresh_type])
   end
 
   def to_module(%__MODULE__{module: module}) do
