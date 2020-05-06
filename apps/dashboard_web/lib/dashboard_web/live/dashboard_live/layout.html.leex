@@ -65,7 +65,8 @@ class="bg-gray-300 p-2 text-gray-500 text-sm px-8"
           data-dc-id="<%= dc.id %>"
         >
           <div class="card-header">
-            <h1 class="card-title">
+            <h1 class="card-title flex items-center">
+              <div class="sortable-handle mr-2 text-gray-500 text-xs" data-dc-id="<%= dc.id %>" style="user-select: none;">|||</div>
               <%= dc.component.name %>
             </h1>
           </div>

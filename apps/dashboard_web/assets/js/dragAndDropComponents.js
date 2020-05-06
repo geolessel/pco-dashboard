@@ -6,6 +6,7 @@ export default {
       document.querySelectorAll("#sortable-container"),
       {
         draggable: "div.sortable",
+        handle: "div.sortable-handle",
         mirror: { constrainDimensions: true },
         swapAnimation: {
           duration: 200,
