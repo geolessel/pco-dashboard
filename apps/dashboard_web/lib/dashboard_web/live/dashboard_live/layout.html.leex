@@ -11,9 +11,75 @@ class="bg-gray-300 p-2 text-gray-500 text-sm px-8"
 </div>
 
 <div class="flex flex-col w-full p-8">
-  <div class="flex flex-row items-center justify-between mb-8">
-    <h1 class="text-gray-800 text-lg">Editing <%= @dashboard.name %></h1>
+  <div class="flex flex-row items-center justify-between mb-4">
+    <h1 class="text-gray-800 text-lg">Editing <strong><%= @dashboard.name %></strong></h1>
     <button class="btn btn-success btn-lg">Add component</button>
+  </div>
+
+  <div class="mb-8">
+    <div
+      class="bg-gray-200 grid grid-cols-5 gap-8 p-8 rounded-lg"
+      id="sortable-container"
+      phx-hook="ComponentDragAndDrop"
+    >
+      <%= for dc <- @dashboard_components do %>
+        <div
+          class="sortable card col-span-<%=
+            case dc.component.module do
+              "DashboardWeb.Components.CheckIns" -> 3
+              "DashboardWeb.Components.FormSubmissions" -> 2
+              "DashboardWeb.Components.FormsOverview" -> 2
+              "DashboardWeb.Components.ListResults" -> 2
+              "DashboardWeb.Components.PersonUpdated" -> 2
+              _ -> 1
+            end
+          %> row-span-<%=
+            case dc.component.module do
+              "DashboardWeb.Components.CheckIns" -> 2
+              "DashboardWeb.Components.FormSubmissions" -> 2
+              "DashboardWeb.Components.FormsOverview" -> 4
+              "DashboardWeb.Components.ListResults" -> 2
+              "DashboardWeb.Components.PersonUpdated" -> 2
+              _ -> 1
+            end
+          %>"
+          data-dc-id="<%= dc.id %>"
+        >
+          <div class="card-header">
+            <h1 class="card-title flex items-center">
+              <div class="sortable-handle mr-2 select-none text-gray-500 text-xs">
+                |||
+              </div>
+              <%= dc.component.name %>
+            </h1>
+          </div>
+          <div class="flex-1">
+            <%= if length(dc.configurations) > 0 do %>
+              <ul class="p-4">
+                <%= for config <- dc.configurations do %>
+                  <li class="text-gray-700 text-sm">
+                    <%= config.configuration.label %>: <%= config.value %>
+                  </li>
+                <% end %>
+              </ul>
+            <% else %>
+              <p class="flex-1 italic p-4 text-gray-500 text-xs">
+                No configuration.
+              </p>
+            <% end %>
+          </div>
+          <div class="card-footer">
+            <button
+              class="btn btn-outline-danger btn-xs"
+              phx-click="remove-component"
+              phx-value-dc-id="<%= dc.id %>"
+            >
+              Remove
+            </button>
+          </div>
+        </div>
+      <% end %>
+    </div>
   </div>
 
   <div class="mb-8">
@@ -48,56 +114,6 @@ class="bg-gray-300 p-2 text-gray-500 text-sm px-8"
             <%= submit "Add to dashboard", class: "btn btn-primary btn-sm flex-1" %>
           </div>
         </form>
-      <% end %>
-    </div>
-  </div>
-
-  <div class="">
-    <h2 class="font-bold mb-4 text-gray-800">Active Components</h2>
-    <div
-      class="bg-gray-200 grid grid-cols-5 gap-8 p-8 rounded-lg"
-      id="sortable-container"
-      phx-hook="ComponentDragAndDrop"
-    >
-      <%= for dc <- @dashboard_components do %>
-        <div
-          class="sortable card col-span-1 row-span-1"
-          data-dc-id="<%= dc.id %>"
-        >
-          <div class="card-header">
-            <h1 class="card-title">
-              <%= dc.component.name %>
-            </h1>
-          </div>
-          <div class="flex-1">
-            <%= if length(dc.configurations) > 0 do %>
-              <ul class="p-4">
-                <%= for config <- dc.configurations do %>
-                  <li class="text-gray-700 text-sm">
-                    <%= config.configuration.label %>: <%= config.value %>
-                  </li>
-                <% end %>
-              </ul>
-            <% else %>
-              <p class="flex-1 italic p-4 text-gray-500 text-xs">
-                No configuration.
-              </p>
-            <% end %>
-          </div>
-          <div class="card-footer">
-            <button
-              class="btn btn-outline-danger btn-xs"
-              phx-click="remove-component"
-              phx-value-dc-id="<%= dc.id %>"
-            >
-              Remove
-            </button>
-            <p class="text-gray-400 text-sm">
-              <% # TODO: Remove once sort issue fixed %>
-              <%= dc.sequence %>
-            </p>
-          </div>
-        </div>
       <% end %>
     </div>
   </div>
