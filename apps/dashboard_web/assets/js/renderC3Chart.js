@@ -2,14 +2,19 @@ import c3 from "c3"
 
 export default {
   mounted() {
-    c3.generate({
+    this.chart = c3.generate({
       bindto: "#chart",
       data: {
-        columns: [
-          ["data1", 30, 200, 100, 400, 150, 250],
-          ["data2", 50, 20, 10, 40, 15, 25],
-        ],
+        columns: JSON.parse(this.el.dataset.chartColumns),
       },
+    })
+
+    window.chart = this.chart
+  },
+
+  updated() {
+    this.chart.load({
+      columns: JSON.parse(this.el.dataset.chartColumns),
     })
   },
 }

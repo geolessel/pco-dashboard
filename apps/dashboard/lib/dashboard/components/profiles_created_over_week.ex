@@ -1,6 +1,7 @@
 defmodule Dashboard.Components.ProfilesCreatedOverWeek do
   use Dashboard.Component
 
+  @impl true
   def data_sources do
     today = Date.utc_today()
 
@@ -16,6 +17,7 @@ defmodule Dashboard.Components.ProfilesCreatedOverWeek do
     }
   end
 
+  @impl true
   def process_data(
         %{this_7_days: this_7_days_response, last_7_days: last_7_days_response} = state
       ) do

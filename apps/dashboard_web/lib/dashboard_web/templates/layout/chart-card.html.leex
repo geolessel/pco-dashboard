@@ -8,6 +8,10 @@
     </div>
   </div>
   <div class="p-4">
-    <div id="chart" phx-hook="RenderC3Chart"></div>
+    <div id="chart"
+         phx-hook="RenderC3Chart"
+         phx-update="ignore"
+         data-chart-columns="<%= Jason.encode!(@columns) %>">
+    </div>
   </div>
 </div>
