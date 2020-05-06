@@ -11,49 +11,12 @@ class="bg-gray-300 p-2 text-gray-500 text-sm px-8"
 </div>
 
 <div class="flex flex-col w-full p-8">
-  <div class="flex flex-row items-center justify-between mb-8">
-    <h1 class="text-gray-800 text-lg">Editing <%= @dashboard.name %></h1>
+  <div class="flex flex-row items-center justify-between mb-4">
+    <h1 class="text-gray-800 text-lg">Editing <strong><%= @dashboard.name %></strong></h1>
     <button class="btn btn-success btn-lg">Add component</button>
   </div>
 
   <div class="mb-8">
-    <h2 class="font-bold mb-4 text-gray-800">Available Components</h2>
-    <div class="bg-gray-200 grid grid-cols-5 gap-8 p-8 rounded-lg">
-      <%= for component <- @all_components do %>
-        <%= f = form_for :component, "#", id: "component-#{component.id}-form", phx_submit: "add-component", class: "card col-span-1 row-span-1" %>
-          <%= hidden_input f, :component_id, value: component.id %>
-          <div class="card-header">
-            <h1 class="card-title">
-              <%= component.name %>
-            </h1>
-          </div>
-          <div class="flex-1">
-            <%= if length(component.configurations) > 0 do %>
-              <ul class="p-4">
-                <%= for configuration <- component.configurations do %>
-                  <li class="mb-2">
-                    <%= label f, :value, configuration.label, class: "text-gray-700 text-sm" %>
-                    <%= text_input f, "configuration_#{configuration.id}", class: "bg-gray-200 appearance-none border-2 border-gray-200 rounded py-1 px-2 text-gray-700 text-sm focus:outline-none focus:bg-white focus:border-blue-500 w-full" %>
-                    <%= hidden_input f, :has_config, value: true %>
-                  </li>
-                <% end %>
-              </ul>
-            <% else %>
-              <p class="italic p-4 text-gray-500 text-xs">
-                No configuration.
-              </p>
-            <% end %>
-          </div>
-          <div class="card-footer">
-            <%= submit "Add to dashboard", class: "btn btn-primary btn-sm flex-1" %>
-          </div>
-        </form>
-      <% end %>
-    </div>
-  </div>
-
-  <div class="">
-    <h2 class="font-bold mb-4 text-gray-800">Active Components</h2>
     <div
       class="bg-gray-200 grid grid-cols-5 gap-8 p-8 rounded-lg"
       id="sortable-container"
@@ -115,6 +78,42 @@ class="bg-gray-300 p-2 text-gray-500 text-sm px-8"
             </button>
           </div>
         </div>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="mb-8">
+    <h2 class="font-bold mb-4 text-gray-800">Available Components</h2>
+    <div class="bg-gray-200 grid grid-cols-5 gap-8 p-8 rounded-lg">
+      <%= for component <- @all_components do %>
+        <%= f = form_for :component, "#", id: "component-#{component.id}-form", phx_submit: "add-component", class: "card col-span-1 row-span-1" %>
+          <%= hidden_input f, :component_id, value: component.id %>
+          <div class="card-header">
+            <h1 class="card-title">
+              <%= component.name %>
+            </h1>
+          </div>
+          <div class="flex-1">
+            <%= if length(component.configurations) > 0 do %>
+              <ul class="p-4">
+                <%= for configuration <- component.configurations do %>
+                  <li class="mb-2">
+                    <%= label f, :value, configuration.label, class: "text-gray-700 text-sm" %>
+                    <%= text_input f, "configuration_#{configuration.id}", class: "bg-gray-200 appearance-none border-2 border-gray-200 rounded py-1 px-2 text-gray-700 text-sm focus:outline-none focus:bg-white focus:border-blue-500 w-full" %>
+                    <%= hidden_input f, :has_config, value: true %>
+                  </li>
+                <% end %>
+              </ul>
+            <% else %>
+              <p class="italic p-4 text-gray-500 text-xs">
+                No configuration.
+              </p>
+            <% end %>
+          </div>
+          <div class="card-footer">
+            <%= submit "Add to dashboard", class: "btn btn-primary btn-sm flex-1" %>
+          </div>
+        </form>
       <% end %>
     </div>
   </div>
