@@ -22,6 +22,7 @@ defmodule Dashboard.Dashboards.Dashboard do
     |> validate_format(:slug, ~r/^[a-zA-Z0-9-_]+$/,
       message: "must contain only letters, numbers, dashes (-), or underscores (_)"
     )
+    |> validate_exclusion(:slug, ~w(new edit update destroy delete show layout admin))
     |> assoc_constraint(:user)
     |> unique_constraint([:slug, :user_id])
   end
