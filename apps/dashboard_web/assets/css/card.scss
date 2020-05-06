@@ -1,7 +1,7 @@
 .card {
   @apply bg-white flex flex-col overflow-hidden rounded-lg shadow shadow-lg;
   .card-header {
-    @apply bg-gray-100 border-product-people border-l-2 flex items-center mt-2 px-4;
+    @apply bg-gray-100 border-l-2 flex items-center mt-2 px-4;
     .card-title {
       @apply flex-1 font-bold mr-2 py-1 text-base text-gray-800;
     }
