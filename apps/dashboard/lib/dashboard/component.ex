@@ -1,19 +1,23 @@
 defmodule Dashboard.Component do
   defmacro __using__(_opts) do
     quote do
-      use GenServer
+      use GenServer, restart: :transient
       require Logger
 
       @poll_interval 20_000
+      # 10 minutes
+      @ttl_seconds 10 * 60 * 1_000
 
       @behaviour Dashboard.Behaviours.Component
 
       def start_link(opts \\ []) do
         opts = Keyword.merge([name: __MODULE__], opts)
 
+        {:global, name} = opts[:name]
+
         GenServer.start_link(
           __MODULE__,
-          %{dashboard_component: opts[:component], user: opts[:user]},
+          %{dashboard_component: opts[:component], user: opts[:user], name: name},
           opts
         )
       end
@@ -47,7 +51,7 @@ defmodule Dashboard.Component do
       # └──────────────────┘
 
       def init(state) do
-        {:ok, timer} = :timer.send_interval(@poll_interval, :update)
+        {:ok, update_timer} = :timer.send_interval(@poll_interval, :update)
 
         state =
           state
@@ -55,7 +59,7 @@ defmodule Dashboard.Component do
           |> Map.put(:subscribers, [])
           |> Map.put(:last_response, %Dashboard.PlanningCenterApi.Response{})
           |> Map.put(:last_update, nil)
-          |> Map.put(:timer, timer)
+          |> Map.put(:update_timer, update_timer)
 
         {:ok, state}
       end
@@ -72,11 +76,11 @@ defmodule Dashboard.Component do
         {:reply, state, state}
       end
 
-      def handle_cast(:cancel_updates, %{timer: nil} = state), do: {:noreply, state}
+      def handle_cast(:cancel_updates, %{update_timer: nil} = state), do: {:noreply, state}
 
-      def handle_cast(:cancel_updates, %{timer: timer} = state) do
-        :timer.cancel(timer)
-        {:noreply, %{state | timer: nil}}
+      def handle_cast(:cancel_updates, %{update_timer: update_timer} = state) do
+        :timer.cancel(update_timer)
+        {:noreply, %{state | update_timer: nil}}
       end
 
       def handle_cast({:subscribe, subscriber_pid}, %{subscribers: subscribers} = state) do
@@ -118,10 +122,21 @@ defmodule Dashboard.Component do
 
       Also handles letting subscribers know there is new data to enjoy.
 
-      If there are no subscribers, don't bother making the request.
+      If there are no subscribers, don't bother making the request. If there are no subscribers
+      and it's been a set amount of time, kill the genserver.
       """
-      def handle_info(:update, %{subscribers: subscribers} = state) when length(subscribers) == 0,
-        do: {:noreply, state}
+      def handle_info(:update, %{subscribers: subscribers, last_update: last_update} = state)
+          when length(subscribers) == 0 and not is_nil(last_update) do
+        if DateTime.diff(DateTime.utc_now(), last_update) > @ttl_seconds do
+          Logger.debug(
+            "shutting down GenServer: #{state.name}. It's been #{@ttl_seconds} seconds and no one's listening."
+          )
+
+          {:stop, :normal, state}
+        else
+          {:noreply, state}
+        end
+      end
 
       def handle_info(:update, state) do
         # path = prepare_api_path(state.dashboard_component)
@@ -155,7 +170,8 @@ defmodule Dashboard.Component do
       end
 
       def terminate(_reason, state) do
-        :timer.cancel(state.timer)
+        Logger.debug("canceling update timer of #{state.name}")
+        {:ok, cancel} = :timer.cancel(state.update_timer)
         :ok
       end
 
