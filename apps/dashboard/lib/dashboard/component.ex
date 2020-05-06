@@ -139,8 +139,6 @@ defmodule Dashboard.Component do
       end
 
       def handle_info(:update, state) do
-        # path = prepare_api_path(state.dashboard_component)
-
         state =
           state
           |> fetch_data()
@@ -180,11 +178,16 @@ defmodule Dashboard.Component do
       # └──────────────────┘
 
       def fetch_data(%{user: user} = state) do
-        data_sources()
-        |> prepare_api_paths(state)
-        |> Enum.reduce(state, fn {assign, path}, map ->
-          Map.put(map, assign, Dashboard.PlanningCenterApi.Client.get(user, path))
-        end)
+        Map.merge(
+          state,
+          data_sources()
+          |> prepare_api_paths(state)
+          |> Enum.map(fn {assign, path} ->
+            Task.async(fn -> {assign, Dashboard.PlanningCenterApi.Client.get(user, path)} end)
+          end)
+          |> Enum.map(&Task.await/1)
+          |> Enum.into(%{})
+        )
       end
 
       def maybe_update_immediately(nil), do: send(self(), :update)
