@@ -1,3 +1,43 @@
 .sortable-handle {
   cursor: grab;
 }
+
+/* Class added on the document body while dragging */
+.draggable--is-dragging {
+}
+
+/* Class added on the container where the draggable was picked up from	 */
+.draggable-container--is-dragging {
+}
+
+/* Class added on the draggable element that has been picked up */
+.draggable-source--is-dragging {
+  @apply bg-blue-100 border-4 border-dashed border-blue-500 !important;
+  div {
+    opacity: 0;
+  }
+}
+
+/* Class added on the draggable element on drag:stop */
+.draggable-source--placed {
+}
+
+/* Class added on the draggable container element on drag:stop */
+.draggable-container--placed {
+}
+
+/* Class added on draggable element you are dragging over */
+.draggable--over {
+}
+
+/* Class added on draggable container element you are dragging over */
+.draggable-container--over {
+}
+
+/* Class added on the original source element, which is hidden on drag */
+.draggable--original {
+}
+
+/* Class added on the mirror element */
+.draggable-mirror {
+}
