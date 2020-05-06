@@ -61,9 +61,26 @@ class="bg-gray-300 p-2 text-gray-500 text-sm px-8"
     >
       <%= for dc <- @dashboard_components do %>
         <div
-          class="sortable card col-span-1 row-span-1"
-          data-dc-id="<%= dc.id %>"
-        >
+          class="sortable card col-span-<%=
+            case dc.component.module do
+              "DashboardWeb.Components.CheckIns" -> 3
+              "DashboardWeb.Components.FormSubmissions" -> 2
+              "DashboardWeb.Components.FormsOverview" -> 2
+              "DashboardWeb.Components.ListResults" -> 2
+              "DashboardWeb.Components.PersonUpdated" -> 2
+              _ -> 1
+            end
+          %> row-span-<%=
+            case dc.component.module do
+              "DashboardWeb.Components.CheckIns" -> 2
+              "DashboardWeb.Components.FormSubmissions" -> 2
+              "DashboardWeb.Components.FormsOverview" -> 4
+              "DashboardWeb.Components.ListResults" -> 2
+              "DashboardWeb.Components.PersonUpdated" -> 2
+              _ -> 1
+            end
+          %>"
+          >
           <div class="card-header">
             <h1 class="card-title flex items-center">
               <div class="sortable-handle mr-2 text-gray-500 text-xs" data-dc-id="<%= dc.id %>" style="user-select: none;">|||</div>
