@@ -20,11 +20,13 @@ export default {
     // sortable.on('drag:move', () => console.log('drag:move'))
     // sortable.on('drag:stop', () => console.log('drag:stop'))
     sortable.on("sortable:stop", (e) => {
-      const dcId = e.data.dragEvent.data.source.dataset.dcId
-      this.pushEvent("reorder-component", {
-        dc_id: dcId,
-        new_sequence: e.newIndex,
-      })
+      if (e.newIndex !== e.oldIndex) {
+        const dcId = e.data.dragEvent.data.source.dataset.dcId
+        this.pushEvent("reorder-component", {
+          dc_id: dcId,
+          new_sequence: e.newIndex,
+        })
+      }
     })
   },
 }

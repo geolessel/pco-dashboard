@@ -120,14 +120,21 @@ defmodule DashboardWeb.DashboardLive.Layout do
     dashboard = socket.assigns.dashboard
 
     # TODO: handle error
-    dashboard
-    |> Dashboards.get_dashboard_component_of_dashboard!(dc_id)
-    |> Dashboards.reorder_component(new_sequence)
-    |> case do
-      {:ok, _} ->
-        user = Accounts.get_user_by_session_token(socket.assigns.user_token)
-        dashboard = Dashboards.get_dashboard!(dashboard.id, user.id)
-        {:noreply, assign(socket, :dashboard_components, dashboard.dashboard_components)}
+    dc =
+      dashboard
+      |> Dashboards.get_dashboard_component_of_dashboard!(dc_id)
+
+    if dc.sequence != new_sequence do
+      dc
+      |> Dashboards.reorder_component(new_sequence)
+      |> case do
+        {:ok, _} ->
+          user = Accounts.get_user_by_session_token(socket.assigns.user_token)
+          dashboard = Dashboards.get_dashboard!(dashboard.id, user.id)
+          {:noreply, assign(socket, :dashboard_components, dashboard.dashboard_components)}
+      end
+    else
+      {:noreply, socket}
     end
   end
 

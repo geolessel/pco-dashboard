@@ -320,6 +320,14 @@ defmodule Dashboard.Dashboards do
     )
   end
 
+  @doc """
+  Reorder the sequencing of the components
+
+  However, don't attempt to resequence the component if the new
+  sequence number and the old are equal.
+  """
+  def reorder_component(%{sequence: sequence} = dc, sequence), do: {:ok, dc}
+
   def reorder_component(%DashboardComponent{} = dc, new_sequence) do
     {resequence_others_query, direction} =
       cond do
