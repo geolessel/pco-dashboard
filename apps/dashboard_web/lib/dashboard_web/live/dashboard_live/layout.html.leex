@@ -1,52 +1,107 @@
-<div style="background-color: #eee; padding: 0.5em; margin-bottom: 2em;">
-  <%= live_redirect("Dashboards", to: Routes.dashboard_index_path(@socket, :index)) %>
+<div
+class="bg-gray-300 p-2 text-gray-500 text-sm px-8"
+>
+  <%= live_redirect("Dashboards", to: Routes.dashboard_index_path(@socket, :index), class: "text-blue-600") %>
   >
-  <%= live_redirect(@dashboard.name, to: Routes.dashboard_show_path(@socket, :show, @dashboard)) %>
+  <%= live_redirect(@dashboard.name, to: Routes.dashboard_show_path(@socket, :show, @dashboard), class: "text-blue-600") %>
   >
-  Edit
+  <span class="text-gray-700">
+    Edit
+  </span>
 </div>
 
-<h1>Editing <%= @dashboard.name %></h1>
-
-<div style="padding-bottom: 1em; border-bottom: 1px solid #ccc; margin-bottom: 2em;">
-  <h2>Available Components</h2>
-  <div style="display: flex; flex-direction: row;">
-    <%= for component <- @all_components do %>
-      <%= f = form_for :component, "#", id: "component-#{component.id}-form", phx_submit: "add-component" %>
-        <div style="display: flex; flex-direction: column; align-items: flex-start; border: 1px solid #666; padding: 0.5em; margin-right: 0.5em;">
-          <%= hidden_input f, :component_id, value: component.id %>
-          <%= component.name %>
-          <%= if length(component.configurations) > 0 do %>
-            <div style="display: flex; flex-direction row;">
-              <%= for configuration <- component.configurations do %>
-                <%= label f, :value, configuration.label, class: "block text-gray-500 font-bold leading-7 py-2 text-right" %>
-                <%= text_input f, "configuration_#{configuration.id}", class: "bg-gray-200 appearance-none border-2 border-gray-200 rounded py-2 px-3 text-gray-700 focus:outline-none focus:bg-white focus:border-blue-500" %>
-                <%= hidden_input f, :has_config, value: true %>
-              <% end %>
-            </div>
-          <% end %>
-          <%= submit "Add to Dashboard", class: "shadow bg-blue-500 hover:bg-blue-400 focus:shadow-outline focus:outline-none text-white py-2 px-4 rounded text-sm" %>
-        </div>
-      </form>
-    <% end %>
+<div class="flex flex-col w-full p-8">
+  <div class="flex flex-row items-center justify-between mb-8">
+    <h1 class="text-gray-800 text-lg">Editing <%= @dashboard.name %></h1>
+    <button class="btn btn-success btn-lg">Add component</button>
   </div>
-</div>
 
-<div>
-  <h2>Active Components</h2>
-  <div id="sortable-container" phx-hook="ComponentDragAndDrop" style="display: flex; flex-direction: row; flex-wrap: wrap; border: 1px solid #eee;">
-    <%= for dc <- @dashboard_components do %>
-      <div style="background: white; display: flex; flex-direction: column; border: 1px solid #666; padding: 0.5em; margin: 0 0.5em 0.5em 0;" class="sortable" data-dc-id="<%= dc.id %>">
-        <div style="display: flex; flex-direction: row; align-items: center;">
-          <span phx-click="remove-component" phx-value-dc-id="<%= dc.id %>" style="cursor: pointer; color: red; margin-right: 0.2em; font-size: 1.2em;">-</span>
-          <%= dc.sequence %>: <%= dc.component.name %>
-        </div>
-        <%= for config <- dc.configurations do %>
-          <div>
-            <%= config.configuration.label %>: <%= config.value %>
+  <div class="mb-8">
+    <h2 class="font-bold mb-4 text-gray-800">Available Components</h2>
+    <div class="bg-gray-200 grid grid-cols-5 gap-8 p-8 rounded-lg">
+      <%= for component <- @all_components do %>
+        <%= f = form_for :component, "#", id: "component-#{component.id}-form", phx_submit: "add-component", class: "card col-span-1 row-span-1" %>
+          <%= hidden_input f, :component_id, value: component.id %>
+          <div class="card-header">
+            <h1 class="card-title">
+              <%= component.name %>
+            </h1>
           </div>
-        <% end %>
-      </div>
-    <% end %>
+          <div class="flex-1">
+            <%= if length(component.configurations) > 0 do %>
+              <ul class="p-4">
+                <%= for configuration <- component.configurations do %>
+                  <li class="mb-2">
+                    <%= label f, :value, configuration.label, class: "text-gray-700 text-sm" %>
+                    <%= text_input f, "configuration_#{configuration.id}", class: "bg-gray-200 appearance-none border-2 border-gray-200 rounded py-1 px-2 text-gray-700 text-sm focus:outline-none focus:bg-white focus:border-blue-500 w-full" %>
+                    <%= hidden_input f, :has_config, value: true %>
+                  </li>
+                <% end %>
+              </ul>
+            <% else %>
+              <p class="italic p-4 text-gray-500 text-xs">
+                No configuration.
+              </p>
+            <% end %>
+          </div>
+          <div class="card-footer">
+            <%= submit "Add to dashboard", class: "btn btn-primary btn-sm flex-1" %>
+          </div>
+        </form>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="">
+    <h2 class="font-bold mb-4 text-gray-800">Active Components</h2>
+    <div
+      class="bg-gray-200 grid grid-cols-5 gap-8 p-8 rounded-lg"
+      id="sortable-container"
+      phx-hook="ComponentDragAndDrop"
+    >
+      <%= for dc <- @dashboard_components do %>
+        <div
+          class="sortable card col-span-1 row-span-1"
+          data-dc-id="<%= dc.id %>"
+        >
+          <div class="card-header">
+            <h1 class="card-title">
+              <%= dc.component.name %>
+            </h1>
+          </div>
+          <div class="flex-1">
+            <%= if length(dc.configurations) > 0 do %>
+              <ul class="p-4">
+                <%= for config <- dc.configurations do %>
+                  <li class="text-gray-700 text-sm">
+                    <%= config.configuration.label %>: <%= config.value %>
+                  </li>
+                  <li class="text-gray-700 text-sm">
+                    <%= config.configuration.label %>: <%= config.value %>
+                  </li>
+                <% end %>
+              </ul>
+            <% else %>
+              <p class="flex-1 italic p-4 text-gray-500 text-xs">
+                No configuration.
+              </p>
+            <% end %>
+          </div>
+          <div class="card-footer">
+            <button
+              class="btn btn-outline-danger btn-xs"
+              phx-click="remove-component"
+              phx-value-dc-id="<%= dc.id %>"
+            >
+              Remove
+            </button>
+            <p class="text-gray-400 text-sm">
+              <% # TODO: Remove once sort issue fixed %>
+              <%= dc.sequence %>
+            </p>
+          </div>
+        </div>
+      <% end %>
+    </div>
   </div>
 </div>
