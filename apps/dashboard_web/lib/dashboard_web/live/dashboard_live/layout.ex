@@ -52,7 +52,7 @@ defmodule DashboardWeb.DashboardLive.Layout do
            },
            configs
          ) do
-      {:ok, dc} ->
+      {:ok, _dc} ->
         {:noreply,
          assign(
            socket,
@@ -65,7 +65,7 @@ defmodule DashboardWeb.DashboardLive.Layout do
   @impl true
   def handle_event(
         "add-component",
-        %{"component" => %{"component_id" => component_id} = params},
+        %{"component" => %{"component_id" => component_id} = _params},
         socket
       ) do
     user = Accounts.get_user_by_session_token(socket.assigns.user_token)
@@ -77,7 +77,7 @@ defmodule DashboardWeb.DashboardLive.Layout do
            component_id: component_id,
            user_id: user.id
          }) do
-      {:ok, dc} ->
+      {:ok, _dc} ->
         {:noreply,
          assign(
            socket,
