@@ -9,9 +9,9 @@ defmodule DashboardWeb.Components.HeadcountsChart do
 
   @impl true
   def update(assigns, socket) do
-    headcounts_chart = Dashboard.Stores.get(genserver_id(assigns), "headcounts_chart")
+    headcounts = Dashboard.Stores.get(data_module(), genserver_id(assigns), :headcounts)
 
-    {:ok, assign(socket, :headcounts_chart, headcounts_chart)}
+    {:ok, assign(socket, :headcounts, headcounts)}
   end
 
   @impl true
@@ -20,7 +20,7 @@ defmodule DashboardWeb.Components.HeadcountsChart do
       assigns
       |> Map.put(:title, "Headcounts")
       |> Map.put(:product, :checkins)
-      |> Map.put(:data_key, :headcounts_chart)
+      |> Map.put(:data_key, :headcounts)
 
     DashboardWeb.LayoutView.render("chart-card.html", assigns)
   end
@@ -29,4 +29,7 @@ defmodule DashboardWeb.Components.HeadcountsChart do
   def genserver_id(assigns, _dc \\ %Dashboard.Dashboards.DashboardComponent{}) do
     "headcounts_chart--user_#{assigns.user_id}"
   end
+
+  @impl DashboardWeb.Behaviours.ComponentLiveView
+  def data_module, do: Dashboard.Components.HeadcountsChart
 end
