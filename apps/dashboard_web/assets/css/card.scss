@@ -1,0 +1,15 @@
+.card {
+  @apply bg-white flex flex-col overflow-hidden rounded-lg shadow shadow-lg;
+  .card-header {
+    @apply bg-gray-100 border-l-2 flex items-center mt-2 px-4;
+    .card-title {
+      @apply flex-1 font-bold mr-2 py-1 text-base text-gray-800;
+    }
+    .card-icon {
+      @apply h-5 rounded text-center text-sm text-white w-5;
+    }
+  }
+  .card-footer {
+    @apply bg-gray-100 border-gray-200 border-t flex items-center justify-between px-4 py-2;
+  }
+}

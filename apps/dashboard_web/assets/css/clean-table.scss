@@ -1,0 +1,16 @@
+.clean-table {
+  @apply leading-6 table-auto w-full;
+  thead {
+    @apply text-gray-500 text-left text-xs uppercase;
+  }
+  th,
+  td {
+    @apply px-2 py-0;
+  }
+  tbody {
+    @apply align-baseline text-gray-700 text-sm;
+    tr:nth-child(odd) {
+      @apply bg-gray-100;
+    }
+  }
+}
