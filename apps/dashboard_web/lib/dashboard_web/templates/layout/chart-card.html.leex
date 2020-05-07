@@ -4,7 +4,10 @@
       <%= @title %>
     </h1>
     <div class="card-icon bg-product-<%=@product%>">
-      <%= Map.get(%{checkins: "C", people: "P"}, @product) %>
+      <svg class="symbol" role="image">
+        <use href="<%= Routes.static_path(@socket, "/js/sprite.svg##{@icon}") %>">
+        </use>
+      </svg>
     </div>
   </div>
   <div class="p-4">

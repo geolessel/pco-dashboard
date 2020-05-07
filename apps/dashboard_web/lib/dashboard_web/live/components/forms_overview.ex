@@ -11,17 +11,20 @@ defmodule DashboardWeb.Components.FormsOverview do
   def update(assigns, socket) do
     forms = Dashboard.Stores.get(data_module(), genserver_id(assigns), :forms, [])
 
-    {:ok, assign(socket, :forms, forms)}
+    {:ok,
+     socket
+     |> assign(:forms, forms)
+     |> assign(:title, "Form Overview")
+     |> assign(:product, :people)
+     |> assign(:icon, "product_people-logomark")
+     |> assign(:table_key, :forms)
+     |> assign(:grid_height, 4)}
   end
 
   @impl true
   def render(assigns) do
     assigns =
       assigns
-      |> Map.put(:title, "Form Overview")
-      |> Map.put(:product, :people)
-      |> Map.put(:table_key, :forms)
-      |> Map.put(:grid_height, 4)
       |> Map.put(:table_columns, [
         %{key: "name", label: "Form"},
         %{key: "submission_count", label: "Submissions"},

@@ -12,7 +12,14 @@ defmodule DashboardWeb.Components.FormSubmissions do
     id = genserver_id(assigns, assigns.dashboard_component)
     submissions = Dashboard.Stores.get(data_module(), id, :submissions, [])
 
-    {:ok, socket |> assign(:submissions, submissions) |> assign(:genserver_id, id)}
+    {:ok,
+     socket
+     |> assign(:submissions, submissions)
+     |> assign(:genserver_id, id)
+     |> assign(:title, "Form Submissions - FORM NAME HERE")
+     |> assign(:product, :people)
+     |> assign(:icon, "product_people-logomark")
+     |> assign(:table_key, :submissions)}
   end
 
   @impl true
@@ -21,9 +28,6 @@ defmodule DashboardWeb.Components.FormSubmissions do
 
     assigns =
       assigns
-      |> Map.put(:title, "Form Submissions - FORM NAME HERE")
-      |> Map.put(:product, :people)
-      |> Map.put(:table_key, :submissions)
       |> Map.put(:table_columns, [
         %{
           get_value: fn item ->
