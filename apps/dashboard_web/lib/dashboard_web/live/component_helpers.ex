@@ -2,6 +2,7 @@ defmodule DashboardWeb.ComponentHelpers do
   @moduledoc """
   Helpers for rendering components in a Dashboard.
   """
+  alias DashboardWeb.Router.Helpers, as: Routes
 
   def get_trend_color(n, n), do: "gray"
   def get_trend_color(cur, prev) when cur > prev, do: "green"
@@ -36,4 +37,14 @@ defmodule DashboardWeb.ComponentHelpers do
   defp get_percent(_, 0), do: -100.0
   defp get_percent(0, _), do: 100.0
   defp get_percent(cur, prev), do: (cur / prev - 1) * 100.0
+
+  def svg_icon(conn, icon) do
+    {:safe,
+     """
+     <svg class="symbol" role="image">
+       <use href="#{Routes.static_path(conn, "/js/sprite.svg##{icon}")}">
+       </use>
+     </svg>
+     """}
+  end
 end

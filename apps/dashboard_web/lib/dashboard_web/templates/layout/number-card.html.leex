@@ -4,10 +4,7 @@
       <%= @title %>
     </h1>
     <div class="card-icon bg-product-<%=@product%>">
-      <svg class="symbol" role="image">
-        <use href="<%= Routes.static_path(@socket, "/js/sprite.svg##{@icon}") %>">
-        </use>
-      </svg>
+      <%= svg_icon(@socket, @icon) %>
     </div>
   </div>
   <div class="p-4">
