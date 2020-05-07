@@ -9,7 +9,7 @@ defmodule DashboardWeb.Components.ProfilesCreatedOverTimeChart do
 
   @impl true
   def update(assigns, socket) do
-    columns = Dashboard.Stores.get(data_module(), genserver_id(assigns), :data)
+    columns = Dashboard.Stores.get(data_module(), genserver_id(assigns), :columns)
 
     {:ok, assign(socket, :columns, columns)}
   end
