@@ -70,6 +70,11 @@ components = [
     module: "DashboardWeb.Components.ProfilesCreatedOverWeek",
     name: "Profiles Created",
     refresh_type: "poll"
+  },
+  %{
+    module: "DashboardWeb.Components.ProfilesCreatedOverTimeChart",
+    name: "Profiles Created Over Time Chart",
+    refresh_type: "poll"
   }
 ]
 

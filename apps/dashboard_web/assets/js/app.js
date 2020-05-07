@@ -18,7 +18,8 @@ import NProgress from "nprogress"
 import { LiveSocket } from "phoenix_live_view"
 
 import ComponentDragAndDrop from "./dragAndDropComponents"
-let Hooks = { ComponentDragAndDrop }
+import RenderC3Chart from "./renderC3Chart"
+let Hooks = { ComponentDragAndDrop, RenderC3Chart }
 
 let csrfToken = document
   .querySelector("meta[name='csrf-token']")

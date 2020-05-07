@@ -1,0 +1,17 @@
+<div class="card col-span-<%= Map.get(assigns, :grid_width, 2) %> row-span-<%= Map.get(assigns, :grid_height, 2) %>">
+  <div class="card-header">
+    <h1 class="card-title">
+      <%= @title %>
+    </h1>
+    <div class="card-icon bg-product-<%=@product%>">
+      <%= Map.get(%{checkins: "C", people: "P"}, @product) %>
+    </div>
+  </div>
+  <div class="p-4">
+    <div id="chart"
+         phx-hook="RenderC3Chart"
+         phx-update="ignore"
+         data-chart-columns="<%= Jason.encode!(@columns) %>">
+    </div>
+  </div>
+</div>
