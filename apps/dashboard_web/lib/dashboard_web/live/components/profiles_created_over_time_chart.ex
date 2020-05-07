@@ -4,7 +4,7 @@ defmodule DashboardWeb.Components.ProfilesCreatedOverTimeChart do
 
   @impl true
   def mount(socket) do
-    {:ok, assign(socket, :data, %{})}
+    {:ok, assign(socket, :columns, [])}
   end
 
   @impl true
