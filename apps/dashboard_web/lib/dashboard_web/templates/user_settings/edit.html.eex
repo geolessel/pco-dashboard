@@ -74,7 +74,7 @@
   <%= if Application.get_env(:dashboard, :auth_type) == :oauth do %>
     <h2 class="text-md text-gray-700 mb-4">Planning Center Authorization</h2>
     <%= if @current_user.oauth_token do %>
-      Authorized! Current authorization expires at <%= @current_user.oauth_token.expires_at %>. It will automatically be renewed up to 90 days after expiration.
+      Authorized! Current authorization expires <%= Timex.from_now(@current_user.oauth_token.expires_at) %>. It will automatically be renewed up to 90 days after expiration.
     <% else %>
       <%= link "Authorize", to: Dashboard.PlanningCenterApi.Oauth.authorize_url!, class: "shadow bg-blue-500 hover:bg-blue-400 focus:shadow-outline focus:outline-none text-white py-2 px-4 rounded text-sm" %>
     <% end %>

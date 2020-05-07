@@ -15,7 +15,6 @@ defmodule DashboardWeb.OauthController do
       nil -> Dashboard.Accounts.create_oauth_token(attrs)
       token -> Dashboard.Accounts.update_oauth_token(token, attrs)
     end
-    |> IO.inspect()
 
     redirect(conn, to: Routes.user_settings_path(conn, :edit))
   end
