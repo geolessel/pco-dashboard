@@ -32,8 +32,6 @@ export default {
         },
       },
     })
-
-    window.chart = this.chart
   },
 
   updated() {
