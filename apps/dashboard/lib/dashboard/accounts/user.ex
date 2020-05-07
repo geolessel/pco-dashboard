@@ -10,6 +10,7 @@ defmodule Dashboard.Accounts.User do
     field :application_id, :string
     field :application_secret, :string
     field :confirmed_at, :naive_datetime
+    has_one :oauth_token, Dashboard.Accounts.OauthToken
 
     timestamps()
   end

@@ -69,6 +69,8 @@ defmodule DashboardWeb.Router do
     put "/users/settings/update_access_token", UserSettingsController, :update_access_token
     get "/users/settings/confirm_email/:token", UserSettingsController, :confirm_email
 
+    get "/oauth/complete", OauthController, :new
+
     live "/dashboards", DashboardLive.Index, :index
     live "/dashboards/new", DashboardLive.Index, :new
     live "/dashboards/:slug/edit", DashboardLive.Index, :edit

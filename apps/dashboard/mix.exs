@@ -42,7 +42,8 @@ defmodule Dashboard.MixProject do
       {:postgrex, ">= 0.0.0"},
       {:jason, "~> 1.0"},
       {:mint, "~> 1.0"},
-      {:castore, "~> 0.1.5"}
+      {:castore, "~> 0.1.5"},
+      {:oauth2, "~> 2.0"}
     ]
   end
 
