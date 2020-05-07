@@ -70,7 +70,7 @@
 }
 
 .c3-circle._expanded_ {
-  stroke-width: 1px;
+  stroke-width: 2px;
   stroke: white;
 }
 
@@ -130,7 +130,7 @@
 .c3-legend-background {
   opacity: 0.75;
   fill: white;
-  stroke: pink;
+  stroke: lightgray;
   stroke-width: 1;
 }
 
@@ -145,44 +145,26 @@
 }
 
 .c3-tooltip {
-  border-collapse: collapse;
-  border-spacing: 0;
-  background-color: #fff;
-  empty-cells: show;
-  -webkit-box-shadow: 7px 7px 12px -9px #777777;
-  -moz-box-shadow: 7px 7px 12px -9px #777777;
-  box-shadow: 7px 7px 12px -9px #777777;
-  opacity: 0.9;
+  @apply bg-white overflow-hidden rounded shadow table-auto;
 }
 
 .c3-tooltip tr {
-  border: 1px solid #ccc;
 }
 
 .c3-tooltip th {
-  background-color: #aaa;
-  font-size: 14px;
-  padding: 2px 5px;
-  text-align: left;
-  color: #fff;
+  @apply bg-gray-100 text-gray-600 text-xs px-2 py-1 uppercase;
 }
 
 .c3-tooltip td {
-  font-size: 13px;
-  padding: 3px 6px;
-  background-color: #fff;
-  border-left: 1px dotted #999;
+  @apply bg-white items-center text-gray-700 text-xs px-2 py-1;
 }
 
 .c3-tooltip td > span {
-  display: inline-block;
-  width: 10px;
-  height: 10px;
-  margin-right: 6px;
+  @apply h-2 inline-block mr-2 w-2 rounded-full;
 }
 
 .c3-tooltip .value {
-  text-align: right;
+  @apply text-right;
 }
 
 /*-- Area --*/
