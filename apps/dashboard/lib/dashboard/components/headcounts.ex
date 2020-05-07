@@ -1,5 +1,6 @@
 defmodule Dashboard.Components.Headcounts do
   use Dashboard.Component
+  alias Dashboard.PlanningCenterApi.Response
 
   @impl true
   def data_sources do
@@ -9,17 +10,10 @@ defmodule Dashboard.Components.Headcounts do
   end
 
   @impl true
-  def process_data(%{headcounts: %Dashboard.PlanningCenterApi.Response{} = response} = state) do
-    headcounts =
-      response
-      |> Map.get(:body, %{})
-      |> Map.get("data")
+  def process_data(%{headcounts: %Response{} = response} = state) do
+    headcounts = Response.dig(response, [:body, "data"])
 
-    total_count =
-      response
-      |> Map.get(:body, %{})
-      |> Map.get("meta")
-      |> Map.get("total_count")
+    total_count = Response.dig(response, [:body, "meta", "total_count"])
 
     state
     |> Map.put(:headcounts, headcounts)

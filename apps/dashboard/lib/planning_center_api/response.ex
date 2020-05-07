@@ -15,4 +15,12 @@ defmodule Dashboard.PlanningCenterApi.Response do
       headers: Enum.into(headers, %{})
     }
   end
+
+  def dig(data, dig_path) when is_map(data) and is_list(dig_path) do
+    dig_deeper(data, dig_path)
+  end
+
+  defp dig_deeper(map, []), do: map
+
+  defp dig_deeper(map, [dig_key | rest]), do: dig_deeper(Map.get(map, dig_key, %{}), rest)
 end

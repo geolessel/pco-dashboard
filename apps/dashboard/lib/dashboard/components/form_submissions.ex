@@ -1,28 +1,36 @@
 defmodule Dashboard.Components.FormSubmissions do
   use Dashboard.Component
+  alias Dashboard.PlanningCenterApi.Response
 
   @impl true
   def data_sources do
     %{
       submissions:
-        "/people/v2/forms/${form_id}/form_submissions?include=person&per_page=8&order=-created_at"
+        "/people/v2/forms/${form_id}/form_submissions?include=person&fields[Person]=name&per_page=8&order=-created_at",
+      form: "/people/v2/forms/${form_id}?fields[Form]=name"
     }
   end
 
   @impl true
-  def process_data(%{submissions: %Dashboard.PlanningCenterApi.Response{} = response} = state) do
+  def process_data(
+        %{submissions: %Response{} = submissions_response, form: %Response{} = form_response} =
+          state
+      ) do
     submissions =
-      response
-      |> Map.get(:body, %{})
-      |> Map.get("data")
+      submissions_response
+      |> Response.dig([:body, "data"])
 
     included =
-      response
-      |> Map.get(:body, %{})
-      |> Map.get("included")
+      submissions_response
+      |> Response.dig([:body, "included"])
+
+    form_name =
+      form_response
+      |> Response.dig([:body, "data", "attributes", "name"])
 
     state
     |> Map.put(:submissions, submissions)
     |> Map.put(:included, included)
+    |> Map.put(:form_name, form_name)
   end
 end

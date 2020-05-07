@@ -17,12 +17,21 @@ defmodule DashboardWeb.Components.ListResults do
         []
       )
 
+    list_name =
+      Dashboard.Stores.get(
+        data_module(),
+        genserver_id(assigns, assigns.dashboard_component),
+        :list_name,
+        ""
+      )
+
     {:ok,
      socket
      |> assign(:results, results)
-     |> assign(:title, "List Results - LIST NAME HERE")
+     |> assign(:title, "List Results - #{list_name}")
      |> assign(:product, :people)
      |> assign(:icon, "product_people-logomark")
+     |> assign(:list_name, list_name)
      |> assign(:table_key, :results)}
   end
 
