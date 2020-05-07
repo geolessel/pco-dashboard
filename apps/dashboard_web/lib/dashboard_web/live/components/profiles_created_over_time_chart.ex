@@ -11,15 +11,18 @@ defmodule DashboardWeb.Components.ProfilesCreatedOverTimeChart do
   def update(assigns, socket) do
     columns = Dashboard.Stores.get(data_module(), genserver_id(assigns), :columns)
 
-    {:ok, assign(socket, :columns, columns)}
+    {:ok,
+     socket
+     |> assign(:columns, columns)
+     |> assign(:title, "Profiles Created")
+     |> assign(:product, :people)
+     |> assign(:icon, "product_people-logomark")}
   end
 
   @impl true
   def render(assigns) do
     assigns =
       assigns
-      |> Map.put(:title, "Profiles Created")
-      |> Map.put(:product, :people)
       |> Map.put(:columns, assigns.columns)
 
     DashboardWeb.LayoutView.render("chart-card.html", assigns)

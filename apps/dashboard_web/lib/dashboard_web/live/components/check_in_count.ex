@@ -12,7 +12,15 @@ defmodule DashboardWeb.Components.CheckInCount do
     id = genserver_id(assigns, assigns.dashboard_component)
     check_in_count = Dashboard.Stores.get(data_module(), id, :check_in_count)
 
-    {:ok, socket |> assign(:check_in_count, check_in_count) |> assign(:genserver_id, id)}
+    {:ok,
+     socket
+     |> assign(:check_in_count, check_in_count)
+     |> assign(:genserver_id, id)
+     |> assign(:title, "Check-ins")
+     |> assign(:product, :checkins)
+     |> assign(:icon, "product_check-ins-logomark")
+     |> assign(:grid_width, 1)
+     |> assign(:timeframe, "This week")}
   end
 
   @impl true
@@ -21,11 +29,7 @@ defmodule DashboardWeb.Components.CheckInCount do
 
     assigns =
       assigns
-      |> Map.put(:title, "Check-ins")
-      |> Map.put(:product, :checkins)
-      |> Map.put(:grid_width, 1)
       |> Map.put(:data_number, total_count)
-      |> Map.put(:timeframe, "This week")
       |> Map.put(:comparison_number, 800)
 
     DashboardWeb.LayoutView.render("number-card.html", assigns)

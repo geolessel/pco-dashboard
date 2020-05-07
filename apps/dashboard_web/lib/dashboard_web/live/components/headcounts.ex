@@ -14,18 +14,22 @@ defmodule DashboardWeb.Components.Headcounts do
     %{headcounts: headcounts, total_count: total_count} =
       Dashboard.Stores.get_all(data_module(), id)
 
-    {:ok, socket |> assign(:headcounts, headcounts) |> assign(:total_count, total_count)}
+    {:ok,
+     socket
+     |> assign(:headcounts, headcounts)
+     |> assign(:total_count, total_count)
+     |> assign(:title, "Headcounts")
+     |> assign(:product, :checkins)
+     |> assign(:icon, "product_check-ins-logomark")
+     |> assign(:grid_width, 1)
+     |> assign(:timeframe, "This week")}
   end
 
   @impl true
   def render(assigns) do
     assigns =
       assigns
-      |> Map.put(:title, "Headcounts")
-      |> Map.put(:product, :checkins)
-      |> Map.put(:grid_width, 1)
       |> Map.put(:data_number, assigns.total_count)
-      |> Map.put(:timeframe, "This week")
       |> Map.put(:comparison_number, 800)
 
     DashboardWeb.LayoutView.render("number-card.html", assigns)

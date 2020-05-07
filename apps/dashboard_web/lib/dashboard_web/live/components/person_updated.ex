@@ -11,16 +11,19 @@ defmodule DashboardWeb.Components.PersonUpdated do
   def update(assigns, socket) do
     people = Dashboard.Stores.get(data_module(), genserver_id(assigns), :people, [])
 
-    {:ok, assign(socket, :people, people)}
+    {:ok,
+     socket
+     |> assign(:people, people)
+     |> assign(:title, "Recently Updated")
+     |> assign(:product, :people)
+     |> assign(:icon, "product_people-logomark")
+     |> assign(:table_key, :people)}
   end
 
   @impl true
   def render(assigns) do
     assigns =
       assigns
-      |> Map.put(:title, "Recently Updated")
-      |> Map.put(:product, :people)
-      |> Map.put(:table_key, :people)
       |> Map.put(:table_columns, [
         %{key: "name", label: "Name"},
         %{

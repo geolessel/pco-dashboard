@@ -11,17 +11,20 @@ defmodule DashboardWeb.Components.CheckIns do
   def update(assigns, socket) do
     checkins = Dashboard.Stores.get(data_module(), genserver_id(assigns), :checkins, [])
 
-    {:ok, assign(socket, :checkins, checkins)}
+    {:ok,
+     socket
+     |> assign(:checkins, checkins)
+     |> assign(:title, "Check-ins")
+     |> assign(:product, :checkins)
+     |> assign(:icon, "product_check-ins-logomark")
+     |> assign(:table_key, :checkins)
+     |> assign(:grid_width, 3)}
   end
 
   @impl true
   def render(assigns) do
     assigns =
       assigns
-      |> Map.put(:title, "Check-ins")
-      |> Map.put(:product, :checkins)
-      |> Map.put(:table_key, :checkins)
-      |> Map.put(:grid_width, 3)
       |> Map.put(:table_columns, [
         %{key: "kind", label: ""},
         %{key: "first_name", label: "First"},

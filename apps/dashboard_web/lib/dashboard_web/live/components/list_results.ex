@@ -17,16 +17,19 @@ defmodule DashboardWeb.Components.ListResults do
         []
       )
 
-    {:ok, assign(socket, :results, results)}
+    {:ok,
+     socket
+     |> assign(:results, results)
+     |> assign(:title, "List Results - LIST NAME HERE")
+     |> assign(:product, :people)
+     |> assign(:icon, "product_people-logomark")
+     |> assign(:table_key, :results)}
   end
 
   @impl true
   def render(assigns) do
     assigns =
       assigns
-      |> Map.put(:title, "List Results - LIST NAME HERE")
-      |> Map.put(:product, :people)
-      |> Map.put(:table_key, :results)
       |> Map.put(:table_columns, [
         %{key: "name", label: "Name"}
       ])
