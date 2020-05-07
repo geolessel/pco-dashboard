@@ -11,12 +11,13 @@ defmodule DashboardWeb.Components.FormSubmissions do
   def update(assigns, socket) do
     id = genserver_id(assigns, assigns.dashboard_component)
     submissions = Dashboard.Stores.get(data_module(), id, :submissions, [])
+    form_name = Dashboard.Stores.get(data_module(), assigns.genserver_id, :form_name)
 
     {:ok,
      socket
      |> assign(:submissions, submissions)
      |> assign(:genserver_id, id)
-     |> assign(:title, "Form Submissions - FORM NAME HERE")
+     |> assign(:title, "Form Submissions - #{form_name}")
      |> assign(:product, :people)
      |> assign(:icon, "product_people-logomark")
      |> assign(:table_key, :submissions)}
@@ -25,6 +26,7 @@ defmodule DashboardWeb.Components.FormSubmissions do
   @impl true
   def render(assigns) do
     included = Dashboard.Stores.get(data_module(), assigns.genserver_id, :included)
+    form_name = Dashboard.Stores.get(data_module(), assigns.genserver_id, :form_name)
 
     assigns =
       assigns
