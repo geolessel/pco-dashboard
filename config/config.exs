@@ -36,7 +36,12 @@ config :phoenix, :json_library, Jason
 config :dashboard,
   api_base: "api.planningcenteronline.com",
   api_transport: :https,
-  api_port: 443
+  api_port: 443,
+  # auth_type: :oauth,
+  auth_type: :personal_access_token,
+  oauth_client_id: System.get_env("DASHBOARD_CLIENT_ID", "YOUR CLIENT ID"),
+  oauth_client_secret: System.get_env("DASHBOARD_CLIENT_SECRET", "YOUR CLIENT SECRET"),
+  oauth_callback_url: System.get_env("DASHBOARD_CALLBACK_URL", "YOUR CALLBACK URL")
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.

@@ -71,35 +71,44 @@
     <% end %>
   </div>
 
-  <h2 class="text-md text-gray-700 mb-4">Change Planning Center access token</h2>
-  <div class="bg-white border mb-8 p-2">
-    <%= form_for @access_token_changeset, Routes.user_settings_path(@conn, :update_access_token), fn f -> %>
-      <%= if @access_token_changeset.action do %>
-        <p class="bg-red-200 border border-red-500 mx-4 my-2 px-3 py-2 rounded text-red-700">Oops, something went wrong! Please check the errors below.</p>
-      <% end %>
-      <div class="grid grid-cols-3 gap-4 p-4">
-        <%= label f, :application_id, "Planning Center Application ID", class: "block text-gray-500 font-bold leading-7 py-2 text-right text-xs" %>
-        <div class="col-span-2">
-          <%= text_input f, :application_id, class: "bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:bg-white focus:border-blue-500 text-xs leading-6" %>
-          <p class="block leading-8 text-red-500 text-sm italic">
-            <%= error_tag f, :application_id %>
-          </p>
-        </div>
-
-        <%= label f, :application_secret, "Planning Center Application Secret", class: "block text-gray-500 font-bold leading-7 py-2 text-right text-xs" %>
-        <div class="col-span-2">
-          <%= text_input f, :application_secret, class: "bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:bg-white focus:border-blue-500 text-xs leading-6" %>
-          <p class="block leading-8 text-red-500 text-sm italic">
-            <%= error_tag f, :application_secret %>
-          </p>
-        </div>
-
-        <div></div>
-        <div class="col-span-2">
-          <%= submit "Change access token", class: "shadow bg-blue-500 hover:bg-blue-400 focus:shadow-outline focus:outline-none text-white py-2 px-4 rounded text-sm" %>
-        </div>
-      </div>
+  <%= if Application.get_env(:dashboard, :auth_type) == :oauth do %>
+    <h2 class="text-md text-gray-700 mb-4">Planning Center Authorization</h2>
+    <%= if @current_user.oauth_token do %>
+      Authorized! Current authorization expires <%= Timex.from_now(@current_user.oauth_token.expires_at) %>. It will automatically be renewed up to 90 days after expiration.
+    <% else %>
+      <%= link "Authorize", to: Dashboard.PlanningCenterApi.Oauth.authorize_url!, class: "shadow bg-blue-500 hover:bg-blue-400 focus:shadow-outline focus:outline-none text-white py-2 px-4 rounded text-sm" %>
     <% end %>
-  </div>
+  <% else %>
+    <h2 class="text-md text-gray-700 mb-4">Change Planning Center access token</h2>
+    <div class="bg-white border mb-8 p-2">
+      <%= form_for @access_token_changeset, Routes.user_settings_path(@conn, :update_access_token), fn f -> %>
+        <%= if @access_token_changeset.action do %>
+          <p class="bg-red-200 border border-red-500 mx-4 my-2 px-3 py-2 rounded text-red-700">Oops, something went wrong! Please check the errors below.</p>
+        <% end %>
+        <div class="grid grid-cols-3 gap-4 p-4">
+          <%= label f, :application_id, "Planning Center Application ID", class: "block text-gray-500 font-bold leading-7 py-2 text-right text-xs" %>
+          <div class="col-span-2">
+            <%= text_input f, :application_id, class: "bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:bg-white focus:border-blue-500 text-xs leading-6" %>
+            <p class="block leading-8 text-red-500 text-sm italic">
+              <%= error_tag f, :application_id %>
+            </p>
+          </div>
+
+          <%= label f, :application_secret, "Planning Center Application Secret", class: "block text-gray-500 font-bold leading-7 py-2 text-right text-xs" %>
+          <div class="col-span-2">
+            <%= text_input f, :application_secret, class: "bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:bg-white focus:border-blue-500 text-xs leading-6" %>
+            <p class="block leading-8 text-red-500 text-sm italic">
+              <%= error_tag f, :application_secret %>
+            </p>
+          </div>
+
+          <div></div>
+          <div class="col-span-2">
+            <%= submit "Change access token", class: "shadow bg-blue-500 hover:bg-blue-400 focus:shadow-outline focus:outline-none text-white py-2 px-4 rounded text-sm" %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
 
 </div>
