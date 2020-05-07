@@ -114,17 +114,30 @@ defmodule Dashboard.ApiClient do
     state
   end
 
-  defp headers(auth) do
+  defp headers(user) do
     []
     |> content_header()
-    |> auth_header(auth)
+    |> auth_header(user)
   end
 
   defp content_header(headers) do
     [{"Content-Type", "application/json"} | headers]
   end
 
-  defp auth_header(headers, %{
+  defp auth_header(headers, user) do
+    case Application.get_env(:dashboard, :auth_type) do
+      :oauth -> oauth_auth_header(headers, user)
+      :personal_access_token -> pat_auth_header(headers, user)
+      auth_type -> raise "Unknown :auth_type from app config: #{auth_type}"
+    end
+  end
+
+  defp oauth_auth_header(headers, %{oauth_token: token}) do
+    # TODO: handle refresh of expired tokens here?
+    [{"Authorization", "Bearer #{token.access_token}"} | headers]
+  end
+
+  defp pat_auth_header(headers, %{
          application_id: application_id,
          application_secret: application_secret
        }) do
@@ -133,9 +146,5 @@ defmodule Dashboard.ApiClient do
       |> Base.encode64()
 
     [{"Authorization", "Basic #{credentials}"} | headers]
-  end
-
-  defp auth_header(headers, %{token: token}) do
-    [{"Authorization", "Bearer #{token}"} | headers]
   end
 end
