@@ -1,5 +1,6 @@
 defmodule Dashboard.Components.ListResults do
   use Dashboard.Component
+  alias Dashboard.PlanningCenterApi.Response
 
   @impl true
   def data_sources do
@@ -9,11 +10,8 @@ defmodule Dashboard.Components.ListResults do
   end
 
   @impl true
-  def process_data(%{results: %Dashboard.PlanningCenterApi.Response{} = response} = state) do
-    results =
-      response
-      |> Map.get(:body, %{})
-      |> Map.get("data")
+  def process_data(%{results: %Response{} = response} = state) do
+    results = Response.dig(response, [:body, "data"])
 
     state
     |> Map.put(:results, results)

@@ -1,5 +1,6 @@
 defmodule Dashboard.Components.ProfilesCreatedOverTimeChart do
   use Dashboard.Component
+  alias Dashboard.PlanningCenterApi.Response
 
   @fetch_days_range 0..-6
 
@@ -35,8 +36,6 @@ defmodule Dashboard.Components.ProfilesCreatedOverTimeChart do
   end
 
   defp total_count(%{body: body} = _response) do
-    body
-    |> Map.get("meta")
-    |> Map.get("total_count")
+    Response.dig(body, ["meta", "total_count"])
   end
 end

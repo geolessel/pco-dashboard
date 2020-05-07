@@ -1,5 +1,6 @@
 defmodule Dashboard.Components.FormsOverview do
   use Dashboard.Component
+  alias Dashboard.PlanningCenterApi.Response
 
   @impl true
   def data_sources do
@@ -9,11 +10,8 @@ defmodule Dashboard.Components.FormsOverview do
   end
 
   @impl true
-  def process_data(%{forms: %Dashboard.PlanningCenterApi.Response{} = response} = state) do
-    forms =
-      response
-      |> Map.get(:body, %{})
-      |> Map.get("data")
+  def process_data(%{forms: %Response{} = response} = state) do
+    forms = Response.dig(response, [:body, "data"])
 
     state
     |> Map.put(:forms, forms)

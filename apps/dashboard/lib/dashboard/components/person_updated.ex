@@ -1,5 +1,6 @@
 defmodule Dashboard.Components.PersonUpdated do
   use Dashboard.Component
+  alias Dashboard.PlanningCenterApi.Response
 
   @impl true
   def data_sources do
@@ -7,11 +8,8 @@ defmodule Dashboard.Components.PersonUpdated do
   end
 
   @impl true
-  def process_data(%{people: %Dashboard.PlanningCenterApi.Response{} = people_response} = state) do
-    people =
-      people_response
-      |> Map.get(:body, %{})
-      |> Map.get("data")
+  def process_data(%{people: %Response{} = people_response} = state) do
+    people = Response.dig(people_response, [:body, "data"])
 
     Map.put(state, :people, people)
   end

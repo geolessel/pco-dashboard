@@ -1,5 +1,6 @@
 defmodule Dashboard.Components.CheckIns do
   use Dashboard.Component
+  alias Dashboard.PlanningCenterApi.Response
 
   @impl true
   def data_sources do
@@ -10,11 +11,8 @@ defmodule Dashboard.Components.CheckIns do
   end
 
   @impl true
-  def process_data(%{checkins: %Dashboard.PlanningCenterApi.Response{} = response} = state) do
-    checkins =
-      response
-      |> Map.get(:body, %{})
-      |> Map.get("data")
+  def process_data(%{checkins: %Response{} = response} = state) do
+    checkins = Response.dig(response, [:body, "data"])
 
     Map.put(state, :checkins, checkins)
   end

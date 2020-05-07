@@ -1,5 +1,6 @@
 defmodule Dashboard.Components.CheckInCount do
   use Dashboard.Component
+  alias Dashboard.PlanningCenterApi.Response
 
   @impl true
   def data_sources do
@@ -9,20 +10,10 @@ defmodule Dashboard.Components.CheckInCount do
   end
 
   @impl true
-  def process_data(
-        %{check_in_count: %Dashboard.PlanningCenterApi.Response{} = check_in_count_response} =
-          state
-      ) do
-    check_in_count =
-      check_in_count_response
-      |> Map.get(:body, %{})
-      |> Map.get("data")
+  def process_data(%{check_in_count: %Response{} = check_in_count_response} = state) do
+    check_in_count = Response.dig(check_in_count_response, [:body, "data"])
 
-    total_count =
-      check_in_count_response
-      |> Map.get(:body, %{})
-      |> Map.get("meta")
-      |> Map.get("total_count")
+    total_count = Response.dig(check_in_count_response, [:body, "meta", "total_count"])
 
     state
     |> Map.put(:check_in_count, check_in_count)

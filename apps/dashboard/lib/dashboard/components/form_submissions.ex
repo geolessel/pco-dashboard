@@ -18,20 +18,15 @@ defmodule Dashboard.Components.FormSubmissions do
       ) do
     submissions =
       submissions_response
-      |> Map.get(:body, %{})
-      |> Map.get("data")
+      |> Response.dig([:body, "data"])
 
     included =
       submissions_response
-      |> Map.get(:body, %{})
-      |> Map.get("included")
+      |> Response.dig([:body, "included"])
 
     form_name =
       form_response
-      |> Map.get(:body, %{})
-      |> Map.get("data")
-      |> Map.get("attributes")
-      |> Map.get("name")
+      |> Response.dig([:body, "data", "attributes", "name"])
 
     state
     |> Map.put(:submissions, submissions)

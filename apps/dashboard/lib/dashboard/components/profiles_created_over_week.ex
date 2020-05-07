@@ -1,5 +1,6 @@
 defmodule Dashboard.Components.ProfilesCreatedOverWeek do
   use Dashboard.Component
+  alias Dashboard.PlanningCenterApi.Response
 
   @impl true
   def data_sources do
@@ -21,17 +22,9 @@ defmodule Dashboard.Components.ProfilesCreatedOverWeek do
   def process_data(
         %{this_7_days: this_7_days_response, last_7_days: last_7_days_response} = state
       ) do
-    this_7_days =
-      this_7_days_response
-      |> Map.get(:body, %{})
-      |> Map.get("meta")
-      |> Map.get("total_count")
+    this_7_days = Response.dig(this_7_days_response, [:body, "meta", "total_count"])
 
-    last_7_days =
-      last_7_days_response
-      |> Map.get(:body, %{})
-      |> Map.get("meta")
-      |> Map.get("total_count")
+    last_7_days = Response.dig(last_7_days_response, [:body, "meta", "total_count"])
 
     state
     |> Map.put(:this_7_days, this_7_days)
