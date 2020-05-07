@@ -37,8 +37,8 @@ config :dashboard,
   api_base: "api.planningcenteronline.com",
   api_transport: :https,
   api_port: 443,
-  # or :personal_access_token
-  auth_type: :oauth,
+  # auth_type: :oauth,
+  auth_type: :personal_access_token,
   oauth_client_id: System.get_env("DASHBOARD_CLIENT_ID", "YOUR CLIENT ID"),
   oauth_client_secret: System.get_env("DASHBOARD_CLIENT_SECRET", "YOUR CLIENT SECRET"),
   oauth_callback_url: System.get_env("DASHBOARD_CALLBACK_URL", "YOUR CALLBACK URL")
