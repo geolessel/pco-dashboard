@@ -5,7 +5,8 @@ defmodule Dashboard.Components.ListResults do
   @impl true
   def data_sources do
     %{
-      results: "/people/v2/lists/${list_id}/people?per_page=8&order=-created_at",
+      results:
+        "/people/v2/lists/${list_id}/people?fields[Person]=name&per_page=8&order=-created_at",
       list: "/people/v2/lists/${list_id}&fields[List]=name,description"
     }
   end

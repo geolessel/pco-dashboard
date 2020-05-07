@@ -6,8 +6,8 @@ defmodule Dashboard.Components.FormSubmissions do
   def data_sources do
     %{
       submissions:
-        "/people/v2/forms/${form_id}/form_submissions?include=person&per_page=8&order=-created_at",
-      form: "/people/v2/forms/${form_id}"
+        "/people/v2/forms/${form_id}/form_submissions?include=person&fields[Person]=name&per_page=8&order=-created_at",
+      form: "/people/v2/forms/${form_id}?fields[Form]=name"
     }
   end
 

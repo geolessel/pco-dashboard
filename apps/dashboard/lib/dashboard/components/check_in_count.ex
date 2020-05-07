@@ -5,7 +5,8 @@ defmodule Dashboard.Components.CheckInCount do
   @impl true
   def data_sources do
     %{
-      check_in_count: "/check-ins/v2/check_ins?order=updated_at&where[created_at][gte]=2020-05-02"
+      check_in_count:
+        "/check-ins/v2/check_ins?per_page=1&order=updated_at&where[created_at][gte]=2020-05-02"
     }
   end
 

@@ -10,11 +10,11 @@ defmodule Dashboard.Components.ProfilesCreatedOverWeek do
       this_7_days:
         "/people/v2/people?where[created_at][gt]=#{Date.add(today, -7)}&where[created_at][lte]=#{
           today
-        }&fields[Person]=name&per_page=1",
+        }&fields[Person]=grade&per_page=1",
       last_7_days:
         "/people/v2/people?where[created_at][gt]=#{Date.add(today, -14)}&where[created_at][lte]=#{
           Date.add(today, -7)
-        }&fields[Person]=name&per_page=1"
+        }&fields[Person]=grade&per_page=1"
     }
   end
 
