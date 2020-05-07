@@ -31,6 +31,7 @@ defmodule DashboardWeb.Components.ProfilesCreatedOverWeek do
       |> Map.put(:product, :people)
       |> Map.put(:grid_width, 1)
       |> Map.put(:data_number, assigns.this_7_days)
+      |> Map.put(:icon, "product_people-logomark")
       |> Map.put(:timeframe, "Last 7 days")
       |> Map.put(:comparison_number, assigns.last_7_days)
 

@@ -11,7 +11,7 @@ defmodule DashboardWeb.Components.FormSubmissions do
   def update(assigns, socket) do
     id = genserver_id(assigns, assigns.dashboard_component)
     submissions = Dashboard.Stores.get(data_module(), id, :submissions, [])
-    form_name = Dashboard.Stores.get(data_module(), assigns.genserver_id, :form_name)
+    form_name = Dashboard.Stores.get(data_module(), id, :form_name)
 
     {:ok,
      socket
@@ -26,7 +26,6 @@ defmodule DashboardWeb.Components.FormSubmissions do
   @impl true
   def render(assigns) do
     included = Dashboard.Stores.get(data_module(), assigns.genserver_id, :included)
-    form_name = Dashboard.Stores.get(data_module(), assigns.genserver_id, :form_name)
 
     assigns =
       assigns
