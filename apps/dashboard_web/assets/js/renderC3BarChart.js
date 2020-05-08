@@ -3,7 +3,7 @@ import c3 from "c3"
 export default {
   mounted() {
     this.chart = c3.generate({
-      bindto: "#chart",
+      bindto: "#Barchart",
       color: {
         pattern: [
           "#4299e1", // blue-500

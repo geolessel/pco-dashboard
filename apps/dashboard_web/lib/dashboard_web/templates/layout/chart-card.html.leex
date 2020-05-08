@@ -40,7 +40,7 @@
     </div>
   </div>
   <div class="p-4">
-    <div id="chart"
+    <div id="<%= @chart_type %>chart"
          phx-hook="RenderC3<%= @chart_type %>Chart"
          phx-update="ignore"
          data-chart-columns="<%= Jason.encode!(@columns) %>">

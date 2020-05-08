@@ -24,6 +24,7 @@ defmodule DashboardWeb.Components.ProfilesCreatedOverTimeChart do
     assigns =
       assigns
       |> Map.put(:columns, assigns.columns)
+      |> Map.put(:chart_type, "")
 
     DashboardWeb.LayoutView.render("chart-card.html", assigns)
   end
