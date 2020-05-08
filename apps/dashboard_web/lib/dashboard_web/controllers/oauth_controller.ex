@@ -2,14 +2,10 @@ defmodule DashboardWeb.OauthController do
   use DashboardWeb, :controller
 
   def new(conn, %{"code" => code}) do
-    response = Dashboard.PlanningCenterApi.Oauth.get_token!(code: code)
-
-    attrs = %{
-      user_id: conn.assigns.current_user.id,
-      access_token: response.token.access_token,
-      refresh_token: response.token.refresh_token,
-      expires_at: DateTime.from_unix!(response.token.expires_at)
-    }
+    attrs =
+      Dashboard.PlanningCenterApi.Oauth.get_token!(code: code)
+      |> Dashboard.PlanningCenterApi.Oauth.to_db_attrs()
+      |> Map.put(:user_id, conn.assigns.current_user.id)
 
     case conn.assigns.current_user.oauth_token do
       nil -> Dashboard.Accounts.create_oauth_token(attrs)
