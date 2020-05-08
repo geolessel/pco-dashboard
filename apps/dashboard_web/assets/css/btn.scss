@@ -5,6 +5,9 @@
 .btn:hover {
   @apply bg-gray-500 border-gray-500;
 }
+a.btn {
+  @apply inline-block;
+}
 
 // Btn Sizes
 .btn-lg {

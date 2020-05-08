@@ -6,7 +6,10 @@
       @apply flex-1 font-bold mr-2 py-1 text-base text-gray-800;
     }
     .card-icon {
-      @apply h-5 rounded text-center text-sm text-white w-5;
+      @apply text-center text-sm;
+      .symbol {
+        @apply fill-current h-5 w-5;
+      }
     }
   }
   .card-footer {
