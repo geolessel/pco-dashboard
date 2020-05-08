@@ -1,0 +1,18 @@
+<h2 class="text-lg text-gray-700 mb-8">Keyboard Shortcuts</h2>
+
+<table class="clean-table">
+  <thead>
+    <tr>
+      <th>Key</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <%= for {key, desc} <- @shortcuts do %>
+      <tr>
+        <td><code><%= key %></code></td>
+        <td><%= desc %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

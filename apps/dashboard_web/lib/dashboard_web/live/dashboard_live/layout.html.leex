@@ -1,3 +1,13 @@
+<%= if @live_action == :help do %>
+  <%= live_modal @socket, DashboardWeb.DashboardLive.KeyboardShortcutsComponent,
+      id: @dashboard.id || :help,
+      title: @page_title,
+      action: @live_action,
+      shortcuts: @shortcuts,
+      return_to: Routes.dashboard_layout_path(@socket, :edit, @dashboard)
+  %>
+<% end %>
+
 <div
 class="bg-gray-300 p-2 text-gray-500 text-sm px-8"
 >
@@ -10,7 +20,7 @@ class="bg-gray-300 p-2 text-gray-500 text-sm px-8"
   </span>
 </div>
 
-<div class="flex flex-col w-full p-8">
+<div class="flex flex-col w-full p-8" phx-window-keyup="keyboard-shortcut">
   <div class="flex flex-row items-center justify-between mb-4">
     <h1 class="text-gray-800 text-lg">Editing <strong><%= @dashboard.name %></strong></h1>
     <div>

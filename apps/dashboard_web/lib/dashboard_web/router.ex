@@ -80,9 +80,10 @@ defmodule DashboardWeb.Router do
     live "/dashboards/:slug/edit", DashboardLive.Index, :edit
 
     live "/dashboards/:slug", DashboardLive.Show, :show
-    live "/dashboards/:slug/show/edit", DashboardLive.Show, :edit
+    live "/dashboards/:slug/help", DashboardLive.Show, :help
 
     live "/dashboards/:slug/layout", DashboardLive.Layout, :edit
+    live "/dashboards/:slug/layout/help", DashboardLive.Layout, :help
   end
 
   scope "/", DashboardWeb do

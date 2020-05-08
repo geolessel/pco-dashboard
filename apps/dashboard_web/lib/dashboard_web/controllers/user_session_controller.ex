@@ -12,7 +12,9 @@ defmodule DashboardWeb.UserSessionController do
     %{"email" => email, "password" => password} = user_params
 
     if user = Accounts.get_user_by_email_and_password(email, password) do
-      UserAuth.login_user(conn, user, user_params)
+      conn
+      |> put_session(:user_return_to, Routes.dashboard_index_path(conn, :index))
+      |> UserAuth.login_user(user, user_params)
     else
       render(conn, "new.html", error_message: "Invalid e-mail or password")
     end

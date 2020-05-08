@@ -1,3 +1,13 @@
+<%= if @live_action == :help do %>
+  <%= live_modal @socket, DashboardWeb.DashboardLive.KeyboardShortcutsComponent,
+      id: @dashboard.id || :help,
+      title: @page_title,
+      action: @live_action,
+      shortcuts: @shortcuts,
+      return_to: Routes.dashboard_show_path(@socket, :show, @dashboard)
+  %>
+<% end %>
+
 <div class="grid grid-cols-5 gap-8 p-8" phx-window-keyup="keyboard-shortcut">
   <%= for dc <- @components do %>
     <%= live_component(@socket,

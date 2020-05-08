@@ -15,7 +15,19 @@ defmodule DashboardWeb.DashboardLive.Show do
   end
 
   @impl true
-  def handle_params(%{"slug" => slug}, _, socket) do
+  def handle_params(params, _url, socket) do
+    {:noreply, apply_action(socket, socket.assigns.live_action, params)}
+  end
+
+  defp apply_action(socket, :help, params) do
+    apply_action(socket, :show, params)
+    |> assign(:shortcuts, [
+      {"shift-l", "Edit dashboard layout"},
+      {"? or shift-/", "View this help dialog"}
+    ])
+  end
+
+  defp apply_action(socket, :show, %{"slug" => slug}) do
     user = Accounts.get_user!(socket.assigns.user_id)
     dashboard = Dashboards.get_dashboard_by_slug!(slug, socket.assigns.user_id)
 
@@ -42,12 +54,11 @@ defmodule DashboardWeb.DashboardLive.Show do
         {module.data_module(), name, pid}
       end)
 
-    {:noreply,
-     socket
-     |> assign(:component_subscriptions, component_subscriptions)
-     |> assign(:page_title, page_title(socket.assigns.live_action))
-     |> assign(:components, dashboard.dashboard_components)
-     |> assign(:dashboard, dashboard)}
+    socket
+    |> assign(:component_subscriptions, component_subscriptions)
+    |> assign(:page_title, page_title(socket.assigns.live_action))
+    |> assign(:components, dashboard.dashboard_components)
+    |> assign(:dashboard, dashboard)
   end
 
   @impl true
@@ -73,6 +84,14 @@ defmodule DashboardWeb.DashboardLive.Show do
   end
 
   @impl true
+  def handle_event("keyboard-shortcut", %{"key" => "?"}, socket) do
+    {:noreply,
+     push_redirect(socket,
+       to: Routes.dashboard_show_path(socket, :help, socket.assigns.dashboard)
+     )}
+  end
+
+  @impl true
   def handle_event("keyboard-shortcut", _, socket) do
     {:noreply, socket}
   end
@@ -87,4 +106,5 @@ defmodule DashboardWeb.DashboardLive.Show do
 
   defp page_title(:show), do: "Show Dashboard"
   defp page_title(:edit), do: "Edit Dashboard"
+  defp page_title(:help), do: "Keyboard Shortcuts"
 end

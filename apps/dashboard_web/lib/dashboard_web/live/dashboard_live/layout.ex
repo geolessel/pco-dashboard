@@ -13,16 +13,29 @@ defmodule DashboardWeb.DashboardLive.Layout do
   end
 
   @impl true
-  def handle_params(%{"slug" => slug}, _, socket) do
+  def handle_params(params, _url, socket) do
+    {:noreply, apply_action(socket, socket.assigns.live_action, params)}
+  end
+
+  defp apply_action(socket, :help, params) do
+    socket
+    |> apply_action(:edit, params)
+    |> assign(:page_title, page_title(socket.assigns.live_action))
+    |> assign(:shortcuts, [
+      {"shift-s", "Show this dashboard"},
+      {"? or shift-/", "View this help dialog"}
+    ])
+  end
+
+  defp apply_action(socket, :edit, %{"slug" => slug}) do
     user = Accounts.get_user_by_session_token(socket.assigns.user_token)
     dashboard = Dashboards.get_dashboard_by_slug!(slug, user.id)
 
-    {:noreply,
-     socket
-     |> assign(:page_title, page_title(socket.assigns.live_action))
-     |> assign(:dashboard_components, dashboard.dashboard_components)
-     |> assign(:all_components, Dashboards.list_components())
-     |> assign(:dashboard, dashboard)}
+    socket
+    |> assign(:page_title, page_title(socket.assigns.live_action))
+    |> assign(:dashboard_components, dashboard.dashboard_components)
+    |> assign(:all_components, Dashboards.list_components())
+    |> assign(:dashboard, dashboard)
   end
 
   @impl true
@@ -138,5 +151,27 @@ defmodule DashboardWeb.DashboardLive.Layout do
     end
   end
 
+  @impl true
+  def handle_event("keyboard-shortcut", %{"key" => "S"}, socket) do
+    {:noreply,
+     push_redirect(socket,
+       to: Routes.dashboard_show_path(socket, :show, socket.assigns.dashboard)
+     )}
+  end
+
+  @impl true
+  def handle_event("keyboard-shortcut", %{"key" => "?"}, socket) do
+    {:noreply,
+     push_redirect(socket,
+       to: Routes.dashboard_layout_path(socket, :help, socket.assigns.dashboard.slug)
+     )}
+  end
+
+  @impl true
+  def handle_event("keyboard-shortcut", _params, socket) do
+    {:noreply, socket}
+  end
+
   defp page_title(:edit), do: "Edit Dashboard Layout"
+  defp page_title(:help), do: "Keyboard Shortcuts"
 end
