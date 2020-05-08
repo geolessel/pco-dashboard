@@ -3,7 +3,7 @@ defmodule Dashboard.PlanningCenterApi.Client do
   @api_base Application.compile_env(:dashboard, :api_base)
   @api_port Application.compile_env(:dashboard, :api_port)
 
-  def get(%Dashboard.Accounts.User{application_id: _, application_secret: _} = user, path) do
+  def get(%Dashboard.Accounts.User{} = user, path) do
     get_connection()
     |> Dashboard.ApiClient.get(user, path)
     |> Dashboard.PlanningCenterApi.Response.from_mint()

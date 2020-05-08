@@ -1,12 +1,16 @@
 defmodule Dashboard.PlanningCenterApi.Oauth do
   use OAuth2.Strategy
 
-  def client do
+  @client_id Application.compile_env(:dashboard, :oauth_client_id)
+  @client_secret Application.compile_env(:dashboard, :oauth_client_secret)
+  @redirect_url Application.compile_env(:dashboard, :oauth_callback_url)
+
+  def client(opts \\ []) do
     OAuth2.Client.new(
       strategy: __MODULE__,
-      client_id: Application.get_env(:dashboard, :oauth_client_id),
-      client_secret: Application.get_env(:dashboard, :oauth_client_secret),
-      redirect_uri: Application.get_env(:dashboard, :oauth_callback_url),
+      client_id: @client_id,
+      client_secret: @client_secret,
+      redirect_uri: @redirect_url,
       site: "https://api.planningcenteronline.com",
       authorize_url: "https://api.planningcenteronline.com/oauth/authorize",
       token_url: "https://api.planningcenteronline.com/oauth/token"
@@ -24,6 +28,21 @@ defmodule Dashboard.PlanningCenterApi.Oauth do
     OAuth2.Client.get_token!(client(), params, headers, opts)
   end
 
+  def refresh!(refresh_token) do
+    OAuth2.Client.new(
+      strategy: OAuth2.Strategy.Refresh,
+      client_id: @client_id,
+      client_secret: @client_secret,
+      redirect_uri: @redirect_url,
+      site: "https://api.planningcenteronline.com",
+      authorize_url: "https://api.planningcenteronline.com/oauth/authorize",
+      token_url: "https://api.planningcenteronline.com/oauth/token",
+      params: %{"refresh_token" => refresh_token}
+    )
+    |> OAuth2.Client.put_serializer("application/json", Jason)
+    |> OAuth2.Client.get_token!()
+  end
+
   # Strategy Callbacks
 
   def authorize_url(client, params) do
@@ -34,5 +53,13 @@ defmodule Dashboard.PlanningCenterApi.Oauth do
     client
     |> put_header("accept", "application/json")
     |> OAuth2.Strategy.AuthCode.get_token(params, headers)
+  end
+
+  def to_db_attrs(response) do
+    %{
+      access_token: response.token.access_token,
+      refresh_token: response.token.refresh_token,
+      expires_at: DateTime.from_unix!(response.token.expires_at)
+    }
   end
 end

@@ -407,6 +407,10 @@ defmodule Dashboard.Accounts do
   """
   def get_oauth_token!(id), do: Repo.get!(OauthToken, id)
 
+  def get_oauth_token_of_user!(%User{id: user_id}) do
+    Repo.get_by!(OauthToken, %{user_id: user_id})
+  end
+
   @doc """
   Creates a oauth_token.
 

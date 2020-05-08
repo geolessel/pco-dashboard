@@ -141,6 +141,7 @@ defmodule Dashboard.Component do
       def handle_info(:update, state) do
         state =
           state
+          |> maybe_refresh_oauth_token()
           |> fetch_data()
           |> process_data()
           |> put_last_update()
@@ -188,6 +189,25 @@ defmodule Dashboard.Component do
           |> Enum.map(&Task.await/1)
           |> Enum.into(%{})
         )
+      end
+
+      def maybe_refresh_oauth_token(%{user: user} = state) do
+        # TODO: Since these are per-component, there could be race conditions!
+        with :oauth <- Application.get_env(:dashboard, :auth_type),
+             token <- Dashboard.Accounts.get_oauth_token_of_user!(user),
+             :lt <-
+               NaiveDateTime.compare(token.expires_at, NaiveDateTime.utc_now()) do
+          attrs =
+            Dashboard.PlanningCenterApi.Oauth.refresh!(token.refresh_token)
+            |> Dashboard.PlanningCenterApi.Oauth.to_db_attrs()
+            |> Map.put(:user_id, user.id)
+
+          Dashboard.Accounts.update_oauth_token(token, attrs)
+
+          Map.put(state, :user, Dashboard.Accounts.get_user!(user.id))
+        else
+          :gt -> state
+        end
       end
 
       def maybe_update_immediately(nil), do: send(self(), :update)

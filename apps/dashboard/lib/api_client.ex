@@ -133,7 +133,6 @@ defmodule Dashboard.ApiClient do
   end
 
   defp oauth_auth_header(headers, %{oauth_token: token}) do
-    # TODO: handle refresh of expired tokens here?
     [{"Authorization", "Bearer #{token.access_token}"} | headers]
   end
 
