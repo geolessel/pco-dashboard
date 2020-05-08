@@ -70,6 +70,10 @@ defmodule DashboardWeb.Router do
     get "/users/settings/confirm_email/:token", UserSettingsController, :confirm_email
 
     get "/oauth/complete", OauthController, :new
+  end
+
+  scope "/", DashboardWeb do
+    pipe_through [:browser, :require_authenticated_user, :require_access_token]
 
     live "/dashboards", DashboardLive.Index, :index
     live "/dashboards/new", DashboardLive.Index, :new
