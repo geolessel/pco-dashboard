@@ -1,26 +1,44 @@
-<h1>Register</h1>
+<div class="flex-1 bg-pink-900">
 
-<%= form_for @changeset, Routes.user_registration_path(@conn, :create), fn f -> %>
-  <%= if @changeset.action do %>
-    <div class="alert alert-danger">
-      <p>Oops, something went wrong! Please check the errors below.</p>
+  <%= form_for @changeset, Routes.user_registration_path(@conn, :create), fn f -> %>
+    <div class="flex align-center justify-center mt-16">
+      <div class="flex-1 max-w-sm">
+        <h2 class="font-bold text-white mb-4 text-lg">Register</h2>
+        <div class="bg-white shadow-xl rounded px-8 pt-6 pb-8 mb-8">
+          <%= if @changeset.action do %>
+            <div class="alert alert-danger">
+              <p>Oops, something went wrong! Please check the errors below.</p>
+            </div>
+          <% end %>
+
+          <div class="mb-4">
+            <%= label f, :email, class: "label" %>
+            <%= text_input f, :email, required: true, class: "input" %>
+            <p class="error">
+              <%= error_tag f, :email %>
+            </p>
+          </div>
+
+          <div class="mb-4">
+            <%= label f, :password, class: "label" %>
+            <%= password_input f, :password, required: true, class: "input" %>
+            <p class="error">
+              <%= error_tag f, :password %>
+            </p>
+          </div>
+
+          <div class="pt-4">
+            <%= submit "Register", class: "btn btn-primary btn-lg" %>
+          </div>
+        </div>
+        <p class="text-pink-300 text-sm text-center">
+          Already have an account?
+          <span class="text-white underline ml-1">
+            <%= link "Login now", to: Routes.user_session_path(@conn, :new) %>
+          </span>
+        </p>
+      </div>
     </div>
   <% end %>
 
-  <%= label f, :email %>
-  <%= text_input f, :email, required: true %>
-  <%= error_tag f, :email %>
-
-  <%= label f, :password %>
-  <%= password_input f, :password, required: true %>
-  <%= error_tag f, :password %>
-
-  <div>
-    <%= submit "Register" %>
-  </div>
-<% end %>
-
-<p>
-  <%= link "Login", to: Routes.user_session_path(@conn, :new) %> |
-  <%= link "Forgot your password?", to: Routes.user_reset_password_path(@conn, :new) %>
-</p>
+</div>
