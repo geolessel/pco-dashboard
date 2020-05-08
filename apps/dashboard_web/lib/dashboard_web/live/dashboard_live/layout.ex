@@ -21,7 +21,10 @@ defmodule DashboardWeb.DashboardLive.Layout do
     socket
     |> apply_action(:edit, params)
     |> assign(:page_title, page_title(socket.assigns.live_action))
-    |> assign(:shortcuts, [{"shift-s", "Show this dashboard"}])
+    |> assign(:shortcuts, [
+      {"shift-s", "Show this dashboard"},
+      {"? or shift-/", "View this help dialog"}
+    ])
   end
 
   defp apply_action(socket, :edit, %{"slug" => slug}) do

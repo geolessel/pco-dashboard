@@ -21,7 +21,10 @@ defmodule DashboardWeb.DashboardLive.Show do
 
   defp apply_action(socket, :help, params) do
     apply_action(socket, :show, params)
-    |> assign(:shortcuts, [{"shift-l", "Edit dashboard layout"}])
+    |> assign(:shortcuts, [
+      {"shift-l", "Edit dashboard layout"},
+      {"? or shift-/", "View this help dialog"}
+    ])
   end
 
   defp apply_action(socket, :show, %{"slug" => slug}) do
