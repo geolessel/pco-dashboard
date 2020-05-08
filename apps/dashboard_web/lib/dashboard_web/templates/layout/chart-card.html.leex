@@ -41,7 +41,7 @@
   </div>
   <div class="p-4">
     <div id="chart"
-         phx-hook="RenderC3Chart"
+         phx-hook="RenderC3<%= @chart_type %>Chart"
          phx-update="ignore"
          data-chart-columns="<%= Jason.encode!(@columns) %>">
     </div>

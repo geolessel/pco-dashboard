@@ -21,9 +21,7 @@ defmodule DashboardWeb.Components.HeadcountsChart do
       |> Map.put(:title, "Attendance")
       |> Map.put(:product, :checkins)
       |> Map.put(:columns, assigns.columns)
-
-    IO.puts("===== Headcounts Chart")
-    IO.inspect(assigns.columns)
+      |> Map.put(:chart_type, "Bar")
 
     DashboardWeb.LayoutView.render("chart-card.html", assigns)
   end
