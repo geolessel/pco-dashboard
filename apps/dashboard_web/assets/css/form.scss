@@ -1,0 +1,14 @@
+.input {
+  @apply appearance-none bg-gray-200 border-2 border-gray-200 leading-4 px-3 py-2 rounded text-gray-700 w-full;
+}
+.input:focus {
+  @apply bg-white border-blue-500 outline-none;
+}
+
+.label {
+  @apply leading-4 mb-4 py-2 text-gray-600 text-sm;
+}
+
+.error {
+  @apply block italic leading-8 text-red-500 text-sm;
+}
