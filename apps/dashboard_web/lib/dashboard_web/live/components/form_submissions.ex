@@ -12,11 +12,15 @@ defmodule DashboardWeb.Components.FormSubmissions do
     id = genserver_id(assigns, assigns.dashboard_component)
     submissions = Dashboard.Stores.get(data_module(), id, :submissions, [])
     form_name = Dashboard.Stores.get(data_module(), id, :form_name)
+    last_update = Dashboard.Stores.get(data_module(), id, :last_update)
+    included = Dashboard.Stores.get(data_module(), id, :included, [])
 
     {:ok,
      socket
      |> assign(:submissions, submissions)
      |> assign(:genserver_id, id)
+     |> assign(:last_update, last_update)
+     |> assign(:included, included)
      |> assign(:title, "Form Submissions - #{form_name}")
      |> assign(:product, :people)
      |> assign(:icon, "product_people-logomark")
@@ -25,8 +29,6 @@ defmodule DashboardWeb.Components.FormSubmissions do
 
   @impl true
   def render(assigns) do
-    included = Dashboard.Stores.get(data_module(), assigns.genserver_id, :included)
-
     assigns =
       assigns
       |> Map.put(:table_columns, [
@@ -35,7 +37,7 @@ defmodule DashboardWeb.Components.FormSubmissions do
             person_id = item["relationships"]["person"]["data"]["id"]
 
             person =
-              included
+              assigns.included
               |> Enum.find(fn include ->
                 include["type"] == "Person" && include["id"] == person_id
               end)

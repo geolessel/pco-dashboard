@@ -10,10 +10,12 @@ defmodule DashboardWeb.Components.PersonUpdated do
   @impl true
   def update(assigns, socket) do
     people = Dashboard.Stores.get(data_module(), genserver_id(assigns), :people, [])
+    last_update = Dashboard.Stores.get(data_module(), genserver_id(assigns), :last_update)
 
     {:ok,
      socket
      |> assign(:people, people)
+     |> assign(:last_update, last_update)
      |> assign(:title, "Recently Updated")
      |> assign(:product, :people)
      |> assign(:icon, "product_people-logomark")
