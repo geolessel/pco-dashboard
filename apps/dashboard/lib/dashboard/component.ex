@@ -207,6 +207,7 @@ defmodule Dashboard.Component do
           Map.put(state, :user, Dashboard.Accounts.get_user!(user.id))
         else
           :gt -> state
+          :personal_access_token -> state
         end
       end
 
