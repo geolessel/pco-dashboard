@@ -1,13 +1,16 @@
-<nav class="bg-gray-200 flex items-center justify-between px-4 py-2">
-  <h1 class="text-lg text-bold px-4">Dashboard</h1>
+<nav class="bg-gray-200 flex h-10 items-center justify-between px-4 py-2">
+  <div class="flex items-center px-4">
+    <div class="mr-2">
+      <%= render "_logo.html", assigns %>
+    </div>
+    <h1 class="text-lg font-bold text-blue-700">Dashboard</h1>
+  </div>
+
   <ul class="flex text-xs divide-x divide-gray-400">
     <%= if @current_user do %>
       <li class="text-gray-500 px-4"><%= @current_user.email %></li>
       <li class="px-4"><%= link "Dashboards", to: Routes.dashboard_index_path(@conn, :index) %></li>
       <li class="px-4"><%= link "Settings", to: Routes.user_settings_path(@conn, :edit) %></li>
-      <%= if function_exported?(Routes, :live_dashboard_path, 2) do %>
-        <li class="px-4"><%= link "LiveDashboard", to: Routes.live_dashboard_path(@conn, :home) %></li>
-      <% end %>
       <li class="px-4 text-red-500"><%= link "Logout", to: Routes.user_session_path(@conn, :delete), method: :delete %></li>
     <% else %>
       <li class="px-4"><%= link "Register", to: Routes.user_registration_path(@conn, :new) %></li>
