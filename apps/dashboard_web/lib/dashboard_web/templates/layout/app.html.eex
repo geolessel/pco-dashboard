@@ -1,7 +1,7 @@
 <main role="main" class="flex flex-col flex-1">
-  <p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></p>
-  <p class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></p>
   <div class="flex flex-col flex-1" style="background-color: #264653" >
+    <p class="alert alert-info max-w-sm mt-4 self-center" role="alert"><%= get_flash(@conn, :info) %></p>
+    <p class="alert alert-danger max-w-sm mt-4 self-center" role="alert"><%= get_flash(@conn, :error) %></p>
     <%= @inner_content %>
   </div>
 </main>
