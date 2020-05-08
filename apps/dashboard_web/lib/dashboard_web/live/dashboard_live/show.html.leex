@@ -4,7 +4,7 @@
       title: @page_title,
       action: @live_action,
       shortcuts: @shortcuts,
-      return_to: Routes.dashboard_layout_path(@socket, :edit, @dashboard)
+      return_to: Routes.dashboard_show_path(@socket, :show, @dashboard)
   %>
 <% end %>
 
