@@ -13,7 +13,10 @@ class="bg-gray-300 p-2 text-gray-500 text-sm px-8"
 <div class="flex flex-col w-full p-8">
   <div class="flex flex-row items-center justify-between mb-4">
     <h1 class="text-gray-800 text-lg">Editing <strong><%= @dashboard.name %></strong></h1>
-    <button class="btn btn-success btn-lg">Add component</button>
+    <div>
+      <%= live_redirect("View dashboard", to: Routes.dashboard_show_path(@socket, :show, @dashboard), class: "btn btn-primary btn-lg mr-4") %>
+      <button class="btn btn-success btn-lg">Add component</button>
+    </div>
   </div>
 
   <div class="mb-8">
