@@ -11,17 +11,20 @@ defmodule DashboardWeb.Components.HeadcountsChart do
   def update(assigns, socket) do
     columns = Dashboard.Stores.get(data_module(), genserver_id(assigns), :columns)
 
-    {:ok, assign(socket, :columns, columns)}
+    {:ok,
+     socket
+     |> assign(:columns, columns)
+     |> assign(:title, "Attendance")
+     |> assign(:product, :checkins)
+     |> assign(:icon, "product_check-ins-logomark")
+     |> assign(:chart_type, "Bar")}
   end
 
   @impl true
   def render(assigns) do
     assigns =
       assigns
-      |> Map.put(:title, "Attendance")
-      |> Map.put(:product, :checkins)
       |> Map.put(:columns, assigns.columns)
-      |> Map.put(:chart_type, "Bar")
 
     DashboardWeb.LayoutView.render("chart-card.html", assigns)
   end
