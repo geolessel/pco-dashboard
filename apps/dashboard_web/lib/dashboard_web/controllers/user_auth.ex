@@ -129,6 +129,40 @@ defmodule DashboardWeb.UserAuth do
     end
   end
 
+  @doc """
+  Used for routes that require Planning Center access.
+
+  It doesn't make sense to allow a user to create and view
+  dashboards without a way to get data for those dashboards.
+  This plug makes sure we can access their Planning Center
+  account before going further.
+  """
+  def require_access_token(%{assigns: %{current_user: current_user}} = conn, _opts) do
+    redirect = fn conn ->
+      conn
+      |> put_flash(:error, "You must configure Planning Center access before viewing that page")
+      |> redirect(to: Routes.user_settings_path(conn, :edit))
+      |> halt()
+    end
+
+    case Application.get_env(:dashboard, :auth_type) do
+      :personal_access_token ->
+        with %{application_id: id, application_secret: secret}
+             when not is_nil(id) and not is_nil(secret) <- current_user do
+          conn
+        else
+          _reason -> redirect.(conn)
+        end
+
+      :oauth ->
+        if !is_nil(current_user.oauth_token) do
+          conn
+        else
+          redirect.(conn)
+        end
+    end
+  end
+
   defp maybe_store_return_to(%{method: "GET", request_path: request_path} = conn) do
     put_session(conn, :user_return_to, request_path)
   end
