@@ -138,5 +138,18 @@ defmodule DashboardWeb.DashboardLive.Layout do
     end
   end
 
+  @impl true
+  def handle_event("keyboard-shortcut", %{"key" => "S"}, socket) do
+    {:noreply,
+     push_redirect(socket,
+       to: Routes.dashboard_show_path(socket, :show, socket.assigns.dashboard)
+     )}
+  end
+
+  @impl true
+  def handle_event("keyboard-shortcut", params, socket) do
+    {:noreply, socket}
+  end
+
   defp page_title(:edit), do: "Edit Dashboard Layout"
 end
