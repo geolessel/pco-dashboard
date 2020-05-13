@@ -87,7 +87,7 @@ you'd like (that value is for your benefit only).
 
 Copy your app id and secret and paste those values into the
 appropriate fields at
-[/users/settings](http://locahost:4000/users/settings).
+[/users/settings](http://localhost:4000/users/settings).
 
 #### Oauth
 
@@ -136,7 +136,7 @@ The app will be available at [http://localhost:4000](http://localhost:4000).
 ### Create a user
 
 In order to use the app, you'll need to register a user. You can do so
-at [/users/register](http://locahost:4000/users/register).
+at [/users/register](http://localhost:4000/users/register).
 
 Once you register, check the logs back in your terminal. You should
 see some debug output that contains a link to "confirm" your
