@@ -2,7 +2,6 @@
 // The MiniCssExtractPlugin is used to separate it out into
 // its own CSS file.
 import "../css/app.scss"
-import "@planningcenter/icons/sprites/general.svg"
 import "@planningcenter/icons/sprites/product.svg"
 import "@planningcenter/icons/css/symbol.css"
 
