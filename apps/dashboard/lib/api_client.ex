@@ -127,7 +127,7 @@ defmodule Dashboard.ApiClient do
   defp auth_header(headers, user) do
     case Application.get_env(:dashboard, :auth_type) do
       :oauth -> oauth_auth_header(headers, user)
-      :personal_access_token -> pat_auth_header(headers, user)
+      :personal_access_token -> put_auth_header(headers, user)
       auth_type -> raise "Unknown :auth_type from app config: #{auth_type}"
     end
   end
@@ -136,7 +136,7 @@ defmodule Dashboard.ApiClient do
     [{"Authorization", "Bearer #{token.access_token}"} | headers]
   end
 
-  defp pat_auth_header(headers, %{
+  defp put_auth_header(headers, %{
          application_id: application_id,
          application_secret: application_secret
        }) do
