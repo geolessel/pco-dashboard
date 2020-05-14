@@ -1,5 +1,11 @@
 module.exports = {
-  purge: [],
+  purge: [
+    "../**/*.html.eex",
+    "../**/*.html.leex",
+    "../**/views/**/*.ex",
+    "../**/lives/**/*.ex",
+    "./js/**/*.js",
+  ],
   theme: {
     extend: {
       colors: {
