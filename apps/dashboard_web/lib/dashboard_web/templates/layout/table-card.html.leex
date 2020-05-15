@@ -1,9 +1,41 @@
-<div class="card col-span-<%= Map.get(assigns, :grid_width, 2) %> row-span-<%= Map.get(assigns, :grid_height, 2) %>">
-  <div class="card-header border-product-<%= Map.get(assigns, :product) %>">
+<div class="card
+  <%= case Map.get(assigns, :grid_width, 2) do %>
+    <% 1 -> %>col-span-1
+    <% 2 -> %>col-span-2
+    <% 3 -> %>col-span-3
+    <% 4 -> %>col-span-4
+    <% 5 -> %>col-span-5
+  <% end %>
+  <%= case Map.get(assigns, :grid_height, 2) do %>
+    <% 1 -> %>row-span-1
+    <% 2 -> %>row-span-2
+    <% 3 -> %>row-span-3
+    <% 4 -> %>row-span-4
+    <% 5 -> %>row-span-5
+  <% end %>">
+  <div class="card-header
+    <%= case @product do %>
+      <% :calendar -> %>border-product-calendar
+      <% :checkins -> %>border-product-checkins
+      <% :giving -> %>border-product-giving
+      <% :groups -> %>border-product-groups
+      <% :people -> %>border-product-people
+      <% :registrations -> %>border-product-registrations
+      <% :services -> %>border-product-services
+    <% end %>">
     <h1 class="card-title">
       <%= @title %>
     </h1>
-    <div class="card-icon text-product-<%=@product%>">
+    <div class="card-icon
+      <%= case @product do %>
+        <% :calendar -> %>text-product-calendar
+        <% :checkins -> %>text-product-checkins
+        <% :giving -> %>text-product-giving
+        <% :groups -> %>text-product-groups
+        <% :people -> %>text-product-people
+        <% :registrations -> %>text-product-registrations
+        <% :services -> %>text-product-services
+      <% end %>">
       <%= svg_icon(@socket, @icon) %>
     </div>
   </div>
