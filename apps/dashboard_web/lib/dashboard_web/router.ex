@@ -17,6 +17,10 @@ defmodule DashboardWeb.Router do
     plug :accepts, ["json"]
   end
 
+  pipeline :health_check do
+    plug :accepts, ["html"]
+  end
+
   scope "/", DashboardWeb do
     pipe_through :browser
 
@@ -92,5 +96,11 @@ defmodule DashboardWeb.Router do
     get "/users/confirm", UserConfirmationController, :new
     post "/users/confirm", UserConfirmationController, :create
     get "/users/confirm/:token", UserConfirmationController, :confirm
+  end
+
+  scope "/", DashboardWeb do
+    pipe_through [:health_check]
+
+    get "/health", HealthController, :index
   end
 end
