@@ -3,9 +3,11 @@ defmodule Dashboard.Components.HeadcountsChart do
 
   @impl true
   def data_sources do
+    # NOTE: For testing purposes, these are known working IDs for Carlsbad Org
+    # event_id: 106369, attendance_type_id: 18348
     %{
       headcounts:
-        "/check-ins/v2/events/106369/attendance_types/18348/headcounts?include=event_time&per_page=100"
+        "/check-ins/v2/events/${event_id}/attendance_types/${attendance_type_id}/headcounts?include=event_time&per_page=100"
     }
   end
 
