@@ -186,7 +186,7 @@ defmodule Dashboard.Component do
           |> Enum.map(fn {assign, path} ->
             Task.async(fn -> {assign, Dashboard.PlanningCenterApi.Client.get(user, path)} end)
           end)
-          |> Enum.map(&Task.await/1)
+          |> Enum.map(&Task.await(&1, 10_000))
           |> Enum.into(%{})
         )
       end
