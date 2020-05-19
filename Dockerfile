@@ -33,7 +33,7 @@ RUN yarn install
 # image BEFORE we yarn run deploy. This is because
 # purgecss looks in those directories to know
 # what CSS to keep during the purge.
-COPY apps/dashboard_web/lib apps/dashboard_web/lib
+COPY apps/dashboard_web/lib /app/apps/dashboard_web/lib
 RUN yarn run deploy
 
 COPY apps/dashboard/priv /app/apps/dashboard/priv
