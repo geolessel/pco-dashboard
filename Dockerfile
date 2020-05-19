@@ -61,4 +61,6 @@ COPY --from=build --chown=nobody:nobody /app/_build/prod/rel/dashboard ./
 
 ENV HOME=/app
 
+EXPOSE 4000
+
 CMD ["bin/dashboard", "start"]
