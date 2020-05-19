@@ -24,12 +24,12 @@ secret_key_base =
     """
 
 config :dashboard_web, DashboardWeb.Endpoint,
+  url: [host: System.get_env("HOST_NAME") || "localhost"],
   http: [
     port: String.to_integer(System.get_env("PORT") || "4000"),
     transport_options: [socket_opts: [:inet6]]
   ],
-  secret_key_base: secret_key_base,
-  check_origin: ["//localhost:4000", "//127.0.0.1:4000"]
+  secret_key_base: secret_key_base
 
 # ## Using releases (Elixir v1.9+)
 #
