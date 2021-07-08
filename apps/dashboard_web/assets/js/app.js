@@ -21,7 +21,8 @@ import { LiveSocket } from "phoenix_live_view"
 
 import ComponentDragAndDrop from "./dragAndDropComponents"
 import RenderC3Chart from "./renderC3Chart"
-let Hooks = { ComponentDragAndDrop, RenderC3Chart }
+import RenderC3BarChart from "./renderC3BarChart"
+let Hooks = { ComponentDragAndDrop, RenderC3Chart, RenderC3BarChart }
 
 let csrfToken = document
   .querySelector("meta[name='csrf-token']")

@@ -1,4 +1,4 @@
-defmodule DashboardWeb.Components.ProfilesCreatedOverTimeChart do
+defmodule DashboardWeb.Components.HeadcountsChart do
   use DashboardWeb, :live_component
   @behaviour DashboardWeb.Behaviours.ComponentLiveView
 
@@ -14,9 +14,10 @@ defmodule DashboardWeb.Components.ProfilesCreatedOverTimeChart do
     {:ok,
      socket
      |> assign(:columns, columns)
-     |> assign(:title, "Profiles Created")
-     |> assign(:product, :people)
-     |> assign(:icon, "product_people-logomark")}
+     |> assign(:title, "Attendance")
+     |> assign(:product, :checkins)
+     |> assign(:icon, "product_check-ins-logomark")
+     |> assign(:chart_type, "Bar")}
   end
 
   @impl true
@@ -24,16 +25,15 @@ defmodule DashboardWeb.Components.ProfilesCreatedOverTimeChart do
     assigns =
       assigns
       |> Map.put(:columns, assigns.columns)
-      |> Map.put(:chart_type, "")
 
     DashboardWeb.LayoutView.render("chart-card.html", assigns)
   end
 
   @impl DashboardWeb.Behaviours.ComponentLiveView
   def genserver_id(assigns, _dc \\ %Dashboard.Dashboards.DashboardComponent{}) do
-    "profiles_created_over_time_chart--user_#{assigns.user_id}"
+    "headcounts_chart--user_#{assigns.user_id}"
   end
 
   @impl DashboardWeb.Behaviours.ComponentLiveView
-  def data_module, do: Dashboard.Components.ProfilesCreatedOverTimeChart
+  def data_module, do: Dashboard.Components.HeadcountsChart
 end

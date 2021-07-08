@@ -75,6 +75,15 @@ components = [
     module: "DashboardWeb.Components.ProfilesCreatedOverTimeChart",
     name: "Profiles Created Over Time Chart",
     refresh_type: "poll"
+  },
+  %{
+    configurations: [
+      %{label: "Event ID", name: "event_id"},
+      %{label: "Attendance Type ID", name: "attendance_type_id"}
+    ],
+    module: "DashboardWeb.Components.HeadcountsChart",
+    name: "Headcounts Chart",
+    refresh_type: "poll"
   }
 ]
 
